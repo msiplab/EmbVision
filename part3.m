@@ -1,4 +1,4 @@
-%% 組込みビジョン入門（３）
+%% *組込みビジョン入門（３）*
 %
 % *クラス定義と単体テスト(MATLAB)*
 %
@@ -7,6 +7,11 @@
 %
 % Copyright (c), All rights resereved, 2014, Shogo MURAMATSU
 %
+
+%%
+% <matlab:showdemo('part2') Part2> |
+% <matlab:showdemo('index') メニュー> |
+% <matlab:showdemo('part4') Part4>
 
 %% 二次元色空間変換テストクラス
 %
@@ -36,3 +41,12 @@
 %
 % *2. SET/GET (Sobel)*
 %
+
+%%
+% <html>
+% <hr>
+% </html>
+%%
+% <matlab:showdemo('part2') Part2> |
+% <matlab:showdemo('index') メニュー> |
+% <matlab:showdemo('part4') Part4>

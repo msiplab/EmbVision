@@ -1,10 +1,14 @@
-%% 組込みビジョン入門（６）
+%% *組込みビジョン入門（６）*
 %
 % *映像ストリーム処理 - Raspberry Pi編 -*
 %
 % 新潟大学　工学部　電気電子工学科　
 % 村松　正吾
 %
+
+%%
+% <matlab:showdemo('part5') Part5> |
+% <matlab:showdemo('index') メニュー>
 
 %% シミュレーションモデル
 
@@ -40,3 +44,12 @@
 %
 % フレーム差分
 %
+
+
+%%
+% <html>
+% <hr>
+% </html>
+%%
+% <matlab:showdemo('part5') Part5> |
+% <matlab:showdemo('index') メニュー>

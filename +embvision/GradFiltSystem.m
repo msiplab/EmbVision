@@ -25,15 +25,14 @@ classdef GradFiltSystem < matlab.System & ...
     end
     
     methods (Access = protected)
-
-         function setupImpl(obj,imgIn)
-             
-             % SETUP 関数
-             obj.imgHeight = size(imgIn,1);
-             obj.imgWidth  = size(imgIn,2);
-             
-         end
         
+        function setupImpl(obj,imgIn)
+            
+            % SETUP 関数
+            obj.imgHeight = size(imgIn,1);
+            obj.imgWidth  = size(imgIn,2);
+            
+        end
         
         function [magOut, angOut] = stepImpl(obj,imgIn)
             % STEP ステップ関数
@@ -91,7 +90,7 @@ classdef GradFiltSystem < matlab.System & ...
             % ブロック名
             icon = 'GRAD_FILT';
         end
-
+        
     end
     
 end

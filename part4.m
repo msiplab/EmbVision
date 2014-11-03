@@ -1,4 +1,4 @@
-%% 組込みビジョン入門（４）
+%% *組込みビジョン入門（４）*
 %
 % *映像ストリーム処理 - MATLAB(R)編 -*
 %
@@ -7,6 +7,11 @@
 %
 % Copyright (c), All rights resereved, 2014, Shogo MURAMATSU
 %
+
+%%
+% <matlab:showdemo('part3') Part3> |
+% <matlab:showdemo('index') メニュー> |
+% <matlab:showdemo('part5') Part5>
 
 %% 映像入力
 %
@@ -34,3 +39,12 @@
 %
 % フレーム差分（プライベートフィールド）
 %
+
+%%
+% <html>
+% <hr>
+% </html>
+%%
+% <matlab:showdemo('part3') Part3> |
+% <matlab:showdemo('index') メニュー> |
+% <matlab:showdemo('part5') Part5>

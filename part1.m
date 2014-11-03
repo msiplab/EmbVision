@@ -9,6 +9,10 @@
 %
 
 %%
+% <matlab:showdemo('index') メニュー> | 
+% <matlab:showdemo('part2') Part2>
+
+%%
 % *概要*
 %
 % 本演習では、MATLAB(R)にて画像ファイルの情報を読み込む方法のほか、
@@ -141,3 +145,11 @@ whos I
 %
 % 処理例
 %
+
+%%
+% <html>
+% <hr>
+% </html>
+%%
+% <matlab:showdemo('index') メニュー> |
+% <matlab:showdemo('part2') Part2>

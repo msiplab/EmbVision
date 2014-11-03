@@ -1,4 +1,4 @@
-%% 組込みビジョン入門（２）
+%% *組込みビジョン入門（２）*
 %
 % *フィルタリングと周波数特性(MATLAB)*
 %
@@ -7,6 +7,11 @@
 %
 % Copyright (c), All rights resereved, 2014, Shogo MURAMATSU
 %
+
+%%
+% <matlab:showdemo('part1') Part1> |
+% <matlab:showdemo('index') メニュー> |
+% <matlab:showdemo('part3') Part3>
 
 %% 一次元フィルタリング
 % conv
@@ -33,3 +38,12 @@
 %
 % 勾配フィルタ（偏角）
 %
+
+%%
+% <html>
+% <hr>
+% </html>
+%%
+% <matlab:showdemo('part1') Part1> |
+% <matlab:showdemo('index') メニュー> |
+% <matlab:showdemo('part3') Part3>

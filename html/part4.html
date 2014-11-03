@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Contents</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-11-03"><meta name="DC.source" content="Contents.m"><style type="text/css">
+      --><title>&#32068;&#36796;&#12415;&#12499;&#12472;&#12519;&#12531;&#20837;&#38272;&#65288;&#65300;&#65289;</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-11-04"><meta name="DC.source" content="part4.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,26 +66,59 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><pre class="codeinput"><span class="comment">% EMBVISION</span>
-<span class="comment">%</span>
-<span class="comment">% Files</span>
-<span class="comment">%   part1 - &#32068;&#36796;&#12415;&#12499;&#12472;&#12519;&#12531;&#20837;&#38272;&#65288;&#65297;&#65289;</span>
-<span class="comment">%   part2 - &#32068;&#36796;&#12415;&#12499;&#12472;&#12519;&#12531;&#20837;&#38272;&#65288;&#65298;&#65289;</span>
-<span class="comment">%   part3 - &#32068;&#36796;&#12415;&#12499;&#12472;&#12519;&#12531;&#20837;&#38272;&#65288;&#65299;&#65289;</span>
-<span class="comment">%   part4 - &#32068;&#36796;&#12415;&#12499;&#12472;&#12519;&#12531;&#20837;&#38272;&#65288;&#65300;&#65289;</span>
-<span class="comment">%   part5 - &#32068;&#36796;&#12415;&#12499;&#12472;&#12519;&#12531;&#20837;&#38272;&#65288;&#65301;&#65289;</span>
-<span class="comment">%   part6 - &#32068;&#36796;&#12415;&#12499;&#12472;&#12519;&#12531;&#20837;&#38272;&#65288;&#65302;&#65289;</span>
-</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
+  </style></head><body><div class="content"><h1><b>&#32068;&#36796;&#12415;&#12499;&#12472;&#12519;&#12531;&#20837;&#38272;&#65288;&#65300;&#65289;</b></h1><!--introduction--><p><b>&#26144;&#20687;&#12473;&#12488;&#12522;&#12540;&#12512;&#20966;&#29702; - MATLAB&reg;&#32232; -</b></p><p>&#26032;&#28511;&#22823;&#23398;&#12288;&#24037;&#23398;&#37096;&#12288;&#38651;&#27671;&#38651;&#23376;&#24037;&#23398;&#31185;&#12288; &#26449;&#26494;&#12288;&#27491;&#21566;</p><p>Copyright (c), All rights resereved, 2014, Shogo MURAMATSU</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">&#26144;&#20687;&#20837;&#21147;</a></li><li><a href="#3">&#26144;&#20687;&#34920;&#31034;</a></li><li><a href="#4">&#26144;&#20687;&#20986;&#21147;</a></li><li><a href="#5">&#26144;&#20687;&#20966;&#29702;</a></li><li><a href="#6">&#28436;&#32722;&#35506;&#38988;</a></li></ul></div><p><a href="matlab:showdemo('part3')">Part3</a> | <a href="matlab:showdemo('index')">&#12513;&#12491;&#12517;&#12540;</a> | <a href="matlab:showdemo('part5')">Part5</a></p><h2>&#26144;&#20687;&#20837;&#21147;<a name="2"></a></h2><p>Video Reader</p><h2>&#26144;&#20687;&#34920;&#31034;<a name="3"></a></h2><h2>&#26144;&#20687;&#20986;&#21147;<a name="4"></a></h2><p>Video Writer</p><h2>&#26144;&#20687;&#20966;&#29702;<a name="5"></a></h2><p>RGB2GRAY-&gt;GRADFILT</p><h2>&#28436;&#32722;&#35506;&#38988;<a name="6"></a></h2><p>HSV2RGB,RGB2HSV&#12502;&#12525;&#12483;&#12463;</p><p>&#12501;&#12524;&#12540;&#12512;&#24046;&#20998;&#65288;&#12503;&#12521;&#12452;&#12505;&#12540;&#12488;&#12501;&#12451;&#12540;&#12523;&#12489;&#65289;</p><p>
+<hr>
+</p><p><a href="matlab:showdemo('part3')">Part3</a> | <a href="matlab:showdemo('index')">&#12513;&#12491;&#12517;&#12540;</a> | <a href="matlab:showdemo('part5')">Part5</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
-% EMBVISION
+%% *組込みビジョン入門（４）*
 %
-% Files
-%   part1 - 組込みビジョン入門（１）
-%   part2 - 組込みビジョン入門（２）
-%   part3 - 組込みビジョン入門（３）
-%   part4 - 組込みビジョン入門（４）
-%   part5 - 組込みビジョン入門（５）
-%   part6 - 組込みビジョン入門（６）
+% *映像ストリーム処理 - MATLAB(R)編 -*
+%
+% 新潟大学　工学部　電気電子工学科　
+% 村松　正吾
+%
+% Copyright (c), All rights resereved, 2014, Shogo MURAMATSU
+%
 
+%%
+% <matlab:showdemo('part3') Part3> |
+% <matlab:showdemo('index') メニュー> |
+% <matlab:showdemo('part5') Part5>
+
+%% 映像入力
+%
+% Video Reader
+%
+
+%% 映像表示
+%
+%
+%
+
+%% 映像出力
+%
+% Video Writer
+%
+
+%% 映像処理
+%
+% RGB2GRAY->GRADFILT
+%
+
+%% 演習課題
+%
+% HSV2RGB,RGB2HSVブロック
+%
+% フレーム差分（プライベートフィールド）
+%
+
+%%
+% <html>
+% <hr>
+% </html>
+%%
+% <matlab:showdemo('part3') Part3> |
+% <matlab:showdemo('index') メニュー> |
+% <matlab:showdemo('part5') Part5>
 ##### SOURCE END #####
 --></body></html>

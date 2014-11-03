@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>&#32068;&#36796;&#12415;&#12499;&#12472;&#12519;&#12531;&#20837;&#38272;&#65288;&#65302;&#65289;</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-11-03"><meta name="DC.source" content="part6.m"><style type="text/css">
+      --><title>&#32068;&#36796;&#12415;&#12499;&#12472;&#12519;&#12531;&#20837;&#38272;&#65288;&#65302;&#65289;</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-11-04"><meta name="DC.source" content="part6.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,9 +66,11 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>&#32068;&#36796;&#12415;&#12499;&#12472;&#12519;&#12531;&#20837;&#38272;&#65288;&#65302;&#65289;</h1><!--introduction--><p><b>&#26144;&#20687;&#12473;&#12488;&#12522;&#12540;&#12512;&#20966;&#29702; - Raspberry Pi&#32232; -</b></p><p>&#26032;&#28511;&#22823;&#23398;&#12288;&#24037;&#23398;&#37096;&#12288;&#38651;&#27671;&#38651;&#23376;&#24037;&#23398;&#31185;&#12288; &#26449;&#26494;&#12288;&#27491;&#21566;</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">&#12471;&#12511;&#12517;&#12524;&#12540;&#12471;&#12519;&#12531;&#12514;&#12487;&#12523;</a></li><li><a href="#2">Raspberry Pi &#35373;&#23450;</a></li><li><a href="#3">Raspberry Pi &#21332;&#35519;&#23455;&#35013;</a></li><li><a href="#4">Raspberry Pi &#12473;&#12479;&#12531;&#12489;&#12450;&#12525;&#12531;&#23455;&#35013;</a></li><li><a href="#5">&#28436;&#32722;&#35506;&#38988;</a></li></ul></div><h2>&#12471;&#12511;&#12517;&#12524;&#12540;&#12471;&#12519;&#12531;&#12514;&#12487;&#12523;<a name="1"></a></h2><h2>Raspberry Pi &#35373;&#23450;<a name="2"></a></h2><p><a href="matlab:open('models/gradfiltraspi.slx')">gradfiltraspi.slx</a></p><h2>Raspberry Pi &#21332;&#35519;&#23455;&#35013;<a name="3"></a></h2><p>&#27700;&#24179;&#22402;&#30452; &#32622;&#25563;</p><h2>Raspberry Pi &#12473;&#12479;&#12531;&#12489;&#12450;&#12525;&#12531;&#23455;&#35013;<a name="4"></a></h2><h2>&#28436;&#32722;&#35506;&#38988;<a name="5"></a></h2><p>SOBEL&#21246;&#37197;&#12501;&#12451;&#12523;&#12479;</p><p>&#12501;&#12524;&#12540;&#12512;&#24046;&#20998;</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
+  </style></head><body><div class="content"><h1><b>&#32068;&#36796;&#12415;&#12499;&#12472;&#12519;&#12531;&#20837;&#38272;&#65288;&#65302;&#65289;</b></h1><!--introduction--><p><b>&#26144;&#20687;&#12473;&#12488;&#12522;&#12540;&#12512;&#20966;&#29702; - Raspberry Pi&#32232; -</b></p><p>&#26032;&#28511;&#22823;&#23398;&#12288;&#24037;&#23398;&#37096;&#12288;&#38651;&#27671;&#38651;&#23376;&#24037;&#23398;&#31185;&#12288; &#26449;&#26494;&#12288;&#27491;&#21566;</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">&#12471;&#12511;&#12517;&#12524;&#12540;&#12471;&#12519;&#12531;&#12514;&#12487;&#12523;</a></li><li><a href="#3">Raspberry Pi &#35373;&#23450;</a></li><li><a href="#4">Raspberry Pi &#21332;&#35519;&#23455;&#35013;</a></li><li><a href="#5">Raspberry Pi &#12473;&#12479;&#12531;&#12489;&#12450;&#12525;&#12531;&#23455;&#35013;</a></li><li><a href="#6">&#28436;&#32722;&#35506;&#38988;</a></li></ul></div><p><a href="matlab:showdemo('part5')">Part5</a> | <a href="matlab:showdemo('index')">&#12513;&#12491;&#12517;&#12540;</a></p><h2>&#12471;&#12511;&#12517;&#12524;&#12540;&#12471;&#12519;&#12531;&#12514;&#12487;&#12523;<a name="2"></a></h2><h2>Raspberry Pi &#35373;&#23450;<a name="3"></a></h2><p><a href="matlab:open('models/gradfiltraspi.slx')">gradfiltraspi.slx</a></p><p>[&#12484;&#12540;&#12523;] &gt; [&#12479;&#12540;&#12466;&#12483;&#12488;&#12495;&#12540;&#12489;&#12454;&#12455;&#12450;&#12391;&#23455;&#34892; ] &gt; [&#12501;&#12449;&#12540;&#12512;&#12454;&#12455;&#12450;&#12398;&#26356;&#26032;... ] &#12469;&#12509;&#12540;&#12488; &#12497;&#12483;&#12465;&#12540;&#12472;: [Raspberry Pi(Simulink)] &gt; [&#27425;&#12408;]</p><p>[&#12484;&#12540;&#12523;] &gt; [&#12479;&#12540;&#12466;&#12483;&#12488;&#12495;&#12540;&#12489;&#12454;&#12455;&#12450;&#12391;&#23455;&#34892; ] &gt; [&#12458;&#12503;&#12471;&#12519;&#12531; ]</p><h2>Raspberry Pi &#21332;&#35519;&#23455;&#35013;<a name="4"></a></h2><p>&#27700;&#24179;&#22402;&#30452; &#32622;&#25563;</p><p>Raspberry Pi &#12395;WEB&#12459;&#12513;&#12521;&#12434;&#25509;&#32154;</p><p>&#12456;&#12463;&#12473;&#12479;&#12540;&#12490;&#12523;&#12514;&#12540;&#12489;&#12391;&#23455;&#34892;</p><h2>Raspberry Pi &#12473;&#12479;&#12531;&#12489;&#12450;&#12525;&#12531;&#23455;&#35013;<a name="5"></a></h2><p>Raspberry Pi &#12395;WEB&#12459;&#12513;&#12521;&#12392;HDMI&#12487;&#12451;&#12473;&#12503;&#12524;&#12452;&#12434;&#25509;&#32154;</p><p>Copyright (c), All rights resereved, 2014, Shogo MURAMATSU</p><h2>&#28436;&#32722;&#35506;&#38988;<a name="6"></a></h2><p>SOBEL&#21246;&#37197;&#12501;&#12451;&#12523;&#12479;</p><p>&#12501;&#12524;&#12540;&#12512;&#24046;&#20998;</p><p>
+<hr>
+</p><p><a href="matlab:showdemo('part5')">Part5</a> | <a href="matlab:showdemo('index')">&#12513;&#12491;&#12517;&#12540;</a></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
-%% 組込みビジョン入門（６）
+%% *組込みビジョン入門（６）*
 %
 % *映像ストリーム処理 - Raspberry Pi編 -*
 %
@@ -76,20 +78,37 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 % 村松　正吾
 %
 
+%%
+% <matlab:showdemo('part5') Part5> |
+% <matlab:showdemo('index') メニュー>
+
 %% シミュレーションモデル
 
 %% Raspberry Pi 設定
 %
 % <matlab:open('models/gradfiltraspi.slx') gradfiltraspi.slx>
 %
-
+% [ツール] > [ターゲットハードウェアで実行 ] > [ファームウェアの更新... ]
+% サポート パッケージ: [Raspberry Pi(Simulink)] > [次へ]
+% 
+%
+% [ツール] > [ターゲットハードウェアで実行 ] > [オプション ]
+%
 
 %% Raspberry Pi 協調実装
 %
 % 水平垂直 置換
 %
+% Raspberry Pi にWEBカメラを接続
+%
+% エクスターナルモードで実行
 
 %% Raspberry Pi スタンドアロン実装
+%
+% Raspberry Pi にWEBカメラとHDMIディスプレイを接続
+%
+% Copyright (c), All rights resereved, 2014, Shogo MURAMATSU
+%
 
 %% 演習課題
 %
@@ -98,5 +117,13 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 % フレーム差分
 %
 
+
+%%
+% <html>
+% <hr>
+% </html>
+%%
+% <matlab:showdemo('part5') Part5> |
+% <matlab:showdemo('index') メニュー>
 ##### SOURCE END #####
 --></body></html>
