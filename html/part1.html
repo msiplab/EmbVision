@@ -1,0 +1,276 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>&#32068;&#36796;&#12415;&#12499;&#12472;&#12519;&#12531;&#20837;&#38272;&#65288;&#65297;&#65289;</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-11-03"><meta name="DC.source" content="part1.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1><b>&#32068;&#36796;&#12415;&#12499;&#12472;&#12519;&#12531;&#20837;&#38272;&#65288;&#65297;&#65289;</b></h1><!--introduction--><p><b>&#30011;&#20687;&#20837;&#20986;&#21147;&#12392;&#30011;&#32032;&#20966;&#29702;(MATLAB)</b></p><p>&#26032;&#28511;&#22823;&#23398;&#12288;&#24037;&#23398;&#37096;&#12288;&#38651;&#27671;&#38651;&#23376;&#24037;&#23398;&#31185;&#12288; &#26449;&#26494;&#12288;&#27491;&#21566;</p><p>Copyright (c), All rights resereved, 2014, Shogo MURAMATSU</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">&#30011;&#20687;&#20837;&#21147;</a></li><li><a href="#11">&#30011;&#20687;&#34920;&#31034;</a></li><li><a href="#15">&#30011;&#32032;&#20966;&#29702;</a></li><li><a href="#18">&#30011;&#20687;&#20986;&#21147;</a></li><li><a href="#19">&#28436;&#32722;&#35506;&#38988;</a></li></ul></div><p><b>&#27010;&#35201;</b></p><p>&#26412;&#28436;&#32722;&#12391;&#12399;&#12289;MATLAB&reg;&#12395;&#12390;&#30011;&#20687;&#12501;&#12449;&#12452;&#12523;&#12398;&#24773;&#22577;&#12434;&#35501;&#12415;&#36796;&#12416;&#26041;&#27861;&#12398;&#12411;&#12363;&#12289; &#30011;&#20687;&#34920;&#31034;&#12289;&#30011;&#20687;&#12501;&#12449;&#12452;&#12523;&#20986;&#21147;&#12289;&#31777;&#21336;&#12394;&#30011;&#32032;&#20966;&#29702;&#12395;&#12388;&#12356;&#12390;&#23398;&#12406;&#12290;</p><h2>&#30011;&#20687;&#20837;&#21147;<a name="2"></a></h2><p>MATLAB&#12395;&#12362;&#12369;&#12427;&#30011;&#20687;&#20837;&#21147;&#12399;&#12289;&#12467;&#12510;&#12531;&#12489;&#12503;&#12525;&#12531;&#12503;&#12488;&#19978;&#12395;&#12390;&#12289; <a href="matlab:doc('imread')">imread</a> &#38306;&#25968;&#12395;&#12501;&#12449;&#12452;&#12523;&#21517;&#12434;&#25351;&#23450;&#12375;&#12390;&#23455;&#34892;&#12373;&#12428;&#12427;&#12290;</p><pre class="codeinput">I = imread(<span class="string">'cameraman.tif'</span>);
+</pre><p>cameraman.tif &#12399;&#12464;&#12524;&#12540;&#12473;&#12465;&#12540;&#12523;&#30011;&#20687;&#12394;&#12398;&#12391;&#12289; &#22793;&#25968; I &#12399;&#20108;&#27425;&#20803;&#37197;&#21015;&#12392;&#12375;&#12390;&#30011;&#20687;&#12487;&#12540;&#12479;&#12434;&#20445;&#25345;&#12377;&#12427;&#12290;</p><p>&#29305;&#12395;&#25351;&#23450;&#12434;&#12375;&#12394;&#12369;&#12428;&#12400;&#12289;&#12487;&#12540;&#12479;&#22411;&#12399;&#31526;&#21495;&#12394;&#12375;&#25972;&#25968;&#65304;&#12499;&#12483;&#12488; ( <a href="matlab:doc('uint8')">uint8</a> ) &#12392;&#12394;&#12427;&#12290;</p><p>&#12467;&#12510;&#12531;&#12489;&#12503;&#12525;&#12531;&#12503;&#12488;&#19978;&#12391;&#12289; <a href="matlab:doc('whos')">whos</a> &#38306;&#25968;&#12395;&#12424;&#12426;&#30906;&#35469;&#12391;&#12365;&#12427;&#12290;</p><pre class="codeinput">whos <span class="string">I</span>
+</pre><pre class="codeoutput">  Name        Size             Bytes  Class    Attributes
+
+  I         256x256            65536  uint8              
+
+</pre><p>&#12394;&#12362;&#12289;Size &#12399;&#12288;'&#39640;&#12373; <img src="part1_eq09235075426147237958.png" alt="$$\times $$"> &#24133;'&#12288;&#12391;&#34920;&#31034;&#12373;&#12428;&#12427;&#12290;</p><p>&#30011;&#20687;&#12398;&#12469;&#12452;&#12474;&#12434;&#30693;&#12427;&#12383;&#12417;&#12395;&#12289; <a href="matlab:doc('size')">size</a> &#38306;&#25968;&#12434;&#21033;&#29992;&#12377;&#12427;&#12371;&#12392;&#12418;&#12391;&#12365;&#12427;&#12290;</p><pre class="codeinput">size(I)
+</pre><pre class="codeoutput">
+ans =
+
+   256   256
+
+</pre><p>&#39640;&#12373;&#12398;&#12415;&#12399;&#12289;&#20108;&#30058;&#30446;&#12398;&#24341;&#25968;&#12395; '1' &#12434;&#25351;&#23450;&#12377;&#12427;&#12290;</p><pre class="codeinput">size(I,1)
+</pre><pre class="codeoutput">
+ans =
+
+   256
+
+</pre><p>&#24133;&#12398;&#12415;&#12399;&#12289;&#20108;&#30058;&#30446;&#12398;&#24341;&#25968;&#12395; '2' &#12434;&#25351;&#23450;&#12377;&#12427;&#12290;</p><pre class="codeinput">size(I,2)
+</pre><pre class="codeoutput">
+ans =
+
+   256
+
+</pre><p>&#12459;&#12521;&#12540;&#30011;&#20687;&#12398;&#35501;&#36796;&#12418;&#21487;&#33021;&#12391;&#12354;&#12427;&#12290;</p><pre class="codeinput">RGB = imread(<span class="string">'peppers.png'</span>);
+</pre><p>&#22793;&#25968; RGB &#12399; &#19977;&#27425;&#20803;&#37197;&#21015;&#12392;&#12375;&#12390;&#30011;&#20687;&#12487;&#12540;&#12479;&#12434;&#20445;&#25345;&#12377;&#12427;&#12290;</p><pre class="codeinput">whos <span class="string">RGB</span>
+</pre><pre class="codeoutput">  Name        Size                Bytes  Class    Attributes
+
+  RGB       384x512x3            589824  uint8              
+
+</pre><p>&#21508;R,G,B&#25104;&#20998;&#12395;&#12399;&#12289;&#12467;&#12525;&#12531;( <a href="matlab:doc(':')">:</a> )&#12395;&#12424;&#12427;&#12452;&#12531;&#12487;&#12483;&#12463;&#12473;&#25351;&#23450;&#12434; &#21033;&#29992;&#12391;&#12365;&#12427;&#12290;</p><pre class="codeinput">R = RGB(:,:,1);
+G = RGB(:,:,2);
+B = RGB(:,:,3);
+</pre><p>&#21508;R,G,B&#25104;&#20998;&#12399;&#12289;&#20108;&#27425;&#20803;&#37197;&#21015;&#12392;&#12394;&#12427;&#12290;</p><pre class="codeinput">whos <span class="string">R</span> <span class="string">G</span> <span class="string">B</span>
+</pre><pre class="codeoutput">  Name        Size              Bytes  Class    Attributes
+
+  B         384x512            196608  uint8              
+  G         384x512            196608  uint8              
+  R         384x512            196608  uint8              
+
+</pre><h2>&#30011;&#20687;&#34920;&#31034;<a name="11"></a></h2><p>MATLAB&#12395;&#12362;&#12369;&#12427;&#30011;&#20687;&#34920;&#31034;&#12399;&#12289;&#12467;&#12510;&#12531;&#12489;&#12503;&#12525;&#12531;&#12503;&#12488;&#19978;&#12395;&#12390;&#12289; <a href="matlab:doc('imshow')">imshow</a> &#38306;&#25968;&#12395;&#12501;&#12449;&#12452;&#12523;&#21517;&#12434;&#25351;&#23450;&#12375;&#12390;&#23455;&#34892;&#12373;&#12428;&#12427;&#12290;</p><p>&#22793;&#25968; I &#12398;&#34920;&#31034;&#12399;&#20197;&#19979;&#12398;&#36890;&#12426;&#12290;</p><pre class="codeinput">figure(1)
+imshow(I)
+</pre><img vspace="5" hspace="5" src="part1_01.png" alt=""> <p>&#12371;&#12371;&#12391;&#12289; <a href="matlab:doc('figure')">figure</a> &#38306;&#25968;&#12399;&#30011;&#20687;&#12434;&#20986;&#21147;&#12377;&#12427;&#12454;&#12451;&#12531;&#12489;&#12454;&#12434; &#25351;&#23450;&#12375;&#12390;&#12356;&#12427;&#12290;</p><p>&#22793;&#25968;RGB&#12398;&#34920;&#31034;&#12399;&#20197;&#19979;&#12398;&#36890;&#12426;&#12290;</p><pre class="codeinput">figure(2)
+imshow(RGB)
+</pre><img vspace="5" hspace="5" src="part1_02.png" alt=""> <p>&#12459;&#12521;&#12540;&#30011;&#20687;&#12392;&#12375;&#12390;&#34920;&#31034;&#12373;&#12428;&#12427;&#12290;</p><h2>&#30011;&#32032;&#20966;&#29702;<a name="15"></a></h2><p>&#37197;&#21015;&#12395;&#23550;&#12377;&#12427;&#28436;&#31639;&#12434;&#26045;&#12377;&#12371;&#12392;&#12391;&#30011;&#20687;&#20966;&#29702;&#12434;&#23455;&#29694;&#12391;&#12365;&#12427;&#12290;</p><p>&#12459;&#12521;&#12540;&#30011;&#20687;RGB&#12434;&#12464;&#12524;&#12540;&#12473;&#12465;&#12540;&#12523;&#30011;&#20687;&#12395;&#22793;&#25563;&#12375;&#12424;&#12358;&#12290; <a href="matlab:doc('images/rgb2gray')">rgb2gray</a> &#38306;&#25968;&#12434;&#21033;&#29992;&#12377;&#12428;&#12400;&#12424;&#12356;&#12290;</p><pre class="codeinput">I = rgb2gray(RGB);
+</pre><p>&#12394;&#12362;&#12289;&#22793;&#25968; I &#12364;&#20445;&#25345;&#12375;&#12390;&#12356;&#12383;cameraman.tif &#12398;&#20869;&#23481;&#12399;&#12289; peppers.png &#12398;&#12464;&#12524;&#12540;&#12473;&#12465;&#12540;&#12523;&#30011;&#20687;&#12395;&#12424;&#12387;&#12390;&#19978;&#26360;&#12365;&#12373;&#12428;&#12390;&#12356;&#12427;&#12290;</p><pre class="codeinput">whos <span class="string">I</span>
+</pre><pre class="codeoutput">  Name        Size              Bytes  Class    Attributes
+
+  I         384x512            196608  uint8              
+
+</pre><p>&#30011;&#20687;&#37197;&#21015;&#12395;&#23550;&#12375;&#12289;&#28436;&#31639;&#12434;&#26045;&#12377;&#12383;&#12417;&#12395;&#12289;&#12375;&#12400;&#12375;&#12400;&#23455;&#25968;&#22411;&#12408;&#12398;&#22793;&#25563;&#12364;&#24517;&#35201;&#12392;&#12394;&#12427;&#12290;</p><p>&#25972;&#25968;&#22411;&#12363;&#12425;&#23455;&#25968;&#22411;&#12408;&#12398;&#22793;&#25563;&#12395;&#12399;&#12289; <a href="matlab:doc('images/im2single')">im2single</a> &#38306;&#25968;&#12289;&#12418;&#12375;&#12367;&#12399; <a href="matlab:doc('images/im2double')">im2double</a>&#12288;&#38306;&#25968;&#12434; &#21033;&#29992;&#12391;&#12365;&#12427;&#12290;</p><pre class="codeinput">I = im2single(I);
+whos <span class="string">I</span>
+
+
+<span class="comment">% rgb2gray</span>
+<span class="comment">% sqrt</span>
+<span class="comment">% .^2</span>
+</pre><pre class="codeoutput">  Name        Size              Bytes  Class     Attributes
+
+  I         384x512            786432  single              
+
+</pre><h2>&#30011;&#20687;&#20986;&#21147;<a name="18"></a></h2><p>imwrite</p><h2>&#28436;&#32722;&#35506;&#38988;<a name="19"></a></h2><p><b>1. &#25104;&#20998;&#21029;&#34920;&#31034;(R,G,B)</b></p><p>&#20966;&#29702;&#20363;</p><p><b>2. &#33394;&#31354;&#38291;&#22793;&#25563;(hsv2rgb)</b></p><p>&#20966;&#29702;&#20363;</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% *組込みビジョン入門（１）*
+%
+% *画像入出力と画素処理(MATLAB)*
+%
+% 新潟大学　工学部　電気電子工学科　
+% 村松　正吾
+%
+% Copyright (c), All rights resereved, 2014, Shogo MURAMATSU
+%
+
+%%
+% *概要*
+%
+% 本演習では、MATLAB(R)にて画像ファイルの情報を読み込む方法のほか、
+% 画像表示、画像ファイル出力、簡単な画素処理について学ぶ。
+%
+
+%% 画像入力
+% 
+% MATLABにおける画像入力は、コマンドプロンプト上にて、
+% <matlab:doc('imread') imread> 関数にファイル名を指定して実行される。
+% 
+I = imread('cameraman.tif');
+
+%%
+% cameraman.tif はグレースケール画像なので、
+% 変数 I は二次元配列として画像データを保持する。
+%
+% 特に指定をしなければ、データ型は符号なし整数８ビット
+% ( <matlab:doc('uint8') uint8> ) となる。
+%
+% コマンドプロンプト上で、 <matlab:doc('whos') whos> 関数により確認できる。
+%
+whos I
+
+%%
+% なお、Size は　'高さ $$\times $$ 幅'　で表示される。
+%
+% 画像のサイズを知るために、
+% <matlab:doc('size') size> 関数を利用することもできる。
+%
+size(I)
+
+%%
+% 高さのみは、二番目の引数に '1' を指定する。
+%
+size(I,1)
+
+%% 
+% 幅のみは、二番目の引数に '2' を指定する。
+%
+size(I,2)
+
+%%
+% カラー画像の読込も可能である。
+%
+RGB = imread('peppers.png');
+
+%%
+% 変数 RGB は 三次元配列として画像データを保持する。
+%
+whos RGB
+
+%%
+% 各R,G,B成分には、コロン( <matlab:doc(':') :> )によるインデックス指定を
+% 利用できる。
+%
+R = RGB(:,:,1);
+G = RGB(:,:,2);
+B = RGB(:,:,3);
+
+%%
+% 各R,G,B成分は、二次元配列となる。
+%
+whos R G B
+
+%% 画像表示
+%
+% MATLABにおける画像表示は、コマンドプロンプト上にて、
+% <matlab:doc('imshow') imshow> 関数にファイル名を指定して実行される。
+% 
+% 変数 I の表示は以下の通り。
+figure(1)
+imshow(I)
+
+%%
+% ここで、 <matlab:doc('figure') figure> 関数は画像を出力するウィンドウを
+% 指定している。
+
+%%
+% 変数RGBの表示は以下の通り。
+%
+figure(2)
+imshow(RGB)
+
+%%
+% カラー画像として表示される。
+%
+
+%% 画素処理
+% 配列に対する演算を施すことで画像処理を実現できる。
+%
+% カラー画像RGBをグレースケール画像に変換しよう。
+% <matlab:doc('images/rgb2gray') rgb2gray> 関数を利用すればよい。
+%
+I = rgb2gray(RGB);
+
+%%
+% なお、変数 I が保持していたcameraman.tif の内容は、
+% peppers.png のグレースケール画像によって上書きされている。
+%
+whos I
+
+%%
+% 画像配列に対し、演算を施すために、しばしば実数型への変換が必要となる。
+%
+% 整数型から実数型への変換には、 <matlab:doc('images/im2single') im2single>
+% 関数、もしくは <matlab:doc('images/im2double') im2double>　関数を
+% 利用できる。
+%
+I = im2single(I);
+whos I
+
+
+% rgb2gray
+% sqrt
+% .^2
+
+%% 画像出力
+%
+% imwrite
+%
+
+%% 演習課題
+%
+% *1. 成分別表示(R,G,B)*
+%
+% 処理例
+%
+% *2. 色空間変換(hsv2rgb)*
+%
+% 処理例
+%
+##### SOURCE END #####
+--></body></html>
