@@ -9,9 +9,9 @@
 %
 
 %%
-% <matlab:showdemo('part1') Part1> |
-% <matlab:showdemo('index') メニュー> |
-% <matlab:showdemo('part3') Part3>
+% <part1.html Part1> |
+% <index.html メニュー> |
+% <part3.html Part3>
 
 %% 一次元フィルタリング
 % conv
@@ -44,6 +44,6 @@
 % <hr>
 % </html>
 %%
-% <matlab:showdemo('part1') Part1> |
-% <matlab:showdemo('index') メニュー> |
-% <matlab:showdemo('part3') Part3>
+% <part1.html Part1> |
+% <index.html メニュー> |
+% <part3.html Part3>

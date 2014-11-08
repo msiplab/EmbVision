@@ -9,9 +9,9 @@
 %
 
 %%
-% <matlab:showdemo('part4') Part4> |
-% <matlab:showdemo('index') メニュー> |
-% <matlab:showdemo('part6') Part6>
+% <part4.html Part4> |
+% <index.html メニュー> |
+% <part6.html Part6>
 
 %% 映像入出力モデル
 % File -> File
@@ -45,6 +45,6 @@
 % <hr>
 % </html>
 %%
-% <matlab:showdemo('part4') Part4> |
-% <matlab:showdemo('index') メニュー> |
-% <matlab:showdemo('part6') Part6>
+% <part4.html Part4> |
+% <index.html メニュー> |
+% <part6.html Part6>

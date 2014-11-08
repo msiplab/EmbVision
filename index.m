@@ -2,12 +2,12 @@
 % 
 % *メニュー*
 %
-% # <matlab:showdemo('part1') 画像入力と画素処理(MATLAB)>
-% # <matlab:showdemo('part2') フィルタリングと周波数特性(MATLAB)>
-% # <matlab:showdemo('part3') クラス定義と単体テスト(MATLAB)>
-% # <matlab:showdemo('part4') 映像ストリーム処理 - MATLAB(R)編 ->
-% # <matlab:showdemo('part5') 映像ストリーム処理 - Simulink(R)編 ->
-% # <matlab:showdemo('part6') 映像ストリーム処理 - Raspberry Pi編 ->
+% # <part1.html 画像入力と画素処理(MATLAB)>
+% # <part2.html フィルタリングと周波数特性(MATLAB)>
+% # <part3.html クラス定義と単体テスト(MATLAB)>
+% # <part4.html 映像ストリーム処理 - MATLAB(R)編 ->
+% # <part5.html 映像ストリーム処理 - Simulink(R)編 ->
+% # <part6.html 映像ストリーム処理 - Raspberry Pi編 ->
 %
 % 新潟大学　工学部　電気電子工学科　
 % 村松　正吾

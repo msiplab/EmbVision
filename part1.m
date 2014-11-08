@@ -9,8 +9,8 @@
 %
 
 %%
-% <matlab:showdemo('index') メニュー> | 
-% <matlab:showdemo('part2') Part2>
+% <index.html メニュー> | 
+% <part2.html Part2>
 
 %%
 % *概要*
@@ -338,5 +338,5 @@ dir *.tif
 % <hr>
 % </html>
 %%
-% <matlab:showdemo('index') メニュー> |
-% <matlab:showdemo('part2') Part2>
+% <index.html メニュー> |
+% <part2.html Part2>

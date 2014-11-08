@@ -7,8 +7,8 @@
 %
 
 %%
-% <matlab:showdemo('part5') Part5> |
-% <matlab:showdemo('index') メニュー>
+% <part5.html Part5> |
+% <index.html メニュー>
 
 %% シミュレーションモデル
 
@@ -51,5 +51,5 @@
 % <hr>
 % </html>
 %%
-% <matlab:showdemo('part5') Part5> |
-% <matlab:showdemo('index') メニュー>
+% <part5.html Part5> |
+% <index.html メニュー>

@@ -9,9 +9,9 @@
 %
 
 %%
-% <matlab:showdemo('part3') Part3> |
-% <matlab:showdemo('index') メニュー> |
-% <matlab:showdemo('part5') Part5>
+% <part3.html Part3> |
+% <index.html メニュー> |
+% <part5.html Part5>
 
 %% 映像入力
 %
@@ -45,6 +45,6 @@
 % <hr>
 % </html>
 %%
-% <matlab:showdemo('part3') Part3> |
-% <matlab:showdemo('index') メニュー> |
-% <matlab:showdemo('part5') Part5>
+% <part3.html Part3> |
+% <index.html メニュー> |
+% <part5.html Part5>

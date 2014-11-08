@@ -9,9 +9,9 @@
 %
 
 %%
-% <matlab:showdemo('part2') Part2> |
-% <matlab:showdemo('index') メニュー> |
-% <matlab:showdemo('part4') Part4>
+% <part2.html Part2> |
+% <index.html メニュー> |
+% <part4.html Part4>
 
 %% 二次元色空間変換テストクラス
 %
@@ -47,6 +47,6 @@
 % <hr>
 % </html>
 %%
-% <matlab:showdemo('part2') Part2> |
-% <matlab:showdemo('index') メニュー> |
-% <matlab:showdemo('part4') Part4>
+% <part2.html Part2> |
+% <index.html メニュー> |
+% <part4.html Part4>
