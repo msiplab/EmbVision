@@ -2,6 +2,7 @@
 *.asv
 *.mex*
 slprj/
+html/
 *_rtt/
 
 # Windows image file caches
