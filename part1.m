@@ -361,4 +361,5 @@ dir *.tif
 % </html>
 %%
 % <index.html メニュー> |
+% <part2.html トップ> |
 % <part2.html Part2>
