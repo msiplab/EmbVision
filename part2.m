@@ -212,6 +212,7 @@ freqz(h)
 %
 % $$ H(e^{j\omega}) = \sum_{n=-\infty}^{\infty} h[n]e^{-j\omega n} 
 %    = h[0]e^{-j0} + h[1]e^{-j\omega} + h[2]e^{-j2\omega} $$
+%
 % $$ = \frac{1}{3}(e^{j\omega} + 1 + e^{-j\omega})e^{-j\omega} 
 %     = \frac{1}{3}(1 + 2\cos\omega)e^{-j\omega} $$
 %
