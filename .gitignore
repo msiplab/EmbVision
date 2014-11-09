@@ -1,4 +1,6 @@
 # MATLAB/Simulink file
+matlab.mat
+*.tif
 *.asv
 *.mex*
 slprj/
