@@ -8,7 +8,7 @@ publish('index',type);
 close all
 
 % ‰Û‘è 1-1
-I = im2double(rgb2gray(imread('peppers.png'))));
+I = im2double(rgb2gray(imread('peppers.png')));
 J = sqrt(I);
 imwrite(J,'html/brightpeppers.png')
 fplot(@sqrt,[0 1])
