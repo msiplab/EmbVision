@@ -8,7 +8,8 @@ publish('index',type);
 close all
 
 % ‰Û‘è 1-1
-I = im2double(rgb2gray(imread('peppers.png')));
+RGB = imread('peppers.png');
+I = im2double(rgb2gray(RGB));
 J = sqrt(I);
 imwrite(J,'html/brightpeppers.png')
 fplot(@sqrt,[0 1])
@@ -18,7 +19,7 @@ axis square
 print -dpng -r72 'html/fplotsqrt.png'
 
 % ‰Û‘è 1-2
-HSV = rgb2hsv(I);
+HSV = rgb2hsv(RGB);
 HSV(:,:,2) = 2*HSV(:,:,2);
 J = hsv2rgb(HSV);
 imwrite(J,'html/highsatpeppers.png')
