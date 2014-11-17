@@ -1,11 +1,10 @@
 classdef GradFiltSystemTestCase < matlab.unittest.TestCase
-    %GRADFILTSYSTEMTESTCASE このクラスの概要をここに記述
-    %   詳細説明をここに記述
+    %GRADFILTSYSTEMTESTCASE GradFiltSystem のテストケース
     
     properties
     end
     
-    methods
+    methods (Test)
     end
     
 end
