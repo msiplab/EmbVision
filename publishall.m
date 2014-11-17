@@ -57,7 +57,9 @@ imwrite(dXang/(2*pi)+0.5,'html/cameramangradang.png')
 publish('part2',type);
 
 %% Part 3
+addpath('work/part3')
 publish('part3',type);
+rmpath('work/part3')
 
 %% Part 4
 publish('part4',type);
@@ -68,3 +70,6 @@ publish('part5',type);
 %% Part 6
 publish('part6',type);
 
+%% ZIP
+zip('embvision','html')
+movefile('embvision.zip','html')

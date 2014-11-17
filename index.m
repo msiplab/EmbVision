@@ -9,6 +9,10 @@
 % # <part5.html 映像ストリーム処理 - Simulink(R)編 ->
 % # <part6.html 映像ストリーム処理 - Raspberry Pi編 ->
 %
+% *ZIPファイル*
+% 
+% * <embvision.zip>
+%
 % 新潟大学　工学部　電気電子工学科　
 % 村松　正吾
 %
