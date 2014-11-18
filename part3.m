@@ -1,6 +1,6 @@
-%% *組込みビジョン入門（３）*
+%% *MATLAB/Simulinkによる組込みビジョン入門（３）*
 %
-% *クラス定義と単体テスト(MATLAB)*
+% *クラス定義と単体テスト*
 %
 % 新潟大学　工学部　電気電子工学科　
 % 村松　正吾
@@ -70,36 +70,29 @@ close all
 %     %
 %     % This template includes the minimum set of functions required
 %     % to define a System object with discrete state.
-%     
 %     properties
 %         % Public, tunable properties.
 %     end
-%     
 %     properties (DiscreteState)
 %     end
-%     
 %     properties (Access = private)
 %         % Pre-computed constants.
 %     end
-%     
 %     methods (Access = protected)
 %         function setupImpl(obj,u)
 %             % Implement tasks that need to be performed only once,
 %             % such as pre-computed constants.
 %         end
-%         
 %         function y = stepImpl(obj,u)
 %             % Implement algorithm. Calculate y as a function of
 %             % input u and discrete states.
 %             y = u;
 %         end
-%         
 %         function resetImpl(obj)
 %             % Initialize discrete-state properties.
 %         end
 %      end
 %   end
-%
 
 %%
 % <matlab:doc('classdef') classdef> 直後の  |Untitled|  を
@@ -195,13 +188,10 @@ close all
 %   classdef Untitled
 %   %UNTITLED このクラスの概要をここに記述
 %      %   詳細説明をここに記述
-%       
 %      properties
 %      end
-%       
 %      methods
 %      end
-%        
 %   end
 
 %%
@@ -227,13 +217,10 @@ close all
 %
 %   classdef Rgb2GraySystemTestCase < matlab.unittest.TestCase
 %       %RGB2GRAYSYSTEMTESTCASE Rgb2GraySystem のテストケース
-%       
 %       properties
 %       end
-%       
 %       methods (Test)
 %       end
-%       
 %   end
 %
 % 編集したファイルを Rgb2GraySystemTestCase.m として保存しよう。
@@ -307,12 +294,9 @@ close all
 %
 %   classdef Rgb2GraySystemTestCase < matlab.unittest.TestCase
 %       %RGB2GRAYSYSTEMTESTCASE Rgb2GraySystem のテストケース
-%     
 %       properties
 %       end
-%     
 %       methods (Test)
-%          
 %           function testSize(testCase)
 %               % 準備
 %               u = zeros(1,2,3);   % 1行2列3成分の三次元配列
@@ -325,7 +309,6 @@ close all
 %               % サイズの検証
 %               testCase.verifySize(y,szExpctd);
 %           end
-%         
 %           function testValues(testCase)
 %               % 準備
 %               u = rand(4,6,3);        % 三次元ランダム配列
@@ -346,12 +329,137 @@ close all
 result = run(Rgb2GraySystemTestCase);
 
 %%
+% |Rgb2GraySystem| を正しく実装できれば、テストは成功する。
+
+%%
 % [ <part3.html トップ> ]
 
-%% 状態（プロパティ）の利用
-% 
-% （準備中）
+%% プロパティの利用
+% クラスは振舞い（メソッド）の他に状態（プロパティ）を持つことができる。
 %
+% クラスの状態は <matlab:doc('properties') properties> ブロック内で
+% プロパティ名を列挙する。
+%
+% 例えば、 |Kernel| という名前のプロパティをもつ |GradFiltSystem| という名の
+% System object クラスの定義は
+%
+%   classdef GradFiltSystem < matlab.System
+%       properties
+%          Kernel % 追加したプロパティ
+%       end
+%       properties (DiscreteState)
+%       end
+%       properties (Access = private)
+%       end
+%       methods (Access = protected)
+%           function setupImpl(obj,u)
+%           end
+%           function y = stepImpl(obj,u)
+%              y = u;
+%           end
+%           function resetImpl(obj)
+%           end
+%        end
+%    end
+%
+% のように記述される。
+
+%% 
+% プロパティには初期値を与えることもできる。
+% プロパティ |Kernel| の初期値が
+%
+%   Kernel = [  1  1  1 ; 
+%               0  0  0 ;
+%              -1 -1 -1 ];
+%
+% となることを期待するテストクラスを実装しよう。
+%
+%   classdef GradFiltSystemTestCase < matlab.unittest.TestCase
+%       %GRADFILTSYSTEMTESTCASE GradFiltSystem のテストケース
+%       properties
+%       end
+%       methods (Test)
+%           function testDefaultKernel(testCase)
+%               % 期待値　
+%               kernelExpctd = [  1  1  1 ;
+%                                 0  0  0 ;
+%                               -1 -1 -1 ];
+%               % ターゲットクラスのインスタンス化
+%               obj = GradFiltSystem();
+%               % プロパティー Kernel の取得
+%               kernelActual = get(obj,'Kernel');
+%               % プロパティー Kernel の検証
+%              testCase.verifyEqual(kernelActual,kernelExpctd)
+%           end
+%       end
+%   end
+
+%%
+% |GradFiltSystem| クラスを上のテストが通るように |Kernel| プロパティを
+% 編集する。
+%
+%   properties
+%       Kernel = [  1  1  1 ; % 初期化したプロパティ
+%                   0  0  0 ;
+%                  -1 -1 -1 ];
+%   end
+
+%%
+% なお、メソッド内でプロパティにアクセスは、
+%
+%   function y = stepImpl(obj,u)
+%      y = conv2(obj.Kernel,u); 
+%   end
+%
+% のように、第一引数（上の例では変数 obj ）を介してドット(.)により行う。
+
+%%
+% [ <part3.html トップ> ]
+
+%% コンストラクタ
+% プロパティ |Kernel| は、 |GradFiltSystem| クラスの
+% インスタンスオブジェクトを生成する際に変更することもできる。
+% まず、以下のテストメソッドを |GradFiltSystemTestCase| に追加しよう。
+%
+%   function testSobelKernel(testCase)
+%       % 期待値
+%       kernelExpctd = [  1  2  1 ;
+%                         0  0  0 ;
+%                        -1 -2 -1 ];
+%       % ターゲットクラスのインスタンス化
+%       obj = GradFiltSystem('Kernel',kernelExpctd);
+%       % プロパティー Kernel の取得
+%       kernelActual = get(obj,'Kernel');
+%       % プロパティー Kernel の検証
+%       testCase.verifyEqual(kernelActual,kernelExpctd)
+%   end     
+
+%%
+% 上のテストを通過するようにコンストラクタを定義しよう。
+%
+% コンストラクタは、 属性を指定しないmethodsブロック（パブリック）内で
+% クラス名と同じ名前のメソッドとして定義する。
+%
+%   methods
+%      % コンストラクタ
+%      function obj = GradFiltSystem(varargin)
+%         setProperties(obj,nargin,varargin{:})
+%      end
+%   end
+%   methods (Access = protected)
+%      ...
+%   end
+
+%%
+% <matlab:doc('varargin') varargin> は可変長の引数入力を受け取る。
+% <matlab:doc('matlab.System.setProperties') setProperties> は、
+%
+% _'プロパティ名1'_, _プロパティ値1_,_'プロパティ名2'_, _プロパティ値2_,...
+%
+% の組合せでの設定を可能とする。
+
+%%
+% [ <part3.html トップ> ]
 
 %% 演習課題
 %
@@ -361,12 +469,9 @@ result = run(Rgb2GraySystemTestCase);
 %
 %   classdef Hsv2RgbSystemTestCase < matlab.unittest.TestCase
 %       %HSV2RGBSYSTEMTESTCASE Hsv2RgbSystem のテストケース
-%     
 %       properties
 %       end
-%     
 %       methods (Test)
-%         
 %           function testSize(testCase)
 %               % 準備
 %               h = zeros(1,2);
@@ -386,7 +491,6 @@ result = run(Rgb2GraySystemTestCase);
 %               testCase.verifySize(g,szGExpctd);
 %               testCase.verifySize(b,szBExpctd);
 %           end
-%         
 %           function testValues(testCase)
 %               % 準備
 %               h = rand(4,6);
@@ -412,15 +516,84 @@ result = run(Rgb2GraySystemTestCase);
 result = run(Hsv2RgbSystemTestCase);
 
 %%
+% |Hsv2RgbSystem| を正しく実装できれば、テストは成功する。
+
+%%
 % *課題3-2. 勾配フィルタクラス*
 %
 % 次のテストクラス
 %
-% （準備中）
+%   classdef GradFiltSystemTestCase < matlab.unittest.TestCase
+%       %GRADFILTSYSTEMTESTCASE GradFiltSystem のテストケース
+%       properties
+%       end
+%       methods (Test)
+%           function testDefaultKernel(testCase)
+%               % 期待値
+%               kernelExpctd = [  1  1  1 ;
+%                                 0  0  0 ;
+%                                -1 -1 -1 ];
+%               % ターゲットクラスのインスタンス化
+%               obj = GradFiltSystem();
+%               % プロパティー Kernel の取得
+%               kernelActual = get(obj,'Kernel');
+%               % プロパティー Kernel の検証
+%               testCase.verifyEqual(kernelActual,kernelExpctd)
+%           end
+%           function testSobelKernel(testCase)
+%               % 期待値
+%               kernelExpctd = [  1  2  1 ;
+%                                 0  0  0 ;
+%                                -1 -2 -1 ];
+%               % ターゲットクラスのインスタンス化
+%               obj = GradFiltSystem('Kernel',kernelExpctd);
+%               % プロパティー Kernel の取得
+%               kernelActual = get(obj,'Kernel');
+%               % プロパティー Kernel の検証
+%               testCase.verifyEqual(kernelActual,kernelExpctd)
+%           end        
+%           function testStepWithPrewittKernel(testCase)
+%               % 準備
+%               H = [  1  1  1 ;
+%                      0  0  0 ;
+%                     -1 -1 -1 ];
+%               % 期待値の準備
+%               I  = imread('cameraman.tif');
+%               X  = im2double(I);
+%               Yv = conv2(H  ,X);        % 垂直勾配の計算
+%               Yv = Yv(2:end-1,2:end-1); % 処理画像のクリッピング
+%               Yh = conv2(H.',X);        % 水平勾配の計算　
+%               Yh = Yh(2:end-1,2:end-1); % 処理画像のクリッピング
+%               magExpctd = sqrt(Yv.^2+Yh.^2); % 勾配の大きさの期待値
+%               angExpctd = atan2(Yv,Yh);     % 勾配の偏角のの期待値
+%               % ターゲットクラスのインスタンス化
+%               obj = GradFiltSystem();
+%               % 処理結果
+%               [magActual,angActual] = step(obj,X);
+%               % 処理結果の検証
+%               testCase.verifyEqual(magActual,magExpctd,'AbsTol',1e-7)
+%               testCase.verifyEqual(angActual,angExpctd,'AbsTol',1e-7)
+%           end        
+%       end
+%   end
 %
 % を満足するように、 |GradFiltSystem| クラスを実装しよう。
 
 result = run(GradFiltSystemTestCase);
+
+%%
+% |GradFiltSystem| を正しく実装できれば、テストは成功する。
+
+%%
+% （処理例）
+I = imread('cameraman.tif');
+hrs = Hsv2RgbSystem();
+gfs = GradFiltSystem();
+[mag,ang] = step(gfs,I);
+ang = (ang+pi)/(2*pi);
+[R,G,B] = step(hrs,ang,mag,mag);
+J = cat(3,R,G,B);
+imshow(J);
 
 %% 参考文献
 % （準備中）
