@@ -17,27 +17,44 @@
 % File -> File
 %
 
+%%
+% <part6.html トップ> 
+
 %% MATLAB System ブロック
 %
 % MATLAB System
 
-%% ブロックのカスタマイズ
-%
-% RGB2GRAYSYSTEM
-% matlab.system.mixin.CustomIcon
-%
+%%
+% <part6.html トップ> 
 
-%% SETUP関数と出力サイズ
+%% ブロックのカスタマイズ
+% matlab.system.mixin.CustomIcon
+
+%%
+% <part6.html トップ> 
+
+%% フィードスルー
 %
-% GRADFILTSYSTEM
-% SETUP関数
+% matlab.system.mixin.Nondirect
+
+%%
+% <part6.html トップ> 
+
+%% 信号伝搬
+% matlab.system.mixin.Propagates
 %
+% 演算精度と誤差評価
+
+%%
+% <part6.html トップ> 
+
 
 %% 演習課題
 %
-% SOBEL勾配
+% *演習課題5-1.* SOBEL勾配
 %
-% フレーム差分 (Nonmatlab.system.mixin.Nondirect フィードスルー）
+%%
+% *演習課題5-2.* フレーム差分
 %
 
 %%
@@ -47,4 +64,5 @@
 %%
 % <part4.html Part4> |
 % <index.html メニュー> |
+% <part5.html トップ> |
 % <part6.html Part6>

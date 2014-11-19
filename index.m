@@ -1,5 +1,8 @@
 %% *MATLAB/Simulinkによる組込みビジョン入門*
 % 
+% 本資料は、新潟大学工学部電気電子工学科専門科目「電気電子創造設計」の課題として
+% 作成したものです。
+%
 % *メニュー*
 %
 % # <part1.html 画像入力と画素処理>
@@ -18,9 +21,12 @@
 %
 %   >> upzip('embvision.zip')
 %
+% *MathWorks*
+%
+% * <http://jp.mathworks.com/academia/>
+%
 % 新潟大学　工学部　電気電子工学科　
 % 村松　正吾
 %
 % Copyright (c), All rights resereved, 2014, Shogo MURAMATSU
 %
-%ad

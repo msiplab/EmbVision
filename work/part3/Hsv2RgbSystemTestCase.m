@@ -1,17 +1,13 @@
 classdef Hsv2RgbSystemTestCase < matlab.unittest.TestCase
     %HSV2RGBSYSTEMTESTCASE Hsv2RgbSystem のテストケース
-    
     properties
     end
-    
     methods (Test)
-        
         function testSize(testCase)
             % 準備
             h = zeros(1,2);
             s = zeros(1,2);
             v = zeros(1,2);
-            hsv = cat(3,h,s,v); % 三次元配列化
             % 期待値
             szRExpctd = [ 1 2 ];
             szGExpctd = [ 1 2 ];
@@ -25,7 +21,6 @@ classdef Hsv2RgbSystemTestCase < matlab.unittest.TestCase
             testCase.verifySize(g,szGExpctd);
             testCase.verifySize(b,szBExpctd);
         end
-        
         function testValues(testCase)
             % 準備
             h = rand(4,6);

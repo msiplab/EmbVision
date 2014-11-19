@@ -11,6 +11,10 @@
 % <index.html メニュー>
 
 %% シミュレーションモデル
+%
+
+%%
+% <part6.html トップ> 
 
 %% Raspberry Pi 設定
 %
@@ -23,6 +27,9 @@
 % [ツール] > [ターゲットハードウェアで実行 ] > [オプション ]
 %
 
+%%
+% <part6.html トップ> 
+
 %% Raspberry Pi 協調実装
 %
 % 水平垂直 置換
@@ -31,6 +38,16 @@
 %
 % エクスターナルモードで実行
 
+%%
+% <part6.html トップ> 
+
+%% 演算精度と速度評価
+%
+%
+
+%%
+% <part6.html トップ> 
+
 %% Raspberry Pi スタンドアロン実装
 %
 % Raspberry Pi にWEBカメラとHDMIディスプレイを接続
@@ -38,13 +55,17 @@
 % Copyright (c), All rights resereved, 2014, Shogo MURAMATSU
 %
 
+%%
+% <part6.html トップ> 
+
 %% 演習課題
 %
-% SOBEL勾配フィルタ
+% *演習課題6-1.* SOBEL勾配フィルタ
 %
-% フレーム差分
+%%
+% 
+% *演習課題6-2.* フレーム差分
 %
-
 
 %%
 % <html>
@@ -53,3 +74,4 @@
 %%
 % <part5.html Part5> |
 % <index.html メニュー>
+% <part6.html トップ> 

@@ -18,11 +18,6 @@
 %
 % 本演習では、MATLAB(R)でのオブジェクト指向プログラミングと
 % 単体テスト機能について簡単に学ぶ。
-%
-% 準備として、開いている全ての Figure を <matlab:doc('close') close> 関数で
-% 閉じておく。
-
-close all
 
 %% オブジェクト指向プログラミング(OOP)
 % プログラムのモジュール化は高い信頼性と広い拡張性をもたらす。
@@ -95,9 +90,9 @@ close all
 %   end
 
 %%
-% <matlab:doc('classdef') classdef> 直後の  |Untitled|  を
+% <matlab:doc('classdef') classdef> 直後の  Untitled  を
 % 
-% |Rgb2GraySystem|  
+% Rgb2GraySystem  
 %
 % と書き換え、先頭行が以下のようになるよう編集しよう。
 
@@ -110,37 +105,37 @@ close all
 %%
 % 編集したファイルを Rgb2GraySystem.m として保存しよう。
 %
-% なお、 |classdef|  に続く文字列はクラス名となる。
+% なお、 classdef  に続く文字列はクラス名となる。
 % クラス名はファイル名と一致させる必要がある。
 
 %%
 % 利用手順を以下にまとめる。
 %
 % # インスタンスオブジェクトを生成（コンストラクタの呼出し）
-% #  |step| メソッドを実行（stepImpl()の呼出し）
+% #  step メソッドを実行（stepImplの呼出し）
 
 %%
 %   >> u = 1;
 %   >> obj = Rgb2GraySystem(); % コンストラクタの呼出し
-%   >> y = step(obj,u)         % stepImpl() の呼出し
+%   >> y = step(obj,u)         % stepImpl の呼出し
 %   
 %   y =
 %
 %        1
 
 %%
-% 現時点で  |Rgb2GraySystem| のクラス定義は自動生成されたままである。
+% 現時点で  Rgb2GraySystem のクラス定義は自動生成されたままである。
 %
-% |stepImpl()| メソッドは、入力 |u| をそのまま出力する。
+% stepImpl メソッドは、入力 u をそのまま出力する。
 %
 %   function y = stepImpl(obj,u)
 %      y = u;
 %   end
 %
-% クラス |Rgb2GraySystem| が所望の機能を満たすためには状態（プロパティ）と
+% クラス Rgb2GraySystem が所望の機能を満たすためには状態（プロパティ）と
 % 振舞い（メソッド）を適切に実装しなければならない。
 %
-% 以下では、 *テスト駆動開発* により |Rgb2GraySystem| クラスの実装を進める。
+% 以下では、 *テスト駆動開発* により Rgb2GraySystem クラスの実装を進める。
 
 %%
 % [ <part3.html トップ> ]
@@ -167,16 +162,16 @@ close all
 % を繰返し、テストクラスとターゲットクラスを充実させる。
 
 %%
-% 以下の手順で、 |Rgb2GraySystem| のクラス実装を進めよう。
+% 以下の手順で、 Rgb2GraySystem のクラス実装を進めよう。
 % 
-% # テストクラス |Rgb2GraySystemTestCase| の定義
-% # テストクラス |Rgb2GraySystemTestCase| へのメソッド |testSize()| の実装
-% # ターゲットクラス |Rgb2GraySystem| のメソッド |testSize()| の失敗の確認
-% # ターゲットクラス |Rgb2GraySystem| のメソッド |stepImpl()| の実装
-% # ターゲットクラス |Rgb2GraySystem| のメソッド |testSize()| の成功の確認
+% # テストクラス Rgb2GraySystemTestCase の定義
+% # テストクラス Rgb2GraySystemTestCase へのメソッド testSize の実装
+% # ターゲットクラス Rgb2GraySystem のメソッド testSize の失敗の確認
+% # ターゲットクラス Rgb2GraySystem のメソッド stepImpl の実装
+% # ターゲットクラス Rgb2GraySystem のメソッド testSize の成功の確認
 
 %% テストクラスの定義
-% では、テストクラス |Rgb2GraySystemTestCase| を定義してみよう。
+% では、テストクラス Rgb2GraySystemTestCase を定義してみよう。
 %
 % ホームタグから、
 % 
@@ -196,9 +191,9 @@ close all
 
 %%
 % <matlab:doc('matlab.unittest.TestCase') matlab.unittest.TestCase> 
-% クラスを継承して、テストクラス |Rgb2GraySystemTestCase| を定義すればよい。
+% クラスを継承して、テストクラス Rgb2GraySystemTestCase を定義すればよい。
 %
-% すなわち、先頭部 |classdef| の行を
+% すなわち、先頭部 classdef の行を
 %
 %   classdef Rgb2GraySystemTestCase < matlab.unittest.TestCase
 %   %RGB2GRAYSYSTEMTESTCASER Rgb2GraySystem のテストケース
@@ -229,7 +224,7 @@ close all
 % [ <part3.html トップ> ]
 
 %% テストメソッドの追加
-% では、テストクラス |Rgb2GraySystemTestCase| に
+% では、テストクラス Rgb2GraySystemTestCase に
 % テストメソッドを追加しよう。
 % 
 % Test 属性のついた methods ブロック内に
@@ -240,7 +235,7 @@ close all
 %   
 %   function testSize(testCase)
 %      % 準備
-%      u = zeros(1,2,3);   % 1行2列3成分の三次元配列
+%      u = zeros(1,2,3);   % 1行2列3成分の三次元零配列
 %      % 期待値
 %      szExpctd = [ 1 2 ]; % 1行2列の二次元配列
 %      % ターゲットのインスタンス化
@@ -251,7 +246,13 @@ close all
 %      testCase.verifySize(y,szExpctd);
 %   end
 %
-% を |Rgb2GraySystemTestCase| の methos (Test) ブロックに追加しよう。
+% を Rgb2GraySystemTestCase の methos (Test) ブロックに追加しよう。
+%
+% なお、 <matlab:doc('matlab.unittest.qualifications.Verifiable.verifySize')
+% verifySize> は、値が指定されたサイズであることを検証する。
+%
+% <matlab:doc('zeros') zeros> 関数は、指定されたサイズの零配列を
+% 生成する。
 
 %%
 % コマンドウィンドウ上で <matlab:doc('matlab.unittest.TestCase.run') run> 
@@ -259,10 +260,10 @@ close all
 %
 %   >> result = run(Rgb2GraySystemTestCase);
 %
-% |Rgb2GraySystem| の実装が不十分なので、検証は失敗に終わる。
+% Rgb2GraySystem の実装が不十分なので、検証は失敗に終わる。
 
 %% ターゲットクラスの実装
-% 検証の失敗を回避するためにクラス |Rgb2GraySystem| の |stepImpl()| メソッド
+% 検証の失敗を回避するためにクラス Rgb2GraySystem の stepImpl メソッド
 % を
 % 
 %   function y = stepImpl(obj,u)
@@ -324,12 +325,18 @@ close all
 %       end
 %   end
 %
-% を満足するように、 |Rgb2GraySystem| クラスを実装しよう。
+% を満足するように、 Rgb2GraySystem クラスを実装しよう。
+%
+% なお、 <matlab:doc('matlab.unittest.qualifications.Verifiable.verifyEqual')
+% verifyEqual> は、値が指定値と等しいことを検証する。
+% 
+% <matlab:doc('rand') rand> 関数は、0から1の実数型の一様乱数を生成
+% する。
 
 result = run(Rgb2GraySystemTestCase);
 
 %%
-% |Rgb2GraySystem| を正しく実装できれば、テストは成功する。
+% Rgb2GraySystem を正しく実装できれば、テストは成功する。
 
 %%
 % [ <part3.html トップ> ]
@@ -340,7 +347,7 @@ result = run(Rgb2GraySystemTestCase);
 % クラスの状態は <matlab:doc('properties') properties> ブロック内で
 % プロパティ名を列挙する。
 %
-% 例えば、 |Kernel| という名前のプロパティをもつ |GradFiltSystem| という名の
+% 例えば、 Kernel という名前のプロパティをもつ GradFiltSystem という名の
 % System object クラスの定義は
 %
 %   classdef GradFiltSystem < matlab.System
@@ -352,11 +359,14 @@ result = run(Rgb2GraySystemTestCase);
 %       properties (Access = private)
 %       end
 %       methods (Access = protected)
-%           function setupImpl(obj,u)
+%           % セットアップ（最初のステップ直前に実行）
+%           function setupImpl(obj,srcImg)
 %           end
-%           function y = stepImpl(obj,u)
-%              y = u;
+%           % ステップ
+%           function resImg = stepImpl(obj,srcImg)
+%              resImg = srcImg;
 %           end
+%           % リセット
 %           function resetImpl(obj)
 %           end
 %        end
@@ -366,7 +376,7 @@ result = run(Rgb2GraySystemTestCase);
 
 %% 
 % プロパティには初期値を与えることもできる。
-% プロパティ |Kernel| の初期値が
+% プロパティ Kernel の初期値が
 %
 %   Kernel = [  1  1  1 ; 
 %               0  0  0 ;
@@ -389,13 +399,13 @@ result = run(Rgb2GraySystemTestCase);
 %               % プロパティー Kernel の取得
 %               kernelActual = get(obj,'Kernel');
 %               % プロパティー Kernel の検証
-%              testCase.verifyEqual(kernelActual,kernelExpctd)
+%               testCase.verifyEqual(kernelActual,kernelExpctd)
 %           end
 %       end
 %   end
 
 %%
-% |GradFiltSystem| クラスを上のテストが通るように |Kernel| プロパティを
+% GradFiltSystem クラスを上のテストが通るように Kernel プロパティを
 % 編集する。
 %
 %   properties
@@ -417,9 +427,9 @@ result = run(Rgb2GraySystemTestCase);
 % [ <part3.html トップ> ]
 
 %% コンストラクタ
-% プロパティ |Kernel| は、 |GradFiltSystem| クラスの
+% プロパティ Kernel は、 GradFiltSystem クラスの
 % インスタンスオブジェクトを生成する際に変更することもできる。
-% まず、以下のテストメソッドを |GradFiltSystemTestCase| に追加しよう。
+% まず、以下のテストメソッドを GradFiltSystemTestCase に追加しよう。
 %
 %   function testSobelKernel(testCase)
 %       % 期待値
@@ -477,7 +487,6 @@ result = run(Rgb2GraySystemTestCase);
 %               h = zeros(1,2);
 %               s = zeros(1,2);
 %               v = zeros(1,2);
-%               hsv = cat(3,h,s,v); % 三次元配列化
 %               % 期待値
 %               szRExpctd = [ 1 2 ];
 %               szGExpctd = [ 1 2 ];
@@ -511,12 +520,15 @@ result = run(Rgb2GraySystemTestCase);
 %       end
 %   end
 %
-% を満足するように、 |Hsv2RgbSystem| クラスを実装しよう。
+% を満足するように、 Hsv2RgbSystem クラスを実装しよう。
+%
+% なお、 <matlab:doc('cat') cat> 関数は指定した次元の方向に配列の結合を
+% 行う。
 
 result = run(Hsv2RgbSystemTestCase);
 
 %%
-% |Hsv2RgbSystem| を正しく実装できれば、テストは成功する。
+% Hsv2RgbSystem を正しく実装できれば、テストは成功する。
 
 %%
 % *課題3-2. 勾配フィルタクラス*
@@ -571,29 +583,32 @@ result = run(Hsv2RgbSystemTestCase);
 %               % 処理結果
 %               [magActual,angActual] = step(obj,X);
 %               % 処理結果の検証
-%               testCase.verifyEqual(magActual,magExpctd,'AbsTol',1e-7)
-%               testCase.verifyEqual(angActual,angExpctd,'AbsTol',1e-7)
+%               testCase.verifyEqual(magActual,magExpctd,'AbsTol',1e-6)
+%               testCase.verifyEqual(angActual,angExpctd,'AbsTol',1e-6)
 %           end        
 %       end
 %   end
 %
-% を満足するように、 |GradFiltSystem| クラスを実装しよう。
+% を満足するように、 GradFiltSystem クラスを実装しよう。
 
 result = run(GradFiltSystemTestCase);
 
 %%
-% |GradFiltSystem| を正しく実装できれば、テストは成功する。
+% GradFiltSystem を正しく実装できれば、テストは成功する。
 
 %%
 % （処理例）
-I = imread('cameraman.tif');
-hrs = Hsv2RgbSystem();
+
+hrs = Hsv2RgbSystem();        
 gfs = GradFiltSystem();
-[mag,ang] = step(gfs,I);
-ang = (ang+pi)/(2*pi);
-[R,G,B] = step(hrs,ang,mag,mag);
-J = cat(3,R,G,B);
-imshow(J);
+
+I = imread('cameraman.tif');     % 画像入力
+[mag,ang] = step(gfs,I);         % 勾配フィルタリング
+ang = (ang+pi)/(2*pi);           % 偏角の正規化
+mag = min(mag,1);                % 大きさの飽和処理
+[R,G,B] = step(hrs,ang,mag,mag); % 疑似カラー化
+J = cat(3,R,G,B);                % RGB配列結合
+imshow(J)                        % 画像表示
 
 %% 参考文献
 % （準備中）

@@ -46,8 +46,8 @@ classdef GradFiltSystemTestCase < matlab.unittest.TestCase
             % ˆ—Œ‹‰Ê
             [magActual,angActual] = step(obj,X);
             % ˆ—Œ‹‰Ê‚ÌŒŸØ
-            testCase.verifyEqual(magActual,magExpctd,'AbsTol',1e-7)
-            testCase.verifyEqual(angActual,angExpctd,'AbsTol',1e-7)
+            testCase.verifyEqual(magActual,magExpctd,'AbsTol',1e-6)
+            testCase.verifyEqual(angActual,angExpctd,'AbsTol',1e-6)
         end        
     end
 end

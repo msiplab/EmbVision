@@ -1,11 +1,8 @@
 classdef Rgb2GraySystemTestCase < matlab.unittest.TestCase
     %RGB2GRAYSYSTEMTESTCASE Rgb2GraySystem のテストケース
-    
     properties
     end
-    
     methods (Test)
-        
         function testSize(testCase)
             % 準備
             u = zeros(1,2,3);   % 1行2列3成分の三次元配列
@@ -18,10 +15,9 @@ classdef Rgb2GraySystemTestCase < matlab.unittest.TestCase
             % サイズの検証
             testCase.verifySize(y,szExpctd);
         end
-        
         function testValues(testCase)
             % 準備
-            u = rand(4,6,3);        % 三次元ランダム配列
+            u = rand(4,6,3);           % 三次元ランダム配列
             % 期待値
             arrayExpctd = rgb2gray(u); % グレースケールの期待値
             % ターゲットのインスタンス化

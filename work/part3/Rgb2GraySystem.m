@@ -1,30 +1,22 @@
 classdef Rgb2GraySystem < matlab.System
-    % RGB2GRAYSYSTEM RGB to Grayscale Converter
+    % RGB2GRAYSYSTEM RGB から グレースケールへの変換
     %
-    
     properties
-        % Public, tunable properties.
     end
-    
     properties (DiscreteState)
     end
-    
     properties (Access = private)
-        % Pre-computed constants.
     end
-    
     methods (Access = protected)
-        function setupImpl(obj,u)
-            % Implement tasks that need to be performed only once,
-            % such as pre-computed constants.
+        % セットアップ（最初のステップ直前に実行）
+        function setupImpl(obj,srcImg)
         end
-        
-        function y = stepImpl(obj,u)
-            y = rgb2gray(u);
+        % ステップ
+        function resImg = stepImpl(obj,srcImg)
+            resImg = rgb2gray(srcImg);
         end
-        
+        % リセット
         function resetImpl(obj)
-            % Initialize discrete-state properties.
         end
     end
 end

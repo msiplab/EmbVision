@@ -276,7 +276,7 @@ whos Fmag
 
 figure(2)
 hsrfc = surface(20*log10(Fmag));
-hsrfc.EdgeColor = 'none';
+set(hsrfc,'EdgeColor','none');
 
 %%
 % ここでは、デシベルに換算している点に注意する。
@@ -290,15 +290,15 @@ caxis([ -20 80 ])
 % 中心が直流となるように <matlab:doc('fftshift') fftshift> 関数を用いて
 % 配列をシフトする。
 
-hsrfc.ZData = fftshift(hsrfc.ZData); % Z軸のシフト
-hsrfc.CData = fftshift(hsrfc.CData); % カラー軸のシフト
+set(hsrfc,'ZData',fftshift(hsrfc.ZData)); % Z軸のシフト
+set(hsrfc,'CData',fftshift(hsrfc.CData)); % カラー軸のシフト
 
 %%
 % 正規化周波数となるよう座標の調整を行う。
 
 fstep = 1/256; % 周波数標本点の間隔
-hsrfc.XData = -0.5:fstep:0.5-fstep;
-hsrfc.YData = -0.5:fstep:0.5-fstep;
+set(hsrfc,'XData',-0.5:fstep:0.5-fstep);
+set(hsrfc,'YData',-0.5:fstep:0.5-fstep);
 xlabel('F_x (\times\pi rad/sample)')
 ylabel('F_y (\times\pi rad/sample)')
 
@@ -390,13 +390,13 @@ figure(4)
 F = fft2(Y,256,256);
 Fmag = abs(F);
 hsrfc = surface(20*log10(Fmag));
-hsrfc.EdgeColor = 'none';
+set(hsrfc,'EdgeColor','none');
 colorbar
 caxis([ -20 80 ])
-hsrfc.ZData = fftshift(hsrfc.ZData);
-hsrfc.CData = fftshift(hsrfc.CData);
-hsrfc.XData = -0.5:fstep:0.5-fstep;
-hsrfc.YData = -0.5:fstep:0.5-fstep;
+set(hsrfc,'ZData',fftshift(hsrfc.ZData));
+set(hsrfc,'CData',fftshift(hsrfc.CData));
+set(hsrfc,'XData',-0.5:fstep:0.5-fstep);
+set(hsrfc,'YData',-0.5:fstep:0.5-fstep);
 xlabel('F_x (\times\pi rad/sample)')
 ylabel('F_y (\times\pi rad/sample)')
 view([ -15 30 ])
