@@ -6,6 +6,8 @@ matlab.mat
 *.mex*
 slprj/
 html/
+models/
++embvision
 *_rtt/
 
 # Windows image file caches
