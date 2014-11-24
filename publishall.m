@@ -119,7 +119,39 @@ rmpath('work/part4')
 %% Part 5
 close all
 
+addpath('work/part5')
+
+%
+copyfile('work/part5/videoio_slx_00.png','html/videoio_slx_00.png');
+copyfile('work/part5/videoio_slx_01.png','html/videoio_slx_01.png');
+copyfile('work/part5/videoio_slx_02.png','html/videoio_slx_02.png');
+copyfile('work/part5/videoio_slx_03.png','html/videoio_slx_03.png');
+copyfile('work/part5/videoio_slx_04.png','html/videoio_slx_04.png');
+copyfile('work/part5/videorgb2gray_slx_00.png','html/videorgb2gray_slx_00.png');
+copyfile('work/part5/videorgb2gray_slx_01.png','html/videorgb2gray_slx_01.png');
+copyfile('work/part5/videorgb2gray_slx_02.png','html/videorgb2gray_slx_02.png');
+copyfile('work/part5/videorgb2gray_slx_03.png','html/videorgb2gray_slx_03.png');
+copyfile('work/part5/videogradfilt_slx_00.png','html/videogradfilt_slx_00.png');
+copyfile('work/part5/file_button.png','html/file_button.png');
+copyfile('work/part5/library_button.png','html/library_button.png');
+copyfile('work/part5/play_button.png','html/play_button.png');
+copyfile('work/part5/library_browser.png','html/library_browser.png');
+copyfile('work/part5/cvs_library.png','html/cvs_library.png');
+copyfile('work/part5/cvs_sources.png','html/cvs_sources.png');
+copyfile('work/part5/cvs_sources_blocks.png','html/cvs_sources_blocks.png');
+copyfile('work/part5/cvs_sinks.png','html/cvs_sinks.png');
+copyfile('work/part5/cvs_sinks_blocks.png','html/cvs_sinks_blocks.png');
+copyfile('work/part5/frommultimediafile_blockparameter.png','html/frommultimediafile_blockparameter.png');
+copyfile('work/part5/tomultimediafile_blockparameter.png','html/tomultimediafile_blockparameter.png');
+copyfile('work/part5/matlabsystem_blockparameter.png','html/matlabsystem_blockparameter.png');
+copyfile('work/part5/imaq_blocks.png','html/imaq_blocks.png');
+copyfile('work/part5/udf_blocks.png','html/udf_blocks.png');
+copyfile('work/part5/vipmengradfilt_avi.png','html/vipmengradfilt_avi.png');
+
+
+%
 publish('part5',type);
+rmpath('work/part5')
 
 %% Part 6
 close all

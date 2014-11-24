@@ -523,9 +523,6 @@ freqz2(H)
 %%
 % <<cameramangradang.png>>
 
-%% 参考文献
-% （準備中）
-
 %%
 % <html>
 % <hr>

@@ -351,9 +351,7 @@ dir *.tif
 %
 %%
 % <<highsatpeppers.png>>
-
-%% 参考文献
-% （準備中）
+%
 
 %%
 % <html>
