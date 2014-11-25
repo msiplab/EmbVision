@@ -36,7 +36,7 @@
 % 
 % バージョンアップを重ねる毎に
 % OOP機能が強化されてきており、今では
-% <matlab:doc('matlab.System') System object>  基底クラスの継承により、
+% <matlab:doc('matlab.System') System object(TM)>  基底クラスの継承により、
 %
 % * ストリーム処理
 % * コード生成

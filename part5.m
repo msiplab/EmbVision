@@ -16,8 +16,8 @@
 %%
 % *概要*
 %
-% 本演習では、Simulink(R)にて映像ファイルの入力と表示を行うほか、
-% MATLAB System object から Simulink ブロックを作成する方法と、
+% 本演習では、Simulinkにて映像ファイルの入力と表示を行うほか、
+% System object(TM) から Simulink ブロックを作成する方法と、
 % 同ブロックを利用した映像ストリーム処理について学ぶ。
 
 %% Simulink モデルの作成
@@ -28,7 +28,7 @@
 % # 「新規作成」
 % # →「Simulink モデル」
 %
-% を選択するか、 MATLABコマンドウィンドウ上から
+% を選択するか、 MATLAB(R)コマンドウィンドウ上から
 % <matlab:doc('new_system') new_system> 関数と
 % <matlab:doc('open_system') open_system> 関数
 % を利用すればよい。
@@ -57,7 +57,7 @@
 % のように <matlab:doc('save_system') save_system> 関数を利用すればよい。
 
 %%
-% <part6.html トップ> 
+% [ <part5.html トップ> ]
 
 %% Simulink ライブラリブラウザー
 % Simulink では、処理の構成要素となるブロックを並べて接続し、
@@ -73,14 +73,14 @@
 % <<library_browser.png>>
 
 %%
-% <part6.html トップ> 
+% [ <part5.html トップ> ]
 
 %% 映像ファイル入出力モデル
 % では、例として映像ファイルの入力と出力を行うシステムモデルを構築しよう。
 %
 % まず、左側のリストから
 %
-% * <matlab:doc('vision') Computer Vision System Toolbox>
+% * <matlab:doc('vision') Computer Vision System Toolbox(TM)>
 %
 % を選択しよう。
 %
@@ -156,7 +156,7 @@
 %%
 % ライブラリブラウザーから
 %
-% * <matlab:doc('imaq') Image Acqusition Toolbox>
+% * <matlab:doc('imaq') Image Acqusition Toolbox(TM)>
 %
 % を選択して、「From Video Device」ブロックを利用すれば、
 % 接続されたカメラからの映像を入力として利用できる。
@@ -178,12 +178,15 @@
 
 %%
 % 出力先として「Computer Vision System Toolbos/Sinks」内にある
-% 「To Video Viewer」ブロックを利用すれば、Simulink 上で、
-% ビューワーが現れ、シミュレーションをしながら出力映像を確認することができる。
-% 詳細は割愛する。
+%
+% * <matlab:doc('videoviewer') Video Viewer> ブロック
+% * <matlab:doc('vision/tovideodisplay') To Video Display> ブロック（Windows(R)のみ）
+% 
+% を利用すれば、Simulink 上でビューワーが現れ、
+% シミュレーションをしながら出力映像を確認することができる。詳細は割愛する。
 
 %%
-% <part6.html トップ> 
+% [ <part5.html トップ> ]
 
 %% MATLAB System ブロック
 % MATLAB System ブロックを利用すると、System object を Simulink ブロック
@@ -232,7 +235,7 @@
 % 実行して、AVIファイル outupt.avi を確認してみよう。
 
 %%
-% <part6.html トップ> 
+% [ <part5.html トップ> ] 
 
 %% アイコンのカスタマイズ
 % MATLAB System ブロックの入出力名は、呼び出される System object 上で
@@ -297,7 +300,7 @@
 
 
 %%
-% <part6.html トップ> 
+% [ <part5.html トップ> ]
 
 %% 演算精度と信号特性伝搬（オプション）
 %
@@ -312,7 +315,7 @@
 % （準備中）
 
 %%
-% <part6.html トップ> 
+% [ <part5.html トップ> ]
 
 %% 演習課題
 %

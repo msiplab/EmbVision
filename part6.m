@@ -1,6 +1,6 @@
 %% *MATLAB/Simulinkによる組込みビジョン入門（６）*
 %
-% *映像ストリーム処理 - Raspberry Pi編 -*
+% *映像ストリーム処理 - Raspberry Pi(TM)編 -*
 %
 % 新潟大学　工学部　電気電子工学科　
 % 村松　正吾
@@ -21,6 +21,8 @@
 % シングルボードコンピュータ Raspberry Pi への実装コードを
 % Simulinkモデルを通じて生成することができる。
 %
+% なお、本演習は Windows(R)上のMATLABで実行する必要がある。
+%
 % 以下では、Raspberry Pi 用のサポートパッケージ
 %
 % * <http://jp.mathworks.com/help/simulink/ug/install-target-for-raspberry-pi-hardware.html Raspberry Pi>
@@ -28,7 +30,7 @@
 % が既にインストールされている前提で話を進める。
 
 %%
-% <part6.html トップ> 
+% [ <part6.html トップ> ]
 
 %% シミュレーションモデル
 % まず、本演習 Part5 で作成した Simulink モデル videogradfilt を 
@@ -53,7 +55,7 @@
 %
 % <<raspberrypi_blocks.png>>
 %
-% あるいは、MATLAB コマンドウィンドウ上から
+% あるいは、MATLAB(R) コマンドウィンドウ上から
 %
 %   raspberrypilib
 % 
@@ -100,7 +102,39 @@
 %
 
 %%
-% <part6.html トップ> 
+% ここで
+%
+% * 「V4L2 Video Capture」ブロックは水平と垂直を転置して出力する。
+% * 「SDL Video Display」ブロックは入力の水平と垂直を転置して表示する。
+%
+% という点に注意してほしい。
+% このことを確かめるために、「Computer Vision System Toolbos/Sinks」内にある
+%
+% * <matlab:doc('vision/tovideodisplay') To Video Display> ブロック（Windows(R)のみ）
+% 
+% を一時的に 「V4L2 Video Capture」の出力Yに接続して、シミュレーションを実行
+% してみよう。
+%
+% <<videogradfiltraspi_slx_03.png>>
+%
+% 「V4L2 Video Capture」の出力と「SDL Video Display」の表示を比べると
+% 互いに転置の関係にあることが分かる。
+%
+% したがって、勾配フィルタの方向を修正しなければならない。
+% 「Filt.Grad.」ブロックのKernelプロパティを
+%
+% <<gradfilt_kernel.png>>
+%
+% のように転置するよう編集して、勾配フィルタの方向を修正しよう。
+%
+% 再度、モデル videogradfiltraspi を実行しよう。
+%
+% <<videogradfiltraspi_slx_04.png>>
+%
+% 出力の彩色（勾配方向）が修正されていることが確認できる。
+
+%%
+% [ <part6.html トップ> ]
 
 %% エクスターナルモード
 % Raspberry Pi 用に構築したモデルを実際のボード上で動作させてみよう。
@@ -126,14 +160,7 @@
 %
 
 %%
-% <part6.html トップ> 
-
-%% 演算精度と速度評価
-%
-%
-
-%%
-% <part6.html トップ> 
+% [ <part6.html トップ> ]
 
 %% Raspberry Pi スタンドアロン実装
 %
@@ -143,15 +170,15 @@
 %
 
 %%
-% <part6.html トップ> 
+% [ <part6.html トップ> ]
 
 %% 演習課題
 %
-% *演習課題6-1.* SOBEL勾配フィルタ
+% *演習課題6-1.* 
 %
 %%
 % 
-% *演習課題6-2.* フレーム差分
+% *演習課題6-2.* 
 %
 
 %%
