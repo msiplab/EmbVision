@@ -156,7 +156,16 @@ rmpath('work/part5')
 %% Part 6
 close all
 
+addpath('work/part6')
+
+copyfile('work/part6/raspberrypi_blocks.png','html/raspberrypi_blocks.png');
+copyfile('work/part6/videogradfiltraspi_slx_00.png','html/videogradfiltraspi_slx_00.png');
+copyfile('work/part6/videogradfiltraspi_slx_01.png','html/videogradfiltraspi_slx_01.png');
+copyfile('work/part6/videogradfiltraspi_slx_02.png','html/videogradfiltraspi_slx_02.png');
+
+%
 publish('part6',type);
+rmpath('work/part6')
 
 %% ZIP
 close all
