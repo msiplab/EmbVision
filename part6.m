@@ -5,6 +5,9 @@
 % 新潟大学　工学部　電気電子工学科　
 % 村松　正吾
 %
+%
+% Copyright (c), All rights resereved, 2014, Shogo MURAMATSU
+%
 
 %%
 % <part5.html Part5> |
@@ -165,9 +168,6 @@
 %% Raspberry Pi スタンドアロン実装
 %
 % Raspberry Pi にWEBカメラとHDMIディスプレイを接続
-%
-% Copyright (c), All rights resereved, 2014, Shogo MURAMATSU
-%
 
 %%
 % [ <part6.html トップ> ]
