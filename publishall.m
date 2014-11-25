@@ -147,7 +147,7 @@ copyfile('work/part5/matlabsystem_blockparameter.png','html/matlabsystem_blockpa
 copyfile('work/part5/imaq_blocks.png','html/imaq_blocks.png');
 copyfile('work/part5/udf_blocks.png','html/udf_blocks.png');
 copyfile('work/part5/vipmengradfilt_avi.png','html/vipmengradfilt_avi.png');
-
+copyfile('work/part5/vipmengradfilt_sobel_avi.png','html/vipmengradfilt_sobel_avi.png');
 
 %
 publish('part5',type);

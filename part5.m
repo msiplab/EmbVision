@@ -299,13 +299,13 @@
 %%
 % <part6.html トップ> 
 
-%% 信号特性伝搬
+%% 演算精度と信号特性伝搬（オプション）
 %
 % * <matlab:doc('matlab.system.mixin.Propagates') matlab.system.mixin.Propagates>
 %
 % （準備中）
 
-%% フィードスルー
+%% フィードスルー（オプション）
 %
 % * <matlab:doc('matlab.system.mixin.Nondirect') matlab.system.mixin.Nondirect>
 %
@@ -316,7 +316,7 @@
 
 %% 演習課題
 %
-% *演習課題5-1.* 勾配フィルタ
+% *演習課題5-1.* Prewitt勾配フィルタ
 %
 % 本演習Part4で作成した System object クラス
 %
@@ -363,9 +363,17 @@
 % <<vipmengradfilt_avi.png>>
 
 %%
-% *演習課題5-2.* フレーム差分
+% *演習課題5-2.* Sobel勾配フィルタ
 %
-% （準備中）
+% 演習課題5-1で作成した Prewitt 勾配フィルタモデルのフィルタカーネル
+% を演習課題4-1で紹介した Sobel カーネルに変えてシミュレーションを実行
+% してみよう。
+% 
+% * ヒント：GradFilterSystem ブロックのパラメータ Kernel を修正すればよい。
+%
+% （処理例）
+%
+% <<vipmengradfilt_sobel_avi.png>>
 
 %%
 % <html>

@@ -431,18 +431,22 @@ result = run(Rgb2GraySystemTestCase);
 % インスタンスオブジェクトを生成する際に変更することもできる。
 % まず、以下のテストメソッドを GradFiltSystemTestCase に追加しよう。
 %
-%   function testSobelKernel(testCase)
-%       % 期待値
-%       kernelExpctd = [  1  2  1 ;
-%                         0  0  0 ;
-%                        -1 -2 -1 ];
-%       % ターゲットクラスのインスタンス化
-%       obj = GradFiltSystem('Kernel',kernelExpctd);
-%       % プロパティー Kernel の取得
-%       kernelActual = get(obj,'Kernel');
-%       % プロパティー Kernel の検証
-%       testCase.verifyEqual(kernelActual,kernelExpctd)
-%   end     
+%   methods (Test)
+%      ...（省略）
+%      function testSobelKernel(testCase)
+%         % 期待値
+%         kernelExpctd = [  1  2  1 ;
+%                           0  0  0 ;
+%                          -1 -2 -1 ];
+%         % ターゲットクラスのインスタンス化
+%         obj = GradFiltSystem('Kernel',kernelExpctd);
+%         % プロパティー Kernel の取得
+%         kernelActual = get(obj,'Kernel');
+%         % プロパティー Kernel の検証
+%         testCase.verifyEqual(kernelActual,kernelExpctd)
+%      end     
+%      ...（省略）
+%   end
 
 %%
 % 上のテストを通過するようにコンストラクタを定義しよう。
