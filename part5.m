@@ -234,7 +234,7 @@
 %%
 % <part6.html トップ> 
 
-%% MATLAB System ブロックのカスタマイズ
+%% アイコンのカスタマイズ
 % MATLAB System ブロックの入出力名は、呼び出される System object 上で
 % カスタマイズできる。
 %
