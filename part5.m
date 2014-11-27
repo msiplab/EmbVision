@@ -1,6 +1,6 @@
-%% *MATLAB/Simulinkによる組込みビジョン入門（５）*
+%% *MATLAB(R)/Simulink(R)による組込みビジョン入門（５）*
 %
-% *映像ストリーム処理 - Simulink(R)編 -*
+% *映像ストリーム処理 - Simulink編 -*
 %
 % 新潟大学　工学部　電気電子工学科　
 % 村松　正吾
@@ -28,7 +28,7 @@
 % # 「新規作成」
 % # →「Simulink モデル」
 %
-% を選択するか、 MATLAB(R)コマンドウィンドウ上から
+% を選択するか、 MATLABコマンドウィンドウ上から
 % <matlab:doc('new_system') new_system> 関数と
 % <matlab:doc('open_system') open_system> 関数
 % を利用すればよい。
@@ -318,8 +318,7 @@
 % [ <part5.html トップ> ]
 
 %% 演習課題
-%
-% *演習課題5-1.* Prewitt勾配フィルタ
+% *演習課題5-1. Prewitt勾配フィルタ*
 %
 % 本演習Part4で作成した System object クラス
 %
@@ -366,7 +365,7 @@
 % <<vipmengradfilt_avi.png>>
 
 %%
-% *演習課題5-2.* Sobel勾配フィルタ
+% *演習課題5-2. Sobel勾配フィルタ*
 %
 % 演習課題5-1で作成した Prewitt 勾配フィルタモデルのフィルタカーネル
 % を演習課題4-1で紹介した Sobel カーネルに変えてシミュレーションを実行

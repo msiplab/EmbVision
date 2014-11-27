@@ -160,11 +160,23 @@ addpath('work/part6')
 
 copyfile('work/part6/raspberrypi_blocks.png','html/raspberrypi_blocks.png');
 copyfile('work/part6/gradfilt_kernel.png','html/gradfilt_kernel.png');
+copyfile('work/part6/raspi_microsd.png','html/raspi_microsd.png');
+copyfile('work/part6/raspi_cableconnection.png','html/raspi_cableconnection.png');
+copyfile('work/part6/raspi_hdmi.png','html/raspi_hdmi.png');
+copyfile('work/part6/raspi_videogradfilt.png','html/raspi_videogradfilt.png');
 copyfile('work/part6/videogradfiltraspi_slx_00.png','html/videogradfiltraspi_slx_00.png');
 copyfile('work/part6/videogradfiltraspi_slx_01.png','html/videogradfiltraspi_slx_01.png');
 copyfile('work/part6/videogradfiltraspi_slx_02.png','html/videogradfiltraspi_slx_02.png');
 copyfile('work/part6/videogradfiltraspi_slx_03.png','html/videogradfiltraspi_slx_03.png');
 copyfile('work/part6/videogradfiltraspi_slx_04.png','html/videogradfiltraspi_slx_04.png');
+copyfile('work/part6/videogradfiltraspi_slx_05.png','html/videogradfiltraspi_slx_05.png');
+copyfile('work/part6/videogradfiltraspi_slx_06.png','html/videogradfiltraspi_slx_06.png');
+copyfile('work/part6/videogradfiltraspi_slx_07.png','html/videogradfiltraspi_slx_07.png');
+copyfile('work/part6/videogradfiltraspi_slx_08.png','html/videogradfiltraspi_slx_08.png');
+copyfile('work/part6/videogradfiltraspi_slx_09.png','html/videogradfiltraspi_slx_09.png');
+copyfile('work/part6/videogradfiltraspi_slx_10.png','html/videogradfiltraspi_slx_10.png');
+copyfile('work/part6/videogradfiltraspi_external.png','html/videogradfiltraspi_external.png');
+copyfile('work/part6/videogradfiltraspi_ipaddress.png','html/videogradfiltraspi_ipaddress.png');
 
 %
 publish('part6',type);

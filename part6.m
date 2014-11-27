@@ -1,10 +1,9 @@
-%% *MATLAB/Simulinkによる組込みビジョン入門（６）*
+%% *MATLAB(R)/Simulink(R)による組込みビジョン入門（６）*
 %
 % *映像ストリーム処理 - Raspberry Pi(TM)編 -*
 %
 % 新潟大学　工学部　電気電子工学科　
 % 村松　正吾
-%
 %
 % Copyright (c), All rights resereved, 2014, Shogo MURAMATSU
 %
@@ -16,7 +15,7 @@
 %% 
 % *概要*
 %
-% 本演習では、Part5で作成したSimulink(R)モデル を Rasberry Pi に実装し、
+% 本演習では、Part5で作成したSimulink モデル を Rasberry Pi に実装し、
 % エクスターナルモードでのシミュレーションのほか、
 % スタンドアロンで実行する方法について学ぶ。
 
@@ -135,11 +134,13 @@
 % <<videogradfiltraspi_slx_04.png>>
 %
 % 出力の彩色（勾配方向）が修正されていることが確認できる。
+%
+% 以降、「To Video Display」ブロックは不要なのでモデルから削除しておこう。
 
 %%
 % [ <part6.html トップ> ]
 
-%% エクスターナルモード
+%% ハードウェア実行の準備
 % Raspberry Pi 用に構築したモデルを実際のボード上で動作させてみよう。
 %
 % Simulink モデルを Raspberry Pi 上で動作させる方法には、
@@ -149,37 +150,167 @@
 %
 % の二種類がある。
 %
-% 水平垂直 置換
+% エクスターナルモードでは、Simulink モデルから Raspberry Pi 上で
+% 動作する実装コードを生成し、Raspberry Pi 上で実際に動作させ、
+% その出力を手元の Simulink 上で確認する。
 %
-% Raspberry Pi にWEBカメラを接続
-%
-% エクスターナルモードで実行
+% 一方、スタンドアロン実行では、Simulink モデルから Raspberry Pi 上で
+% 独立に動作する実装コードを生成し、Raspberry Pi 上で動作させる。
 
 %%
-% [ツール] > [ターゲットハードウェアで実行 ] > [ファームウェアの更新... ]
-% サポート パッケージ: [Raspberry Pi(Simulink)] > [次へ]
+% まず、準備として Raspberry Pi model B/B+ を用意し
 %
-% [ツール] > [ターゲットハードウェアで実行 ] > [オプション ]
+% # MicroSD カード
+% # LAN ケーブル
+% # Web カメラ
+% # 電源ケーブル
+% 
+% の順に接続しよう。
 %
+% <<raspi_microsd.png>>
+%
+% <<raspi_cableconnection.png>>
+%
+% なお、MicroSD にはRaspberry Pi Support Package から
+% ファームウェアイメージの書き込みが完了しているものとする。
+%
+% * [ツール] > [ターゲットハードウェアで実行 ] > [ファームウェアの更新... ]
+
+%%
+% では、Simulink から Raspberry Pi への接続を行うための準備をしよう。
+%
+% Simulink モデル videogradfiltraspi のメニューバーから
+%
+% * [ツール] > [ターゲットハードウェアで実行 ] > [オプション ]
+%
+% へと進む。
+%
+% <<videogradfiltraspi_slx_05.png>>
+%
+% ターゲットハードウェアとして「Raspberry Pi」を選択する。
+%
+% <<videogradfiltraspi_slx_06.png>>
+%
+% 接続するボードの情報を確認する。
+%
+% <<videogradfiltraspi_slx_07.png>>
+%
+% 特に、「Board information」の「Host name」は、各ボード毎に設定が異なるので
+% 編集が必要となる。
+%
+% * 演習中に必要な情報を提供する。
+%
+% IPアドレスが分かれば、以下の用に編集すればよい。（192.168.11.2は一例）
+%
+% <<videogradfiltraspi_ipaddress.png>>
+% 
+% 「OK」をクリックし準備を完了する。
 
 %%
 % [ <part6.html トップ> ]
 
-%% Raspberry Pi スタンドアロン実装
+%% エクスターナルモード
+% では、Simulink モデル videogradfiltraspi をエクスターナルモードで動作
+% させてみよう。
+% 
+% まず、シミュレーションのモードを「ノーマル」から
 %
-% Raspberry Pi にWEBカメラとHDMIディスプレイを接続
+% * エクスターナル
+%
+% へと変更する。
+%
+% <<videogradfiltraspi_external.png>>
+%
+% 早速、実行してみよう。
+%
+% <<videogradfiltraspi_slx_08.png>>
+%
+% Raspberry Pi に接続した Web カメラの処理映像が Simulink 上で表示される。
+
+%%
+% [ <part6.html トップ> ]
+
+%% スタンドアロン実行
+% では、Simulink モデル videogradfiltraspi を Raspberry Pi 上で
+% スタンドアロン実行してみよう。
+%
+% スタンドアロン実行のために以下の準備を行う。
+%
+% # 電源ケーブルを一旦外す
+% # HDMIディスプレイ接続する
+% # 電源ケーブルを再度接続する
+%
+% <<raspi_hdmi.png>>
+%
+% 正しく接続されていれば、Rasbian の起動を Raspberry Pi に接続した
+% ディスプレイ上で確認できる。
+
+%%
+% Simulink モデル videogradfiltraspi に戻り、
+%
+% * 「ハードウェアに展開」
+%
+% のボタンをクリックしよう。
+%
+% <<videogradfiltraspi_slx_09.png>>
+%
+% Windowsのコマンドウィンドウが立ち上がらい、Simulink モデルの左下に
+%
+% * 「モデルは'Raspberry Pi' に正常に配布されました。」
+%
+% と表示されれば成功である。
+%
+% <<videogradfiltraspi_slx_10.png>>
+%
+% Raspberry Pi に接続されたディスプレイ上にカメラからの映像の
+% 処理結果が表示される。
+% 
+% <<raspi_videogradfilt.png>>
+%
+
+%% 
+% 以降、Simulink モデル videogradfiltraspi を閉じても、Raspberry Pi 上の
+% 処理は継続される。
+%
+%   close_system('videogradfiltraspi')
+%
+
+%% 
+% MATLAB コマンドウィンドウ上で <matlab:help('raspberrypi') raspberrypi>
+% 関数を利用すると、接続中の Raspberry Pi の情報を取得できる。
+%
+%   h = raspberrypi
+
+%%
+% Raspberry Pi 上で動作中のモデル videogradfiltraspi を停止するには、
+% stop メソッドを利用する。
+%
+%   h.stop('videogradfiltraspi')
+%
+    
+%%
+% 再度モデル videogradfiltraspi を開き、run メソッドを用いれば、
+% Raspberry Pi 上でモデルを再起動することもできる。
+%
+%   open_system('videogradfiltraspi')
+%   h.run('videogradfiltraspi')
 
 %%
 % [ <part6.html トップ> ]
 
 %% 演習課題
 %
-% *演習課題6-1.* 
+% *演習課題6-1. Sobel勾配フィルタ* 
 %
+% 演習課題4-1で紹介した Sobel カーネルに変えて Raspberry Pi 上で、
+% スタンドアロン実行しよう。
+
 %%
 % 
-% *演習課題6-2.* 
+% *演習課題6-2. モデルの自作と実行*（オプション） 
 %
+% 自ら映像処理モデルを創造設計し、
+% Raspberry Pi 上で、スタンドアロン実行しよう。
 
 %%
 % <html>
@@ -187,5 +318,5 @@
 % </html>
 %%
 % <part5.html Part5> |
-% <index.html メニュー>
+% <index.html メニュー> |
 % <part6.html トップ> 
