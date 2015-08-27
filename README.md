@@ -32,4 +32,4 @@ Then, tutorial documents will be installed into the following folder:
 
 ## Author
 
-[shodimaggio](https://github.com/shodmaggio/)
+[shodimaggio](https://github.com/shodimaggio/)
