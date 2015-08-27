@@ -1,98 +1,101 @@
-%% *MATLAB(R)/Simulink(R)による組込みビジョン入門（４）*
+%% *EmbVision Tutorial: Part 4*
 %
-% *映像ストリーム処理 - MATLAB編 -*
+% *Video Stream Processing - MATLAB -*
 %
-% 新潟大学　工学部　電気電子工学科　
-% 村松　正吾
+% <html>
+% Shogo MURAMATSU, Associate Prof.,<br>
+% Dept. of Electrical and Electronics Eng., Faculty of Eng., Niigata Univ.
+% </html>
 %
-% Copyright (c), All rights resereved, 2014, Shogo MURAMATSU
+% Copyright (c), All rights reserved, 2014-2015, Shogo MURAMATSU
 %
 
 %%
 % <part3.html Part3> |
-% <index.html メニュー> |
+% <index.html Contents> |
 % <part5.html Part5>
 
 %%
-% *概要*
+% *Summary*
 %
-% 本演習では、MATLABにて映像ファイルの情報を読み込む方法のほか、
-% 映像表示、映像ファイル出力、簡単な映像ストリーム処理について学ぶ。
+% Through this exercise, you can learn how to read,
+% display and write videos. As well, you can also experiment
+% simple video stream processing.
 %
-% 準備として、開いている全ての Figure を <matlab:doc('close') close> 関数で
-% 閉じておく。
+% As a preliminary, close all figures by using 
+% function <matlab:doc('close') CLOSE>
 
 close all
 
-%% 映像入力
+%% Video Read
 % 
-% MATLABにおける映像入力は、
-% <matlab:doc('VideoReader') VideoReader> クラスの
-% <matlab:doc('VideoReader.readFrame') readFrame> メソッドを
-% 利用することで実現できる。
+% To read a video from a file, MATLAB provides 
+% the <matlab:doc('VideoReader.readFrame') READFRAME> method in 
+% <matlab:doc('VideoReader') VIDEOREADER> class.
  
 vrObj = VideoReader('shuttle.avi');
 frame = readFrame(vrObj);
 
 %%
-% 変数 frame は映像データの最初のフレームを保持する。
+% Variable frame stores the first frame of the video data.
 % 
-% shuttle.avi はRGBカラー映像なので、変数 frame は三次元配列となる。
+% Because "shuttle.avi" is RGB color video, variable frame 
+% becomes 3-D array.
 %
-% 特に指定をしなければ、データ型は符号なし整数８ビット型 uint8となる。
+% In not specified, the data type becomes unsigned 8 bit.
 
 whos vrObj frame
 
 %%
-% frame を表示してみよう。
+% Let us display the frame.
 %
-% 後ほど利用するため、imshow のハンドルオブジェクトも用意しておく。
+% In order to use later, prepare the handle object of IMSHOW.
 
 figure(1)
 hi1 = imshow(frame);
 
 %%
-% なお、変数 vrObj は、VideoReader のインスタンスオブジェクトとなっており、
-% 映像に関する情報をプロパティとして保持している。
+% Note that variable vrObj is an instance object of VideoReader class and
+% stores the information on the video as properties.
 %
-% 主なプロパティを以下にまとめる。
+% The followings summarize the main properties.
 %
-% * BitsPerPixel: 一画素当たりのビット数 [bpp]
-% * FrameRate: フレームレート [bps]
-% * Height: 画面の高さ [pixels]
-% * Width: 画面の幅 [pixels]
+% * BitsPerPixel: Bits per pixel [bpp]
+% * FrameRate: Frame rate [bps]
+% * Height: height [pixels]
+% * Width: width [pixels]
 
 properties(vrObj)
 
 %%
-% したがって、画面の高さや幅、フレームレートなどの情報は
-% 以下のようにして取得できる。
+% Thus, the properties such as the height, width and frame rate
+% are obtained as follows.
 
 height    = get(vrObj,'Height');
 width     = get(vrObj,'Width');
 frameRate = get(vrObj,'FrameRate');
 
 %%
-% さらに、 readFrame メソッドを呼び出すと次のフレームを読み込む。
+% Calling the READFRAME method reads next frame.
 %
-% なお、imshow のハンドルオブジェクト hi1 の CData プロパティに frame の
-% データを上書きすることで表示を更新している。
+% By overwriting the frame data to the CData property of 
+% IMSHOW handle object hi1, the contents is updated.
 
 frame = readFrame(vrObj);
 set(hi1,'CData',frame);
 
 %%
-% [ <part4.html トップ> ]
+% [ <part4.html Top> ]
 
-%% 映像表示
-% 映像入力オブジェクト vrObj の時刻を 0 に戻して、全てのフレームを表示しよう。
+%% Video Display
+% Let us set property "CurrentTime" of vrObj to 0 and
+% display all of the frames.
 %
-% なお、 <matlab:doc('while') while> ループ内で全てのフレームが
-% 表示されるよう <matlab:doc('drawnow') drawnow> 関数で
-% 各フレームの描画を強制する。
+% In order to force to show every frame in the <matlab:doc('while') WHILE>
+% loop, one can adopt the <matlab:doc('drawnow') DRAWNOW> function.
 %
-% また、 <matlab:doc('VideoReader.hasFrame') hasFrame> メソッドで
-% 最終フレームか否かの情報を取得している。
+% The <matlab:doc('VideoReader.hasFrame') HASFRAME> method enables us to
+% detect whether the current frame is the last or not.
 
 set(vrObj,'CurrentTime',0);
 while (hasFrame(vrObj))
@@ -101,19 +104,19 @@ while (hasFrame(vrObj))
 end
 
 %%
-% 他に、 <matlab:doc('movie') movie> 関数での映像表示も可能である。
-% ここでは説明を割愛する。
+% As another way, the <matlab:doc('movie') MOVIE> function also 
+% displays videos. For the detail, refer to the document.
 
 %%
-% [ <part4.html トップ> ]
+% [ <part4.html Top> ]
 
-%% 映像出力
-% MATLABにおける映像出力は <matlab:doc('VideoWriter') VideoWriter> クラスの
-% <matlab:doc('VideoWriter.writeVideo') writeVideo> メソッドを利用することで
-% 実現できる。
+%% Video Write
+% MATLAB realizes the video write function by 
+% the <matlab:doc('VideoWriter.writeVideo') WRITEVIDEO> method of 
+% the <matlab:doc('VideoWriter') VIDEOWRITER> class.
 %
-% 映像入力オブジェクト vrObj の時刻を 0　に戻して、映像のコピーを
-% AVIファイル shuttleclone.avi に出力してみよう。
+% Let us rewind the CurrentTime property to 0 and write a video 
+% to AVI file named "shuttleclone.avi."
 
 set(vrObj,'CurrentTime',0);
 vwObj = VideoWriter('shuttleclone.avi');
@@ -130,37 +133,37 @@ end
 close(vwObj)
 
 %%
-% AVIファイル shuttleclone.avi が出力される。
+% Then, the video is written to AVI file "shuttleclone.avi."
 %
-% 保存されたAVIファイルはMATLABの外部のツールで再生することができる。
+% The saved AVI file can be played by a tool outside MATLAB.
 %
 % <<shuttleclone.png>>
 % 
 
 %%
-% [ <part4.html トップ> ]
+% [ <part4.html Top> ]
 
-%% 映像処理
-% 映像フレームの入力と出力の間に各フレームに対する処理を挿入することで、
-% 映像ストリーム処理を実現できる。
+%% Video Processing
+% By inserting a frame processing between reading and writing a frame,
+% one can realize a video stream processing.
 %
-% 以下では、演習（３）で作成した
+% Here, let us create a video by applying the gradient filter created
+% in Exercise Part 3 to every frame. Recall the following three
+% System object classes.
 %
 % * Rgb2GraySystem
 % * Hsv2RgbSystem
 % * GradFiltSystem
-%
-% を利用して、フレーム毎の勾配フィルタ出力を映像化しよう。
 % 
-% まず、フレーム処理オブジェクトを生成する。
+% First, instantiate System objects for the frame processing as
 
 rgsObj = Rgb2GraySystem();
 hrsObj = Hsv2RgbSystem();
 gfsObj = GradFiltSystem();
 
 %%
-% 次に、映像入力オブジェクト vrObj の時刻を 0　に戻し、
-% 出力映像を保存するAVIファイル shuttlegrad.avi の準備をする。
+% Then, rewind the CurrentTime property of vrObj to zero and 
+% prepare an AVI file "shuttlegrad.avi" to save the output video.
 
 set(vrObj,'CurrentTime',0);
 vwObj = VideoWriter('shuttlegrad.avi');
@@ -168,94 +171,97 @@ set(vwObj,'FrameRate',frameRate);
 open(vwObj)
 
 %%
-% 映像処理を開始する。
+% Start the video processing.
 
 while (hasFrame(vrObj))
-    frame     = readFrame(vrObj);         % フレーム入力
-    graysc    = step(rgsObj,frame);       % グレースケール化
-    [mag,ang] = step(gfsObj,graysc);      % 勾配フィルタリング
-    ang       = (ang+pi)/(2*pi);          % 偏角の正規化
-    mag       = min(mag,1);               % 大きさの飽和処理
-    [r,g,b]   = step(hrsObj,ang,mag,mag); % 疑似カラー化
-    frame     = cat(3,r,g,b);             % RGB配列結合
-    writeVideo(vwObj,frame);              % フレーム出力 
+    frame     = readFrame(vrObj);         % Read frame
+    graysc    = step(rgsObj,frame);       % Convert to grayscale
+    [mag,ang] = step(gfsObj,graysc);      % Apply gradient filtering
+    ang       = (ang+pi)/(2*pi);          % Normalize the direction
+    mag       = min(mag,1);               % Saturate the magnitude
+    [r,g,b]   = step(hrsObj,ang,mag,mag); % Convert to pseudo color
+    frame     = cat(3,r,g,b);             % Concatenate to RGB array 
+    writeVideo(vwObj,frame);              % Write frame
 end
 close(vwObj)
 
 %%
-% 処理が終了すると、AVIファイル shuttlegrad.avi に処理結果が保存される。
+% After finishing the process, the result will be saved in to the
+% AVI file named "shuttlegrad.avi."
 %
 % <<shuttlegrad.png>>
 % 
 
 %%
-% [ <part4.html トップ> ]
+% [ <part4.html Top> ]
 
-%% フレーム間処理（オプション）
-% 過去のフレームを記憶する System object クラスを定義することもできる。
+%% Inter Frame Processing (Option)
+% It is possible to define a System object class which 
+% stores past frames.
 %
-% 連続する2枚のフレームの平均を出力する FrameAveSystem クラスを作成するため、
-% 以下のテストケース FrameAveSystemTestCase を用意する。
+% In order to create a new class, FrameAveSystem, which produces
+% average frames between successive two input frames,
+% let us prepare the following test case class, FrameAveSystemTestCase.
 %
 %   classdef FrameAveSystemTestCase < matlab.unittest.TestCase
-%       %FRAMEAVESYSTEMTESTCASE FrameAveSystem のテストケース
+%       %FRAMEAVESYSTEMTESTCASE Test Case for FrameAveSystem
 %       properties
 %       end
 %       methods (Test)
 %           function testFirstFrame(testCase)
-%               % 準備
+%               % Preparation
 %               width  = 12;
 %               height = 16;
-%               % 入力フレーム
+%               % Input frame
 %               frame1 = rand(height,width,3);
-%               % 期待値
+%               % Expectations
 %               cnt0Expctd = [];
 %               cnt1Expctd = 1;
 %               res1Expctd = frame1;
-%               % ターゲットクラスのインスタンス化
+%               % Instantiation of the target
 %               obj = FrameAveSystem();
-%               % 初期状態の検証
+%               % Verify the initial state
 %               state      = getDiscreteState(obj);
 %               cnt0Actual = state.Count;
 %               testCase.verifyEqual(cnt0Actual,cnt0Expctd)            
-%               % 処理結果
+%               % Actual values
 %               res1Actual = step(obj,frame1);
 %               state      = getDiscreteState(obj);
 %               cnt1Actual = state.Count;
-%               % 処理結果の検証
+%               % Verify the actual values
 %               testCase.verifyEqual(res1Actual,res1Expctd,'RelTol',1e-6)
 %               testCase.verifyEqual(cnt1Actual,cnt1Expctd)            
 %           end
 %           function testThreeFrames(testCase)
-%               % 準備
+%               % Preparation
 %               width  = 12;
 %               height = 16;
-%               % 入力フレーム
+%               % Input frames
 %               frame1 = rand(height,width,3);
 %               frame2 = rand(height,width,3);
 %               frame3 = rand(height,width,3);            
-%               % 期待値
+%               % Expectations
 %               cnt1Expctd = 1;
 %               cnt2Expctd = 2;            
 %               cnt3Expctd = 3;                        
 %               res1Expctd = frame1;
 %               res2Expctd = (frame1+frame2)/2;
 %               res3Expctd = (frame2+frame3)/2;
-%               % ターゲットクラスのインスタンス化
+%               % Instantiation of the target
 %               obj = FrameAveSystem();
-%               % 第１フレーム処理結果
+%               % Actual values of the process for the first frame
 %               res1Actual = step(obj,frame1);
 %               state      = getDiscreteState(obj);
 %               cnt1Actual = state.Count;
-%               % 第２フレーム処理結果
+%               % Actual values of the process for the second frame
 %               res2Actual = step(obj,frame2);
 %               state      = getDiscreteState(obj);
 %               cnt2Actual = state.Count;            
-%               % 第３フレーム処理結果
+%               % Actual values of the process for the third frame
 %               res3Actual = step(obj,frame3);
 %               state      = getDiscreteState(obj);
 %               cnt3Actual = state.Count;            
-%               % 処理結果の検証
+%               % Verify the actual values
 %               testCase.verifyEqual(cnt1Actual,cnt1Expctd)                        
 %               testCase.verifyEqual(cnt2Actual,cnt2Expctd)                                    
 %               testCase.verifyEqual(cnt3Actual,cnt3Expctd)                                                
@@ -264,27 +270,27 @@ close(vwObj)
 %               testCase.verifyEqual(res3Actual,res3Expctd,'RelTol',1e-6)                        
 %           end        
 %           function testReset(testCase)
-%               % 準備
+%               % Preparation
 %               width  = 12;
 %               height = 16;
-%               % 入力フレーム
+%               % Input frame
 %               frame1 = rand(height,width,3);
-%               % 期待値
+%               % Expectations
 %               cnt0Expctd = [];
 %               cnt1Expctd = 1;
 %               cntrExpctd = 0;
-%               % ターゲットクラスのインスタンス化
+%               % Instantiation of the target
 %               obj = FrameAveSystem();
-%               % 初期状態の検証
+%               % Verify the initial state
 %               state      = getDiscreteState(obj);
 %               cnt0Actual = state.Count;
 %               testCase.verifyEqual(cnt0Actual,cnt0Expctd)            
-%               % 第一フレーム処理後の状態の検証
+%               % Verify the state after processing for the first frame
 %               step(obj,frame1);
 %               state      = getDiscreteState(obj);
 %               cnt1Actual = state.Count;
 %               testCase.verifyEqual(cnt1Actual,cnt1Expctd)                        
-%               % リセット後の状態の検証
+%               % Verify the state after reset
 %               reset(obj);
 %               state      = getDiscreteState(obj);
 %               cntrActual = state.Count;
@@ -294,38 +300,39 @@ close(vwObj)
 %   end
 
 %%
-% テストケース FrameAveSystemTestCase の検証を満たすように実装した
-% FrameAveSystem クラスの例を以下に示す。
+% The following is an example of the FrameAveSystem class that 
+% satisfies the above test case class, FrameAveSystemTestCase.
+% 
 %
 %   classdef FrameAveSystem < matlab.System
 %       properties
-%           preFrame % 前フレーム
+%           preFrame % Previous frame
 %       end
 %       properties (DiscreteState)
-%           Count    % フレームカウント
+%           Count    % Frame count
 %       end
 %       properties (Access = private)
 %       end
 %       methods (Access = protected)
-%           % セットアップ（最初のステップ直前に実行）
+%           % Setup (evaluated just before the first call of STEP)
 %           function setupImpl(obj,srcFrame)
-%               % 前フレームの初期化
+%               % Initialization of the previous frame
 %               obj.preFrame = srcFrame;
-%               % フレームカウントの初期化
+%               % Initialization of the frame count
 %               obj.Count = 0;
 %           end
-%           % ステップ
+%           % Step 
 %           function resFrame = stepImpl(obj,srcFrame)
-%               % フレーム平均処理 
+%               % Taking average of frames
 %               resFrame = (obj.preFrame + srcFrame)/2;
-%               % 前フレームの更新←現フレーム
+%               % Update the previous frame by the current one
 %               obj.preFrame = srcFrame;
-%               % フレームカウントのインクリメント
+%               % Increment the frame count
 %               obj.Count = obj.Count+1;
 %           end
-%           % リセット
+%           % Reset
 %           function resetImpl(obj)
-%               % フレームカウントのリセット
+%               % Reset the frame count
 %               obj.Count = 0;
 %           end
 %       end
@@ -336,7 +343,7 @@ close(vwObj)
 result = run(FrameAveSystemTestCase);
 
 %%
-% FrameAveSystem の実行例を以下に示す。
+% An example script of using the FrameAveSystem class is shown below.
 %
 fasObj = FrameAveSystem();
 
@@ -345,124 +352,127 @@ vwObj = VideoWriter('shuttleave.avi');
 set(vwObj,'FrameRate',frameRate);
 open(vwObj)
 while (hasFrame(vrObj))
-    frame = readFrame(vrObj);   % フレーム入力
-    frame = im2double(frame);   % 実数型へ変換
-    frame = step(fasObj,frame); % フレーム平均処理
-    writeVideo(vwObj,frame);    % フレーム出力 
+    frame = readFrame(vrObj);   % Read frame
+    frame = im2double(frame);   % Convert to double type
+    frame = step(fasObj,frame); % Take average of frames
+    writeVideo(vwObj,frame);    % Write frame
 end
 close(vwObj)
 
 %%
-% 処理が終了すると、AVIファイル shuttleave.avi に処理結果が保存される。
+% After finishing the process, the result will be saved in to the
+% AVI file named "shuttleave.avi."
 %
 % <<shuttleave.png>>
 
 %%
-% [ <part4.html トップ> ]
+% [ <part4.html top> ]
 
-%% 演習課題
-% *演習課題4-1. Sobel勾配フィルタ*
+%% Exercises
+% *Exercise 4-1. Sobel Gradient Filter*
 %
-% 垂直勾配フィルタ係数として配列
+% Instantiate a gradient filter object 
+%
+%    gfs = GradFiltSystem('Kernel',[ 1 2 1 ; 0 0 0 ; -1 -2 -1 ]); 
+%
+%
+% by using vertical differential filter coefficients
 %
 % $$ \left(\begin{array}{ccc}
 %    1 &  2 &  1 \\
 %    0 &  0 &  0 \\
 %   -1 & -2 & -1 \\
-%    \end{array}\right) $$
+%    \end{array}\right) $$,
 %
-% を、水平勾配フィルタ係数として配列
+% and horizontal differential filter coefficients
 %
 % $$ \left(\begin{array}{ccc}
 %    1 &  0 & -1 \\
 %    2 &  0 & -2 \\
 %    1 &  0 & -1 \\
-%    \end{array}\right) $$
-% 
-% を利用した勾配フィルタオブジェクト
+%    \end{array}\right) $$.
 %
-%    gfs = GradFiltSystem('Kernel',[ 1 2 1 ; 0 0 0 ; -1 -2 -1 ]); 
+% Then, apply the following process to video "shuttle.avi."
 %
-% を生成し、映像データ shuttle.avi に対する以下の処理を各フレームに対して
-% 施してみよう。
-% また、その処理結果をAVIファイル shuttlesobel.avi に保存しよう。
+%    graysc    = step(rgsObj,frame);       % Convert to grayscale
+%    [mag,ang] = step(gfsObj,graysc);      % Apply gradient filtering
+%    ang       = (ang+pi)/(2*pi);          % Normalize the direction
+%    mag       = min(mag,1);               % Saturate the magnitude
+%    [r,g,b]   = step(hrsObj,ang,mag,mag); % Convert to pseudo color
+%    frame     = cat(3,r,g,b);             % Concatenate to RGB array
 %
-%    graysc    = step(rgsObj,frame);       % グレースケール化
-%    [mag,ang] = step(gfsObj,graysc);      % 勾配フィルタリング
-%    ang       = (ang+pi)/(2*pi);          % 偏角の正規化
-%    mag       = min(mag,1);               % 大きさの飽和処理
-%    [r,g,b]   = step(hrsObj,ang,mag,mag); % 疑似カラー化
-%    frame     = cat(3,r,g,b);             % RGB配列結合
+% Save the result to AVI file "shuttlesobel.avi."
 %
-% (処理例）
+% (Example Answer)
 %
 % <<shuttlesobel.png>>
 
 %%
-% *演習課題4-2. フレーム差分*（オプション）
+% *Exercise 4-2. Frame Difference* (Option)
 %
-% 以下のテストケース FrameDiffSystemTestCase の検証を満たすように
-% 連続する2枚のフレームの差分を出力する FrameDiffSystem クラスを作成しよう。
+% Implement a class named "FrameDiffSystem,"
+% which produces difference between successive frames
+% so that the following test case passes.
 %
 %   classdef FrameDiffSystemTestCase < matlab.unittest.TestCase
-%       %FRAMEDIFFSYSTEMTESTCASE FrameDiffSystem のテストケース
+%       %FRAMEDIFFSYSTEMTESTCASE Test Case for FrameDiffSystem
 %       properties
 %       end
 %       methods (Test)
 %           function testFirstFrame(testCase)
-%               % 準備
+%               % Preparation
 %               width  = 12;
 %               height = 16;
-%               % 入力フレーム
+%               % Input frame
 %               frame1 = rand(height,width);
-%               % 期待値
+%               % Expectations
 %               cnt0Expctd = [];
 %               cnt1Expctd = 1;
 %               res1Expctd = zeros(height,width);
-%               % ターゲットクラスのインスタンス化
+%               % Instantiation of the target
 %               obj = FrameDiffSystem();
-%               % 初期状態の検証
+%               % Verify the initial state
 %               state      = getDiscreteState(obj);
 %               cnt0Actual = state.Count;
 %               testCase.verifyEqual(cnt0Actual,cnt0Expctd)            
-%               % 処理結果
+%               % Actual values
 %               res1Actual = step(obj,frame1);
 %               state      = getDiscreteState(obj);
 %               cnt1Actual = state.Count;
-%               % 処理結果の検証
+%               % Verify the actual values
 %               testCase.verifyEqual(res1Actual,res1Expctd,'RelTol',1e-6)
 %               testCase.verifyEqual(cnt1Actual,cnt1Expctd)            
 %           end
 %           function testThreeFrames(testCase)
-%               % 準備
+%               % Preparation
 %               width  = 12;
 %               height = 16;
-%               % 入力フレーム
+%               % Input frames
 %               frame1 = rand(height,width);
 %               frame2 = rand(height,width);
 %               frame3 = rand(height,width);            
-%               % 期待値
+%               % Expectations
 %               cnt1Expctd = 1;
 %               cnt2Expctd = 2;            
 %               cnt3Expctd = 3;                        
 %               res1Expctd = zeros(height,width);
 %               res2Expctd = (frame2-frame1);
 %               res3Expctd = (frame3-frame2);
-%               % ターゲットクラスのインスタンス化
+%               % Instantiation of the target
 %               obj = FrameDiffSystem();
-%               % 第１フレーム処理結果
+%               % Actual values of the process for the first frame
 %               res1Actual = step(obj,frame1);
 %               state      = getDiscreteState(obj);
 %               cnt1Actual = state.Count;
-%               % 第２フレーム処理結果
+%               % Actual values of the process for the second frame
 %               res2Actual = step(obj,frame2);
 %               state      = getDiscreteState(obj);
 %               cnt2Actual = state.Count;            
-%               % 第３フレーム処理結果
+%               % Actual values of the process for the third frame
 %               res3Actual = step(obj,frame3);
 %               state      = getDiscreteState(obj);
 %               cnt3Actual = state.Count;            
-%               % 処理結果の検証
+%               % Verify the actual values
 %               testCase.verifyEqual(cnt1Actual,cnt1Expctd)                        
 %               testCase.verifyEqual(cnt2Actual,cnt2Expctd)                                    
 %               testCase.verifyEqual(cnt3Actual,cnt3Expctd)                                                
@@ -471,27 +481,27 @@ close(vwObj)
 %               testCase.verifyEqual(res3Actual,res3Expctd,'RelTol',1e-6)                        
 %           end        
 %           function testReset(testCase)
-%               % 準備
+%               % Preparation
 %               width  = 12;
 %               height = 16;
-%               % 入力フレーム
+%               % Input frame
 %               frame1 = rand(height,width);
-%               % 期待値
+%               % Expectations
 %               cnt0Expctd = [];
 %               cnt1Expctd = 1;
 %               cntrExpctd = 0;
-%               % ターゲットクラスのインスタンス化
+%               % Instantiation of the target
 %               obj = FrameDiffSystem();
-%               % 初期状態の検証
+%               % Verify the initial state
 %               state      = getDiscreteState(obj);
 %               cnt0Actual = state.Count;
 %               testCase.verifyEqual(cnt0Actual,cnt0Expctd)            
-%               % 第一フレーム処理後の状態の検証
+%               % Verify the state after the process for the first frame
 %               step(obj,frame1);
 %               state      = getDiscreteState(obj);
 %               cnt1Actual = state.Count;
 %               testCase.verifyEqual(cnt1Actual,cnt1Expctd)                        
-%               % リセット後の状態の検証
+%               % Verify the state after reset
 %               reset(obj);
 %               state      = getDiscreteState(obj);
 %               cntrActual = state.Count;
@@ -501,7 +511,7 @@ close(vwObj)
 %   end
 
 %%
-% （処理例）
+% (Example Answer)
 
 result = run(FrameDiffSystemTestCase);
 
@@ -514,11 +524,11 @@ set(vwObj,'FrameRate',frameRate);
 fdfObj = FrameDiffSystem();
 open(vwObj)
 while (hasFrame(vrObj))
-    frame = readFrame(vrObj);   % フレーム入力
-    frame = im2double(frame);   % 実数型への変換
-    frame = step(fdfObj,frame); % フレーム差分処理
+    frame = readFrame(vrObj);   % Frame input
+    frame = im2double(frame);   % Convert to double type
+    frame = step(fdfObj,frame); % Frame difference
     frame = frame/2+0.5;
-    writeVideo(vwObj,frame);    % フレーム出力
+    writeVideo(vwObj,frame);    % Frame output
 end
 close(vwObj)
 
@@ -531,6 +541,6 @@ close(vwObj)
 % </html>
 %%
 % <part3.html Part3> |
-% <index.html メニュー> |
-% <part4.html トップ> |
+% <index.html Contents> |
+% <part4.html Top> |
 % <part5.html Part5>

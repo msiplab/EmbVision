@@ -1,5 +1,7 @@
-%% *MATLAB(R)/Simulink(R)による組込みビジョン入門*
+%% *EmbVision チュートリアル*
 % 
+% *MATLAB(R)/Simulink(R)による組込みビジョン入門*
+%
 % 本資料は、新潟大学工学部電気電子工学科専門科目「電気電子創造設計」の課題として
 % 作成したものです。
 %
@@ -14,19 +16,23 @@
 %
 % *ZIPファイル*
 % 
-% * <embvision.zip>
+% * <embvision_jp.zip>
 %
 % MATLAB コマンドウィンドウ上で展開する際、 <matlab:doc('unzip') unzip>
 % 関数を利用できる。
 %
-%   >> upzip('embvision.zip')
+%   >> upzip('embvision_jp.zip')
 %
-% *MathWorks*
+% *MathWorks アカデミア*
 %
 % * <http://jp.mathworks.com/academia/>
 %
-% 新潟大学　工学部　電気電子工学科　
-% 村松　正吾
+% *作成者*
 %
-% Copyright (c), All rights resereved, 2014, Shogo MURAMATSU
+% <html>
+% 新潟大学　工学部　電気電子工学科　<br>
+% 准教授　村松　正吾
+% </html>
+%
+% Copyright (c), All rights reserved, 2014-2015, Shogo MURAMATSU
 %

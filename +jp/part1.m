@@ -1,11 +1,11 @@
-%% *MATLAB(R)/Simulink(R)による組込みビジョン入門（１）*
+%% *EmbVision チュートリアル（１）*
 % 
 % *画像入出力と画素処理*
 %
 % 新潟大学　工学部　電気電子工学科　
 % 村松　正吾
 %
-% Copyright (c), All rights resereved, 2014, Shogo MURAMATSU
+% Copyright (c), All rights reserved, 2014-2015, Shogo MURAMATSU
 %
 
 %%

@@ -1,11 +1,11 @@
-%% *MATLAB(R)/Simulink(R)による組込みビジョン入門（２）*
+%% *EmbVision チュートリアル（２）*
 %
 % *フィルタリングと周波数特性*
 %
 % 新潟大学　工学部　電気電子工学科　
 % 村松　正吾
 %
-% Copyright (c), All rights resereved, 2014, Shogo MURAMATSU
+% Copyright (c), All rights reserved, 2014-2015, Shogo MURAMATSU
 %
 
 %%
@@ -37,9 +37,9 @@ load chirp
 whos y Fs
 
 %%
-% 次に、予め用意されているオーディオデータ chirp を読み出し、
+% 次に、予め用意されているオーディオデータ gong を読み出し、
 % <matlab:doc('length') length> 関数を利用して長さを揃え、
-% gong のデータと混合する。
+% chirp のデータと混合する。
 
 c = y; % 変数 c に代入
 load gong
@@ -162,7 +162,7 @@ zlim([ -70 10 ])
 % どのようなことに気が付くだろうか？
 %
 % * 大よそ、正規化周波数0.4以上の高周波成分が減衰している。
-% * 特に、0.6から0.7付近の減衰が大きい。
+% * 特に、0.667付近の減衰が大きい。
 %
 % ということに注意して観察して欲しい。
 %
@@ -231,7 +231,7 @@ freqz(h)
 % 先に示したオーディオデータと同様に線形フィルタ処理を施すことができる。
 % 
 % まず、 開いている全ての Figure を <matlab:doc('close') close> 関数で
-% で閉じた後、<matlab:doc予め用意されている画像データ cameraman を
+% で閉じた後、予め用意されている画像データ cameraman を
 % 読み込んで表示しよう。
 
 close all
@@ -381,7 +381,7 @@ figure(3)
 imshow(Y+0.5)
 
 %%
-% 先のフィルタは、垂直方向の勾配 $$ \frac{\partial X}{\partial y} $$ 
+% 先のフィルタは、垂直方向の微分 $$ \frac{\partial X}{\partial y} $$ 
 % の離散近似を出力する。
 %
 % 出力 Y の周波数特性を確認しよう。
@@ -475,7 +475,7 @@ freqz2(H)
 
 %% 演習課題
 %
-% *課題2-1. 水平勾配フィルタ*
+% *課題2-1. 水平微分フィルタ*
 % 
 % フィルタ係数  $$ h[n_y,n_x] $$ として配列
 %
@@ -485,11 +485,10 @@ freqz2(H)
 %    1 &  0 & -1 \\
 %    \end{array}\right) $$
 % 
-% （水平勾配の離散近似フィルタ）を用意し、
+% （水平微分の離散近似フィルタ）を用意し、
 % 画像ファイル cameraman.tif のグレースケール画像に対して
 % 線形フィルタ処理を施し、処理結果を画像ファイル cameramangradx.tif に保存せよ。
-% cameramangradang.tif に保存せよ（負の値を考慮して、値0.5 により
-% かさ上げすること）。
+% （負の値を考慮して、値0.5 によりかさ上げすること）。
 %
 % また、フィルタの周波数特性をグラフで確認せよ。
 %
@@ -502,8 +501,8 @@ freqz2(H)
 %%
 % *課題2-2. 勾配の大きさと偏角*
 %
-% 垂直勾配フィルタ出力 $$ \frac{\partial X}{\partial y} $$ と 
-% 水平勾配フィルタ出力 $$ \frac{\partial X}{\partial x} $$ から、
+% 垂直微分フィルタ出力 $$ \frac{\partial X}{\partial y} $$ と 
+% 水平微分フィルタ出力 $$ \frac{\partial X}{\partial x} $$ から、
 %
 % * 勾配の大きさ : $$ \|\Delta X \| = \sqrt{
 % \left(\frac{\partial X}{\partial y}\right)^2

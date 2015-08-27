@@ -1,11 +1,11 @@
-%% *MATLAB(R)/Simulink(R)による組込みビジョン入門（６）*
+%% *EmbVision チュートリアル（６）*
 %
 % *映像ストリーム処理 - Raspberry Pi(TM)編 -*
 %
 % 新潟大学　工学部　電気電子工学科　
 % 村松　正吾
 %
-% Copyright (c), All rights resereved, 2014, Shogo MURAMATSU
+% Copyright (c), All rights reserved, 2014-2015, Shogo MURAMATSU
 %
 
 %%
@@ -15,7 +15,7 @@
 %% 
 % *概要*
 %
-% 本演習では、Part5で作成したSimulink モデル を Rasberry Pi に実装し、
+% 本演習では、Part5で作成したSimulink モデル を Raspberry Pi に実装し、
 % エクスターナルモードでのシミュレーションのほか、
 % スタンドアロンで実行する方法について学ぶ。
 
@@ -49,7 +49,7 @@
 % さらに、各種入出力ブロックは Raspberry Pi 用のブロックライブラリから
 % 選択して使用する必要がある。
 %
-% Raspbery Pi 用のブロックライブラリは、Similinkライブラリブラウザーから
+% Raspberry Pi 用のブロックライブラリは、Simulinkライブラリブラウザーから
 %
 % * Simulink Support Package for Raspberry Pi hardware
 % 
@@ -91,7 +91,7 @@
 % 要求するのに対し、「HSV to RGB」ブロックが実数型(double)でデータを出力
 % するためである。
 %
-% この問題を回避するために、ゲイン調整をデータ型変換を行うブロック
+% この問題を回避するために、ゲイン調整とデータ型変換を行うブロック
 %
 % * <matlab:doc('simulink/gain') Simulink/Commonly Used Blocks/Gain>
 % * <matlab:doc('simulink/datatpeconversion') Simulink/Commonly Used Blocks/Convert>
@@ -110,7 +110,7 @@
 % * 「SDL Video Display」ブロックは入力の水平と垂直を転置して表示する。
 %
 % という点に注意してほしい。
-% このことを確かめるために、「Computer Vision System Toolbos/Sinks」内にある
+% このことを確かめるために、「Computer Vision System Toolbox/Sinks」内にある
 %
 % * <matlab:doc('vision/tovideodisplay') To Video Display> ブロック（Windows(R)のみ）
 % 
@@ -244,6 +244,10 @@
 %
 % 正しく接続されていれば、Rasbian の起動を Raspberry Pi に接続した
 % ディスプレイ上で確認できる。
+%
+% なお，Raspberry Pi Camera Module を利用するためには以下のサイトを参照してほしい。
+% 
+% http://www.mathworks.com/matlabcentral/answers/122199-simulink-with-raspberry-pi-camera-capture
 
 %%
 % Simulink モデル videogradfiltraspi に戻り、
@@ -254,7 +258,7 @@
 %
 % <<videogradfiltraspi_slx_09.png>>
 %
-% Windowsのコマンドウィンドウが立ち上がらい、Simulink モデルの左下に
+% Windowsのコマンドウィンドウが立ち上がらり、Simulink モデルの左下に
 %
 % * 「モデルは'Raspberry Pi' に正常に配布されました。」
 %
@@ -311,6 +315,17 @@
 %
 % 自ら映像処理モデルを創造設計し、
 % Raspberry Pi 上で、スタンドアロン実行しよう。
+%
+% 以下に期待される拡張例を示す。
+% 
+% * Raspberry Pi カメラモジュール制御
+% * 固定小数点実装
+% * 並列実装（RasPi2上のクアッドコア用）
+% * 物体の検出および認識
+% * 音声・音響信号処理
+% * GPIO/I2C 制御
+% * ネットワークアプリケーション開発
+%
 
 %%
 % <html>

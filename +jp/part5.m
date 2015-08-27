@@ -1,11 +1,11 @@
-%% *MATLAB(R)/Simulink(R)による組込みビジョン入門（５）*
+%% *EmbVision チュートリアル（５）*
 %
 % *映像ストリーム処理 - Simulink編 -*
 %
 % 新潟大学　工学部　電気電子工学科　
 % 村松　正吾
 %
-% Copyright (c), All rights resereved, 2014, Shogo MURAMATSU
+% Copyright (c), All rights reserved, 2014-2015, Shogo MURAMATSU
 %
 
 %%
@@ -106,7 +106,7 @@
 %
 
 %%
-% ブロック群から 「From Mulimedia File」を右クリックして、
+% ブロック群から 「From Multimedia File」を右クリックして、
 % モデル videoio にブロックを追加しよう。
 %
 % <<videoio_slx_01.png>>
@@ -123,13 +123,13 @@
 %
 
 %%
-% ブロック群から 「To Mulimedia File」を右クリックして、
+% ブロック群から 「To Multimedia File」を右クリックして、
 % モデル videoio にブロックを追加しよう。
 %
 % <<videoio_slx_02.png>>
 
 %%
-% 「From Mulimedia File」の出力端子をドラックして、「From Mulimedia File」の
+% 「From Multimedia File」の出力端子をドラックして、「From Multimedia File」の
 % 入力端子に接続しよう。
 %
 % <<videoio_slx_03.png>>
@@ -156,7 +156,7 @@
 %%
 % ライブラリブラウザーから
 %
-% * <matlab:doc('imaq') Image Acqusition Toolbox(TM)>
+% * <matlab:doc('imaq') Image Acquisition Toolbox(TM)>
 %
 % を選択して、「From Video Device」ブロックを利用すれば、
 % 接続されたカメラからの映像を入力として利用できる。
@@ -177,7 +177,7 @@
 % <<tomultimediafile_blockparameter.png>>
 
 %%
-% 出力先として「Computer Vision System Toolbos/Sinks」内にある
+% 出力先として「Computer Vision System Toolbox/Sinks」内にある
 %
 % * <matlab:doc('videoviewer') Video Viewer> ブロック
 % * <matlab:doc('vision/tovideodisplay') To Video Display> ブロック（Windows(R)のみ）
@@ -202,7 +202,7 @@
 %   save_system('videoio','videorgb2gray')
 
 %%
-% Simulink ライブラリブラウザーから「Simulink/User-Defiend Functions」の
+% Simulink ライブラリブラウザーから「Simulink/User-Defined Functions」の
 % ブロック群を表示し、その中から
 %
 % * MATLAB System ブロック
@@ -232,7 +232,7 @@
 % <<videorgb2gray_slx_02.png>>
 
 %%
-% 実行して、AVIファイル outupt.avi を確認してみよう。
+% 実行して、AVIファイル output.avi を確認してみよう。
 
 %%
 % [ <part5.html トップ> ] 
