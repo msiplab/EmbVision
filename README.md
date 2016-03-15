@@ -1,4 +1,4 @@
-# EmbVision Tutorial for MATLAB(R)/Simulink(R) & Raspberry Pi(TM)
+# EmbVision: Embedded Vision Tutorial with MATLAB(R)/Simulink(R) & Raspberry Pi(TM)
 ====
 Overview
 
