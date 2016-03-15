@@ -1,9 +1,9 @@
-# EmbVision
+# EmbVision Tutorial for MATLAB(R)/Simulink(R) & Raspbery Pi(TM)
 ====
 Overview
 
-Tutorial documents of video streaming processing on MATLAB(R)/Simulink(R) for training beginners. 
-Through the exercises, trainees can implement user-defined System objects(TM) and deploy them on Raspberry Pi(TM).
+Tutorial documents of video streaming processing on MATLAB/Simulink for training beginners. 
+Through the exercises, trainees can implement user-defined System objects(TM) and deploy them on Raspberry Pi.
 
 ## Requirement
 
@@ -18,17 +18,17 @@ Through the exercises, trainees can implement user-defined System objects(TM) an
 
 On MATLAB command windows, call function PUBLISHALL as
 
-> publishall('en')
+    > publishall('en')
 
 for generating English documents, or
 
-> publishall('jp')
+    > publishall('jp')
 
 for generating Japanese documents.
 
 Then, tutorial documents will be installed into the following folder:
 
-+en/html or +jp/html.
+     +en/html or +jp/html.
 
 ## Author
 
