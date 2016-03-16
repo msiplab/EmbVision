@@ -38,4 +38,4 @@ Then, tutorial documents will be installed into the following folder:
 
 ## Author
 
-[shodimaggio](https://github.com/shodimaggio/)
+[Shogo MURAMATSU](https://github.com/shodimaggio/)
