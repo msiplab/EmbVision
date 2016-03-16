@@ -2,10 +2,14 @@
 
 Embedded Vision Tutorial with MATLAB(R)/Simulink(R) & Raspberry Pi(TM)
 
+![Demo](https://raw.githubusercontent.com/wiki/shodimaggio/EmbVision/images/slide1.PNG)
+
 ## Overview
 
 Tutorial documents of video streaming processing on MATLAB/Simulink for training beginners. 
 Through the exercises, trainees can implement user-defined System objects(TM) and deploy them on Raspberry Pi.
+
+![Demo](https://raw.githubusercontent.com/wiki/shodimaggio/EmbVision/images/slide2.PNG)
 
 ## Requirement
 
