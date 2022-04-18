@@ -2,11 +2,11 @@
 %
 % *映像ストリーム処理 - MATLAB編 -*
 %
-% 新潟大学　工学部　電気電子工学科　
-% 村松　正吾
+% 新潟大学
+% 村松　正吾，高橋　勇希
 %
-% Copyright (c), All rights reserved, 2014-2015, Shogo MURAMATSU
-%
+% Copyright (c), All rights reserved, 2014-2022, Shogo MURAMATSU and Yuki TAKAHASHI
+% 
 
 %%
 % <part3.html Part3> |

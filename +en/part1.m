@@ -3,11 +3,11 @@
 % *Image I/O and Pixel Processing*
 %
 % <html>
-% Shogo MURAMATSU, Associate Prof.,<br>
-% Dept. of Electrical and Electronics Eng., Faculty of Eng., Niigata Univ.
+% Shogo MURAMATSU and Yuki TAKAHASHI <br>
+% Niigata Univ.
 % </html>
 %
-% Copyright (c), All rights reserved, 2014-2015, Shogo MURAMATSU
+% Copyright (c), All rights reserved, 2014-2022, Shogo MURAMATSU
 %
 
 %%
