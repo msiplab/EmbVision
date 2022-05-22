@@ -1,10 +1,5 @@
 classdef FrameBinarizeSystem < matlab.System
-    properties
-    end
-    properties (DiscreteState)
-    end
-    properties (Access = private)
-    end
+% FRAMEBINARISYSTEM グレースケールを２値化画像に変換する
     methods(Access = protected)
         % セットアップ（最初のステップ直前に実行）
         function setupImpl(obj,srcImg)
