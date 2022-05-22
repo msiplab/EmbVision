@@ -12,8 +12,8 @@ type = 'html';
 %targetdir = [ '+' lang '/' type '/' ];
 targetdir = [ '+cq/' type '/' ];
 
-if ~exist([targetdir 'html'],'dir')
-    mkdir([targetdir 'html'])
+if ~exist(targetdir,'dir')
+    mkdir(targetdir)
 end
 
 %% Index
