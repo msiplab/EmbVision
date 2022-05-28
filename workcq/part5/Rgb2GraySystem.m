@@ -1,5 +1,4 @@
-classdef Rgb2GraySystem < matlab.System ...
-         & matlab.system.mixin.CustomIcon
+classdef Rgb2GraySystem < matlab.System
     % RGB2GRAYSYSTEM RGB から グレースケールへの変換
     %
     properties
@@ -19,25 +18,5 @@ classdef Rgb2GraySystem < matlab.System ...
         % リセット
         function resetImpl(obj)
         end
-        % 入力ポート数
-        function N = getNumInputsImpl(obj)
-            N = 1; 
-        end
-        % 出力ポート数        
-        function N = getNumOutputsImpl(obj)
-            N = 1;
-        end      
-        % 入力ポート名
-        function inputName = getInputNamesImpl(obj)
-            inputName = 'RGB';
-        end
-        % 出力ポート名        
-        function outputName = getOutputNamesImpl(obj)
-            outputName = 'Gray';
-        end
-        % アイコン
-        function icon = getIconImpl(obj)
-           icon = sprintf('RGB to Gray');
-        end        
     end
 end

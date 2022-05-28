@@ -1,6 +1,6 @@
 %% *EmbVision(CQ版) チュートリアル（４）*
 %
-% *映像ストリーム処理 - MATLAB編 -*
+% *クラス定義と単体テスト*
 %
 % 新潟大学
 % 村松　正吾，高橋　勇希
@@ -16,515 +16,604 @@
 %%
 % *概要*
 %
-% 本演習では、MATLABにて映像ファイルの情報を読み込む方法のほか、
-% 映像表示、映像ファイル出力、簡単な映像ストリーム処理について学ぶ。
+% 本演習では、MATLABでのオブジェクト指向プログラミングと
+% 単体テスト機能について簡単に学ぶ。
+
+%% オブジェクト指向プログラミング(OOP)
+% プログラムのモジュール化は高い信頼性と広い拡張性をもたらす。
+% オブジェクト指向プログラミング
+% （ <matlab:doc('object-oriented-programming') OOP> ）では、
 %
-% 準備として、開いている全ての Figure を <matlab:doc('close') close> 関数で
-% 閉じておく。
-
-close all
-
-%% 映像入力
+% *状態（プロパティ）* と *振舞い（メソッド）*
+%
+% をもつプログラムモジュールをクラスとして定義し、
+%
+% *クラスの実体（インスタンスオブジェクト）*
+%
+% を生成しながら組合せ、相互に作用させて大規模なプログラムを構築する。
+%
+% MATLABでもOOPを利用することができる。
 % 
-% MATLABにおける映像入力は、
-% <matlab:doc('VideoReader') VideoReader> クラスの
-% <matlab:doc('VideoReader.readFrame') readFrame> メソッドを
-% 利用することで実現できる。
- 
-vrObj = VideoReader('shuttle.avi');
-frame = readFrame(vrObj);
-
-%%
-% 変数 frame は映像データの最初のフレームを保持する。
-% 
-% shuttle.avi はRGBカラー映像なので、変数 frame は三次元配列となる。
+% バージョンアップを重ねる毎に
+% OOP機能が強化されてきており、今では
+% <matlab:doc('matlab.System') System object(TM)>  基底クラスの継承により、
 %
-% 特に指定をしなければ、データ型は符号なし整数８ビット型 uint8となる。
-
-whos vrObj frame
-
-%%
-% frame を表示してみよう。
+% * ストリーム処理
+% * コード生成
+% * Simulink ブロック定義
 %
-% 後ほど利用するため、imshow のハンドルオブジェクトも用意しておく。
-
-figure(1)
-hi1 = imshow(frame);
-
-%%
-% なお、変数 vrObj は、VideoReader のインスタンスオブジェクトとなっており、
-% 映像に関する情報をプロパティとして保持している。
-%
-% 主なプロパティを以下にまとめる。
-%
-% * BitsPerPixel: 一画素当たりのビット数 [bpp]
-% * FrameRate: フレームレート [bps]
-% * Height: 画面の高さ [pixels]
-% * Width: 画面の幅 [pixels]
-
-properties(vrObj)
-
-%%
-% したがって、画面の高さや幅、フレームレートなどの情報は
-% 以下のようにして取得できる。
-
-height    = get(vrObj,'Height');
-width     = get(vrObj,'Width');
-frameRate = get(vrObj,'FrameRate');
-
-%%
-% さらに、 readFrame メソッドを呼び出すと次のフレームを読み込む。
-%
-% なお、imshow のハンドルオブジェクト hi1 の CData プロパティに frame の
-% データを上書きすることで表示を更新している。
-
-frame = readFrame(vrObj);
-set(hi1,'CData',frame);
+% が容易となっている。
 
 %%
 % [ <part4.html トップ> ]
 
-%% 映像表示
-% 映像入力オブジェクト vrObj の時刻を 0 に戻して、全てのフレームを表示しよう。
+%% System objectクラスの定義
+% では、例としてRGB画像 から グレースケール画像に変換する
+% System object クラスの型枠を定義してみよう。
 %
-% なお、 <matlab:doc('while') while> ループ内で全てのフレームが
-% 表示されるよう <matlab:doc('drawnow') drawnow> 関数で
-% 各フレームの描画を強制する。
-%
-% また、 <matlab:doc('VideoReader.hasFrame') hasFrame> メソッドで
-% 最終フレームか否かの情報を取得している。
-
-set(vrObj,'CurrentTime',0);
-while (hasFrame(vrObj))
-    frame = readFrame(vrObj);
-    set(hi1,'CData',frame);
-end
-
-%%
-% 他に、 <matlab:doc('movie') movie> 関数での映像表示も可能である。
-% ここでは説明を割愛する。
-
-%%
-% [ <part4.html トップ> ]
-
-%% 映像出力
-% MATLABにおける映像出力は <matlab:doc('VideoWriter') VideoWriter> クラスの
-% <matlab:doc('VideoWriter.writeVideo') writeVideo> メソッドを利用することで
-% 実現できる。
-%
-% 映像入力オブジェクト vrObj の時刻を 0　に戻して、映像のコピーを
-% AVIファイル shuttleclone.avi に出力してみよう。
-
-set(vrObj,'CurrentTime',0);
-vwObj = VideoWriter('shuttleclone.avi');
-properties(vwObj)
-
-%%
-
-set(vwObj,'FrameRate',frameRate);
-open(vwObj)
-while (hasFrame(vrObj))
-    frame = readFrame(vrObj);
-    writeVideo(vwObj,frame);
-end
-close(vwObj)
-
-%%
-% AVIファイル shuttleclone.avi が出力される。
-%
-% 保存されたAVIファイルはMATLABの外部のツールで再生することができる。
-%
-% <<shuttleclone.png>>
+% ホームタグから、
 % 
+% # 「新規作成」
+% # →「System object >」
+% # →「標準」
+%
+% を選択するとエディタが開き以下のようなコードの編集準備が整う。
 
 %%
-% [ <part4.html トップ> ]
-
-%% 映像処理
-% 映像フレームの入力と出力の間に各フレームに対する処理を挿入することで、
-% 映像ストリーム処理を実現できる。
-%
-% 以下では、演習（３）で作成した
-%
-% * Rgb2GraySystem
-% * Hsv2RgbSystem
-% * GradFiltSystem
-%
-% を利用して、フレーム毎の勾配フィルタ出力を映像化しよう。
-% 
-% まず、フレーム処理オブジェクトを生成する。
-
-rgsObj = Rgb2GraySystem();
-hrsObj = Hsv2RgbSystem();
-gfsObj = GradFiltSystem();
-
-%%
-% 次に、映像入力オブジェクト vrObj の時刻を 0　に戻し、
-% 出力映像を保存するAVIファイル shuttlegrad.avi の準備をする。
-
-set(vrObj,'CurrentTime',0);
-vwObj = VideoWriter('shuttlegrad.avi');
-set(vwObj,'FrameRate',frameRate);
-open(vwObj)
-
-%%
-% 映像処理を開始する。
-
-while (hasFrame(vrObj))
-    frame     = readFrame(vrObj);         % フレーム入力
-    graysc    = step(rgsObj,frame);       % グレースケール化
-    [mag,ang] = step(gfsObj,graysc);      % 勾配フィルタリング
-    ang       = (ang+pi)/(2*pi);          % 偏角の正規化
-    mag       = min(mag,1);               % 大きさの飽和処理
-    [r,g,b]   = step(hrsObj,ang,mag,mag); % 疑似カラー化
-    frame     = cat(3,r,g,b);             % RGB配列結合
-    writeVideo(vwObj,frame);              % フレーム出力 
-end
-close(vwObj)
-
-%%
-% 処理が終了すると、AVIファイル shuttlegrad.avi に処理結果が保存される。
-%
-% <<shuttlegrad.png>>
-% 
-
-%%
-% [ <part4.html トップ> ]
-
-%% フレーム間処理（オプション）
-% 過去のフレームを記憶する System object クラスを定義することもできる。
-%
-% 連続する2枚のフレームの平均を出力する FrameAveSystem クラスを作成するため、
-% 以下のテストケース FrameAveSystemTestCase を用意する。
-%
-%   classdef FrameAveSystemTestCase < matlab.unittest.TestCase
-%       %FRAMEAVESYSTEMTESTCASE FrameAveSystem のテストケース
-%       properties
-%       end
-%       methods (Test)
-%           function testFirstFrame(testCase)
-%               % 準備
-%               width  = 12;
-%               height = 16;
-%               % 入力フレーム
-%               frame1 = rand(height,width,3);
-%               % 期待値
-%               cnt0Expctd = [];
-%               cnt1Expctd = 1;
-%               res1Expctd = frame1;
-%               % ターゲットクラスのインスタンス化
-%               obj = FrameAveSystem();
-%               % 初期状態の検証
-%               state      = getDiscreteState(obj);
-%               cnt0Actual = state.Count;
-%               testCase.verifyEqual(cnt0Actual,cnt0Expctd)            
-%               % 処理結果
-%               res1Actual = step(obj,frame1);
-%               state      = getDiscreteState(obj);
-%               cnt1Actual = state.Count;
-%               % 処理結果の検証
-%               testCase.verifyEqual(res1Actual,res1Expctd,'RelTol',1e-6)
-%               testCase.verifyEqual(cnt1Actual,cnt1Expctd)            
-%           end
-%           function testThreeFrames(testCase)
-%               % 準備
-%               width  = 12;
-%               height = 16;
-%               % 入力フレーム
-%               frame1 = rand(height,width,3);
-%               frame2 = rand(height,width,3);
-%               frame3 = rand(height,width,3);            
-%               % 期待値
-%               cnt1Expctd = 1;
-%               cnt2Expctd = 2;            
-%               cnt3Expctd = 3;                        
-%               res1Expctd = frame1;
-%               res2Expctd = (frame1+frame2)/2;
-%               res3Expctd = (frame2+frame3)/2;
-%               % ターゲットクラスのインスタンス化
-%               obj = FrameAveSystem();
-%               % 第１フレーム処理結果
-%               res1Actual = step(obj,frame1);
-%               state      = getDiscreteState(obj);
-%               cnt1Actual = state.Count;
-%               % 第２フレーム処理結果
-%               res2Actual = step(obj,frame2);
-%               state      = getDiscreteState(obj);
-%               cnt2Actual = state.Count;            
-%               % 第３フレーム処理結果
-%               res3Actual = step(obj,frame3);
-%               state      = getDiscreteState(obj);
-%               cnt3Actual = state.Count;            
-%               % 処理結果の検証
-%               testCase.verifyEqual(cnt1Actual,cnt1Expctd)                        
-%               testCase.verifyEqual(cnt2Actual,cnt2Expctd)                                    
-%               testCase.verifyEqual(cnt3Actual,cnt3Expctd)                                                
-%               testCase.verifyEqual(res1Actual,res1Expctd,'RelTol',1e-6)
-%               testCase.verifyEqual(res2Actual,res2Expctd,'RelTol',1e-6)            
-%               testCase.verifyEqual(res3Actual,res3Expctd,'RelTol',1e-6)                        
-%           end        
-%           function testReset(testCase)
-%               % 準備
-%               width  = 12;
-%               height = 16;
-%               % 入力フレーム
-%               frame1 = rand(height,width,3);
-%               % 期待値
-%               cnt0Expctd = [];
-%               cnt1Expctd = 1;
-%               cntrExpctd = 0;
-%               % ターゲットクラスのインスタンス化
-%               obj = FrameAveSystem();
-%               % 初期状態の検証
-%               state      = getDiscreteState(obj);
-%               cnt0Actual = state.Count;
-%               testCase.verifyEqual(cnt0Actual,cnt0Expctd)            
-%               % 第一フレーム処理後の状態の検証
-%               step(obj,frame1);
-%               state      = getDiscreteState(obj);
-%               cnt1Actual = state.Count;
-%               testCase.verifyEqual(cnt1Actual,cnt1Expctd)                        
-%               % リセット後の状態の検証
-%               reset(obj);
-%               state      = getDiscreteState(obj);
-%               cntrActual = state.Count;
-%               testCase.verifyEqual(cntrActual,cntrExpctd)                        
-%           end        
-%       end
+%   classdef Untitled < matlab.System
+%     % Untitled Add summary here
+%     %
+%     % This template includes the minimum set of functions required
+%     % to define a System object with discrete state.
+%     properties
+%         % Public, tunable properties.
+%     end
+%     properties (DiscreteState)
+%     end
+%     properties (Access = private)
+%         % Pre-computed constants.
+%     end
+%     methods (Access = protected)
+%         function setupImpl(obj,u)
+%             % Implement tasks that need to be performed only once,
+%             % such as pre-computed constants.
+%         end
+%         function y = stepImpl(obj,u)
+%             % Implement algorithm. Calculate y as a function of
+%             % input u and discrete states.
+%             y = u;
+%         end
+%         function resetImpl(obj)
+%             % Initialize discrete-state properties.
+%         end
+%      end
 %   end
 
 %%
-% テストケース FrameAveSystemTestCase の検証を満たすように実装した
-% FrameAveSystem クラスの例を以下に示す。
+% <matlab:doc('classdef') classdef> 直後の  Untitled  を
+% 
+% Rgb2GraySystem  
 %
-%   classdef FrameAveSystem < matlab.System
+% と書き換え、先頭行が以下のようになるよう編集しよう。
+
+%%
+%   classdef Rgb2GraySystem < matlab.System
+%     % RGB2GRAYSYSTEM RGB to Grayscale Converter
+%     %
+%   
+
+%%
+% 編集したファイルを Rgb2GraySystem.m として保存しよう。
+%
+% なお、 classdef  に続く文字列はクラス名となる。
+% クラス名はファイル名と一致させる必要がある。
+
+%%
+% 利用手順を以下にまとめる。
+%
+% # インスタンスオブジェクトを生成（コンストラクタの呼出し）
+% #  step メソッドを実行（stepImplの呼出し）
+
+%%
+%   >> u = 1;
+%   >> obj = Rgb2GraySystem(); % コンストラクタの呼出し
+%   >> y = step(obj,u)         % stepImpl の呼出し
+%   
+%   y =
+%
+%        1
+
+%%
+% 現時点で  Rgb2GraySystem のクラス定義は自動生成されたままである。
+%
+% stepImpl メソッドは、入力 u をそのまま出力する。
+%
+%   function y = stepImpl(obj,u)
+%      y = u;
+%   end
+%
+% クラス Rgb2GraySystem が所望の機能を満たすためには状態（プロパティ）と
+% 振舞い（メソッド）を適切に実装しなければならない。
+%
+% 以下では、 *テスト駆動開発* により Rgb2GraySystem クラスの実装を進める。
+
+%%
+% [ <part4.html トップ> ]
+
+%% テスト駆動開発
+% プログラムの信頼性を向上させるためには、テスト用のコードを充実させると良い。
+% 
+% MATLABでは、モジュール毎の <matlab:doc('matlab.unittest') 単体テスト> 
+% を自動化するフレームワークが提供されている。
+%
+% 単体テストはクラス単位で行うテストで、実装コードよりもテストの記述を
+% 優先するテスト駆動開発に欠かせない。
+%
+% テストを優先して充実させることで
+% バグが少なく改変や拡張に強いプログラムを開発できる。
+% 
+% 一般に、テスト駆動開発では、
+% 
+% * テストメソッドの実装 
+% * → ダミーメソッドでの失敗の確認
+% * → ターゲットメソッドの実装
+% * → ターゲットメソッドでの成功の確認
+% 
+% を繰返し、テストクラスとターゲットクラスを充実させる。
+
+%%
+% 以下の手順で、 Rgb2GraySystem のクラス実装を進めよう。
+% 
+% # テストクラス Rgb2GraySystemTestCase の定義
+% # テストクラス Rgb2GraySystemTestCase へのメソッド testSize の実装
+% # ターゲットクラス Rgb2GraySystem のメソッド testSize の失敗の確認
+% # ターゲットクラス Rgb2GraySystem のメソッド stepImpl の実装
+% # ターゲットクラス Rgb2GraySystem のメソッド testSize の成功の確認
+
+%% テストクラスの定義
+% では、テストクラス Rgb2GraySystemTestCase を定義してみよう。
+%
+% ホームタグから、
+% 
+% # 「新規作成」
+% # →「クラス」
+%
+% を選択するとエディタが開き以下のようなコードの編集準備が整う。
+% 
+%   classdef Untitled
+%   %UNTITLED このクラスの概要をここに記述
+%      %   詳細説明をここに記述
+%      properties
+%      end
+%      methods
+%      end
+%   end
+
+%%
+% <matlab:doc('matlab.unittest.TestCase') matlab.unittest.TestCase> 
+% クラスを継承して、テストクラス Rgb2GraySystemTestCase を定義すればよい。
+%
+% すなわち、先頭部 classdef の行を
+%
+%   classdef Rgb2GraySystemTestCase < matlab.unittest.TestCase
+%   %RGB2GRAYSYSTEMTESTCASER Rgb2GraySystem のテストケース
+%
+% と書き換えればよい。
+%
+% また、 Test 属性の付いた <matlab:doc('methods') methods> ブロック
+%
+%   methods (Test)
+%   end
+% 
+% を用意する。
+
+%%
+% 編集後のコード全体は以下のようになる。
+%
+%   classdef Rgb2GraySystemTestCase < matlab.unittest.TestCase
+%       %RGB2GRAYSYSTEMTESTCASE Rgb2GraySystem のテストケース
 %       properties
-%           preFrame % 前フレーム
+%       end
+%       methods (Test)
+%       end
+%   end
+%
+% 編集したファイルを Rgb2GraySystemTestCase.m として保存しよう。
+
+%%
+% [ <part4.html トップ> ]
+
+%% テストメソッドの追加
+% では、テストクラス Rgb2GraySystemTestCase に
+% テストメソッドを追加しよう。
+% 
+% Test 属性のついた methods ブロック内に
+% テストの内容を記述したメソッドを追加すればよい。
+% 同ブロック内の全てのメソッドが自動的にテストの対象となる。
+%
+% テストメソッド
+%   
+%   function testSize(testCase)
+%      % 準備
+%      u = zeros(1,2,3);   % 1行2列3成分の三次元零配列
+%      % 期待値
+%      szExpctd = [ 1 2 ]; % 1行2列の二次元配列
+%      % ターゲットのインスタンス化
+%      obj = Rgb2GraySystem();
+%      % 実行結果
+%      y = step(obj,u);
+%      % サイズの検証
+%      testCase.verifySize(y,szExpctd);
+%   end
+%
+% を Rgb2GraySystemTestCase の methos (Test) ブロックに追加しよう。
+%
+% なお、 <matlab:doc('matlab.unittest.qualifications.Verifiable.verifySize')
+% verifySize> は、値が指定されたサイズであることを検証する。
+%
+% <matlab:doc('zeros') zeros> 関数は、指定されたサイズの零配列を
+% 生成する。
+
+%%
+% コマンドウィンドウ上で <matlab:doc('matlab.unittest.TestCase.run') run> 
+% メソッドを呼び出してテストを実行しよう。
+%
+%   >> result = run(Rgb2GraySystemTestCase);
+%
+% Rgb2GraySystem の実装が不十分なので、検証は失敗に終わる。
+
+%% ターゲットクラスの実装
+% 検証の失敗を回避するためにクラス Rgb2GraySystem の stepImpl メソッド
+% を
+% 
+%   function y = stepImpl(obj,u)
+%      y = zeros(size(u,1),size(u,2));
+%   end
+%
+% と定義しなおして、再度テストを実行しよう。
+%
+%   >> result = run(Rgb2GraySystemTestCase);
+%  
+%   Rgb2GraySystemTestCase を実行しています
+%   .
+%   Rgb2GraySystemTestCase が完了しました
+%   __________
+
+%%
+% 結果は失敗から成功に変わる。
+
+%% テストクラスとターゲットクラスの充実化
+% 以降、以下の手順を繰り返してテストクラスとターゲットクラスを充実させる。
+%
+% # テストクラスへのテストメソッドの実装
+% # ターゲットクラスのテスト失敗の確認
+% # ターゲットクラスへのメソッドの実装
+% # ターゲットクラスのテスト成功の確認
+
+%%
+% 次のテストクラス
+%
+%   classdef Rgb2GraySystemTestCase < matlab.unittest.TestCase
+%       %RGB2GRAYSYSTEMTESTCASE Rgb2GraySystem のテストケース
+%       properties
+%       end
+%       methods (Test)
+%           function testSize(testCase)
+%               % 準備
+%               u = zeros(1,2,3);   % 1行2列3成分の三次元配列
+%               % 期待値
+%               szExpctd = [ 1 2 ]; % 1行2列の二次元配列
+%               % ターゲットのインスタンス化
+%               obj = Rgb2GraySystem();
+%               % 実行結果
+%               y = step(obj,u);
+%               % サイズの検証
+%               testCase.verifySize(y,szExpctd);
+%           end
+%           function testValues(testCase)
+%               % 準備
+%               u = rand(4,6,3);        % 三次元ランダム配列
+%               % 期待値
+%               arrayExpctd = rgb2gray(u); % グレースケールの期待値
+%               % ターゲットのインスタンス化
+%               obj = Rgb2GraySystem();
+%               % 実行結果
+%               arrayActual = step(obj,u);
+%               % 配列の値の検証
+%               testCase.verifyEqual(arrayActual,arrayExpctd);
+%           end
+%       end
+%   end
+%
+% を満足するように、 Rgb2GraySystem クラスを実装しよう。
+%
+% なお、 <matlab:doc('matlab.unittest.qualifications.Verifiable.verifyEqual')
+% verifyEqual> は、値が指定値と等しいことを検証する。
+% 
+% <matlab:doc('rand') rand> 関数は、0から1の実数型の一様乱数を生成
+% する。
+
+result = run(Rgb2GraySystemTestCase);
+
+%%
+% Rgb2GraySystem を正しく実装できれば、テストは成功する。
+
+%%
+% [ <part4.html トップ> ]
+
+%% プロパティの利用
+% クラスは振舞い（メソッド）の他に状態（プロパティ）を持つことができる。
+%
+% クラスの状態は <matlab:doc('properties') properties> ブロック内で
+% プロパティ名を列挙する。
+%
+% 例えば、 Kernel という名前のプロパティをもつ GradFiltSystem という名の
+% System object クラスの定義は
+%
+%   classdef GradFiltSystem < matlab.System
+%       properties
+%          Kernel % 追加したプロパティ
 %       end
 %       properties (DiscreteState)
-%           Count    % フレームカウント
 %       end
 %       properties (Access = private)
 %       end
 %       methods (Access = protected)
 %           % セットアップ（最初のステップ直前に実行）
-%           function setupImpl(obj,srcFrame)
-%               % 前フレームの初期化
-%               obj.preFrame = srcFrame;
-%               % フレームカウントの初期化
-%               obj.Count = 0;
+%           function setupImpl(obj,srcImg)
 %           end
 %           % ステップ
-%           function resFrame = stepImpl(obj,srcFrame)
-%               % フレーム平均処理 
-%               resFrame = (obj.preFrame + srcFrame)/2;
-%               % 前フレームの更新←現フレーム
-%               obj.preFrame = srcFrame;
-%               % フレームカウントのインクリメント
-%               obj.Count = obj.Count+1;
+%           function resImg = stepImpl(obj,srcImg)
+%              resImg = srcImg;
 %           end
 %           % リセット
 %           function resetImpl(obj)
-%               % フレームカウントのリセット
-%               obj.Count = 0;
+%           end
+%        end
+%    end
+%
+% のように記述される。
+
+%% 
+% プロパティには初期値を与えることもできる。
+% プロパティ Kernel の初期値が
+%
+%   Kernel = [  1  1  1 ; 
+%               0  0  0 ;
+%              -1 -1 -1 ];
+%
+% となることを期待するテストクラスを実装しよう。
+%
+%   classdef GradFiltSystemTestCase < matlab.unittest.TestCase
+%       %GRADFILTSYSTEMTESTCASE GradFiltSystem のテストケース
+%       properties
+%       end
+%       methods (Test)
+%           function testDefaultKernel(testCase)
+%               % 期待値　
+%               kernelExpctd = [  1  1  1 ;
+%                                 0  0  0 ;
+%                               -1 -1 -1 ];
+%               % ターゲットクラスのインスタンス化
+%               obj = GradFiltSystem();
+%               % プロパティー Kernel の取得
+%               kernelActual = get(obj,'Kernel');
+%               % プロパティー Kernel の検証
+%               testCase.verifyEqual(kernelActual,kernelExpctd)
 %           end
 %       end
 %   end
 
 %%
-
-result = run(FrameAveSystemTestCase);
+% GradFiltSystem クラスを上のテストが通るように Kernel プロパティを
+% 編集する。
+%
+%   properties
+%       Kernel = [  1  1  1 ; % 初期化したプロパティ
+%                   0  0  0 ;
+%                  -1 -1 -1 ];
+%   end
 
 %%
-% FrameAveSystem の実行例を以下に示す。
+% なお、メソッド内でプロパティにアクセスは、
 %
-fasObj = FrameAveSystem();
-
-set(vrObj,'CurrentTime',0);
-vwObj = VideoWriter('shuttleave.avi');
-set(vwObj,'FrameRate',frameRate);
-open(vwObj)
-while (hasFrame(vrObj))
-    frame = readFrame(vrObj);   % フレーム入力
-    frame = im2double(frame);   % 実数型へ変換
-    frame = step(fasObj,frame); % フレーム平均処理
-    writeVideo(vwObj,frame);    % フレーム出力 
-end
-close(vwObj)
+%   function y = stepImpl(obj,u)
+%      y = conv2(obj.Kernel,u); 
+%   end
+%
+% のように、第一引数（上の例では変数 obj ）を介してドット(.)により行う。
 
 %%
-% 処理が終了すると、AVIファイル shuttleave.avi に処理結果が保存される。
+% [ <part4.html トップ> ]
+
+%% コンストラクタ
+% プロパティ Kernel は、 GradFiltSystem クラスの
+% インスタンスオブジェクトを生成する際に変更することもできる。
+% まず、以下のテストメソッドを GradFiltSystemTestCase に追加しよう。
 %
-% <<shuttleave.png>>
+%   methods (Test)
+%      ...（省略）
+%      function testSobelKernel(testCase)
+%         % 期待値
+%         kernelExpctd = [  1  2  1 ;
+%                           0  0  0 ;
+%                          -1 -2 -1 ];
+%         % ターゲットクラスのインスタンス化
+%         obj = GradFiltSystem('Kernel',kernelExpctd);
+%         % プロパティー Kernel の取得
+%         kernelActual = get(obj,'Kernel');
+%         % プロパティー Kernel の検証
+%         testCase.verifyEqual(kernelActual,kernelExpctd)
+%      end     
+%      ...（省略）
+%   end
+
+%%
+% 上のテストを通過するようにコンストラクタを定義しよう。
+%
+% コンストラクタは、 属性を指定しないmethodsブロック（パブリック）内で
+% クラス名と同じ名前のメソッドとして定義する。
+%
+%   methods
+%      % コンストラクタ
+%      function obj = GradFiltSystem(varargin)
+%         setProperties(obj,nargin,varargin{:})
+%      end
+%   end
+%   methods (Access = protected)
+%      ...
+%   end
+
+%%
+% <matlab:doc('varargin') varargin> は可変長の引数入力を受け取る。
+% <matlab:doc('matlab.System.setProperties') setProperties> は、
+%
+% _'プロパティ名1'_, _プロパティ値1_,_'プロパティ名2'_, _プロパティ値2_,...
+%
+% の組合せでの設定を可能とする。
 
 %%
 % [ <part4.html トップ> ]
 
 %% 演習課題
-% *演習課題4-1. Sobel微分フィルタ*
 %
-% 垂直微分フィルタ係数として配列
-%
-% $$ \left(\begin{array}{ccc}
-%    1 &  2 &  1 \\
-%    0 &  0 &  0 \\
-%   -1 & -2 & -1 \\
-%    \end{array}\right) $$
-%
-% を、水平微分フィルタ係数として配列
-%
-% $$ \left(\begin{array}{ccc}
-%    1 &  0 & -1 \\
-%    2 &  0 & -2 \\
-%    1 &  0 & -1 \\
-%    \end{array}\right) $$
+% *課題4-1. HSV2RGBクラス*
 % 
-% を利用した勾配フィルタオブジェクト
+% 次のテストクラス
 %
-%    gfs = GradFiltSystem('Kernel',[ 1 2 1 ; 0 0 0 ; -1 -2 -1 ]); 
-%
-% を生成し、映像データ shuttle.avi に対する以下の処理を各フレームに対して
-% 施してみよう。
-% また、その処理結果をAVIファイル shuttlesobel.avi に保存しよう。
-%
-%    graysc    = step(rgsObj,frame);       % グレースケール化
-%    [mag,ang] = step(gfsObj,graysc);      % 勾配フィルタリング
-%    ang       = (ang+pi)/(2*pi);          % 偏角の正規化
-%    mag       = min(mag,1);               % 大きさの飽和処理
-%    [r,g,b]   = step(hrsObj,ang,mag,mag); % 疑似カラー化
-%    frame     = cat(3,r,g,b);             % RGB配列結合
-%
-% (処理例）
-%
-% <<shuttlesobel.png>>
-
-%%
-% *演習課題4-2. フレーム差分*（オプション）
-%
-% 以下のテストケース FrameDiffSystemTestCase の検証を満たすように
-% 連続する2枚のフレームの差分を出力する FrameDiffSystem クラスを作成しよう。
-%
-%   classdef FrameDiffSystemTestCase < matlab.unittest.TestCase
-%       %FRAMEDIFFSYSTEMTESTCASE FrameDiffSystem のテストケース
+%   classdef Hsv2RgbSystemTestCase < matlab.unittest.TestCase
+%       %HSV2RGBSYSTEMTESTCASE Hsv2RgbSystem のテストケース
 %       properties
 %       end
 %       methods (Test)
-%           function testFirstFrame(testCase)
+%           function testSize(testCase)
 %               % 準備
-%               width  = 12;
-%               height = 16;
-%               % 入力フレーム
-%               frame1 = rand(height,width);
+%               h = zeros(1,2);
+%               s = zeros(1,2);
+%               v = zeros(1,2);
 %               % 期待値
-%               cnt0Expctd = [];
-%               cnt1Expctd = 1;
-%               res1Expctd = zeros(height,width);
-%               % ターゲットクラスのインスタンス化
-%               obj = FrameDiffSystem();
-%               % 初期状態の検証
-%               state      = getDiscreteState(obj);
-%               cnt0Actual = state.Count;
-%               testCase.verifyEqual(cnt0Actual,cnt0Expctd)            
-%               % 処理結果
-%               res1Actual = step(obj,frame1);
-%               state      = getDiscreteState(obj);
-%               cnt1Actual = state.Count;
-%               % 処理結果の検証
-%               testCase.verifyEqual(res1Actual,res1Expctd,'RelTol',1e-6)
-%               testCase.verifyEqual(cnt1Actual,cnt1Expctd)            
+%               szRExpctd = [ 1 2 ];
+%               szGExpctd = [ 1 2 ];
+%               szBExpctd = [ 1 2 ];
+%               % ターゲットのインスタンス化
+%               obj = Hsv2RgbSystem();
+%               % 実行結果
+%               [r,g,b] = step(obj,h,s,v);
+%               % サイズの検証
+%               testCase.verifySize(r,szRExpctd);
+%               testCase.verifySize(g,szGExpctd);
+%               testCase.verifySize(b,szBExpctd);
 %           end
-%           function testThreeFrames(testCase)
+%           function testValues(testCase)
 %               % 準備
-%               width  = 12;
-%               height = 16;
-%               % 入力フレーム
-%               frame1 = rand(height,width);
-%               frame2 = rand(height,width);
-%               frame3 = rand(height,width);            
+%               h = rand(4,6);
+%               s = rand(4,6);
+%               v = rand(4,6);
+%               hsv = cat(3,h,s,v); % 三次元配列化
 %               % 期待値
-%               cnt1Expctd = 1;
-%               cnt2Expctd = 2;            
-%               cnt3Expctd = 3;                        
-%               res1Expctd = zeros(height,width);
-%               res2Expctd = (frame2-frame1);
-%               res3Expctd = (frame3-frame2);
+%               rgbExpctd = hsv2rgb(hsv); 
+%               % ターゲットのインスタンス化
+%               obj = Hsv2RgbSystem();
+%               % 実行結果
+%               [rActual,gActual,bActual] = step(obj,h,s,v);
+%               % 配列の値の検証
+%               testCase.verifyEqual(rActual,rgbExpctd(:,:,1));
+%               testCase.verifyEqual(gActual,rgbExpctd(:,:,2));
+%               testCase.verifyEqual(bActual,rgbExpctd(:,:,3));
+%           end
+%       end
+%   end
+%
+% を満足するように、 Hsv2RgbSystem クラスを実装しよう。
+%
+% なお、 <matlab:doc('cat') cat> 関数は指定した次元の方向に配列の結合を
+% 行う。
+
+result = run(Hsv2RgbSystemTestCase);
+
+%%
+% Hsv2RgbSystem を正しく実装できれば、テストは成功する。
+
+%%
+% *課題4-2. 勾配フィルタクラス*
+%
+% 次のテストクラス
+%
+%   classdef GradFiltSystemTestCase < matlab.unittest.TestCase
+%       %GRADFILTSYSTEMTESTCASE GradFiltSystem のテストケース
+%       properties
+%       end
+%       methods (Test)
+%           function testDefaultKernel(testCase)
+%               % 期待値
+%               kernelExpctd = [  1  1  1 ;
+%                                 0  0  0 ;
+%                                -1 -1 -1 ];
 %               % ターゲットクラスのインスタンス化
-%               obj = FrameDiffSystem();
-%               % 第１フレーム処理結果
-%               res1Actual = step(obj,frame1);
-%               state      = getDiscreteState(obj);
-%               cnt1Actual = state.Count;
-%               % 第２フレーム処理結果
-%               res2Actual = step(obj,frame2);
-%               state      = getDiscreteState(obj);
-%               cnt2Actual = state.Count;            
-%               % 第３フレーム処理結果
-%               res3Actual = step(obj,frame3);
-%               state      = getDiscreteState(obj);
-%               cnt3Actual = state.Count;            
-%               % 処理結果の検証
-%               testCase.verifyEqual(cnt1Actual,cnt1Expctd)                        
-%               testCase.verifyEqual(cnt2Actual,cnt2Expctd)                                    
-%               testCase.verifyEqual(cnt3Actual,cnt3Expctd)                                                
-%               testCase.verifyEqual(res1Actual,res1Expctd,'RelTol',1e-6)
-%               testCase.verifyEqual(res2Actual,res2Expctd,'RelTol',1e-6)            
-%               testCase.verifyEqual(res3Actual,res3Expctd,'RelTol',1e-6)                        
+%               obj = GradFiltSystem();
+%               % プロパティー Kernel の取得
+%               kernelActual = get(obj,'Kernel');
+%               % プロパティー Kernel の検証
+%               testCase.verifyEqual(kernelActual,kernelExpctd)
+%           end
+%           function testSobelKernel(testCase)
+%               % 期待値
+%               kernelExpctd = [  1  2  1 ;
+%                                 0  0  0 ;
+%                                -1 -2 -1 ];
+%               % ターゲットクラスのインスタンス化
+%               obj = GradFiltSystem('Kernel',kernelExpctd);
+%               % プロパティー Kernel の取得
+%               kernelActual = get(obj,'Kernel');
+%               % プロパティー Kernel の検証
+%               testCase.verifyEqual(kernelActual,kernelExpctd)
 %           end        
-%           function testReset(testCase)
+%           function testStepWithPrewittKernel(testCase)
 %               % 準備
-%               width  = 12;
-%               height = 16;
-%               % 入力フレーム
-%               frame1 = rand(height,width);
-%               % 期待値
-%               cnt0Expctd = [];
-%               cnt1Expctd = 1;
-%               cntrExpctd = 0;
+%               H = [  1  1  1 ;
+%                      0  0  0 ;
+%                     -1 -1 -1 ];
+%               % 期待値の準備
+%               I  = imread('cameraman.tif');
+%               X  = im2double(I);
+%               Yv = conv2(H  ,X);        % 垂直勾配の計算
+%               Yv = Yv(2:end-1,2:end-1); % 処理画像のクリッピング
+%               Yh = conv2(H.',X);        % 水平勾配の計算　
+%               Yh = Yh(2:end-1,2:end-1); % 処理画像のクリッピング
+%               magExpctd = sqrt(Yv.^2+Yh.^2); % 勾配の大きさの期待値
+%               angExpctd = atan2(Yv,Yh);     % 勾配の偏角のの期待値
 %               % ターゲットクラスのインスタンス化
-%               obj = FrameDiffSystem();
-%               % 初期状態の検証
-%               state      = getDiscreteState(obj);
-%               cnt0Actual = state.Count;
-%               testCase.verifyEqual(cnt0Actual,cnt0Expctd)            
-%               % 第一フレーム処理後の状態の検証
-%               step(obj,frame1);
-%               state      = getDiscreteState(obj);
-%               cnt1Actual = state.Count;
-%               testCase.verifyEqual(cnt1Actual,cnt1Expctd)                        
-%               % リセット後の状態の検証
-%               reset(obj);
-%               state      = getDiscreteState(obj);
-%               cntrActual = state.Count;
-%               testCase.verifyEqual(cntrActual,cntrExpctd)                        
+%               obj = GradFiltSystem();
+%               % 処理結果
+%               [magActual,angActual] = step(obj,X);
+%               % 処理結果の検証
+%               testCase.verifyEqual(magActual,magExpctd,'AbsTol',1e-6)
+%               testCase.verifyEqual(angActual,angExpctd,'AbsTol',1e-6)
 %           end        
 %       end
 %   end
+%
+% を満足するように、 GradFiltSystem クラスを実装しよう。
+
+result = run(GradFiltSystemTestCase);
+
+%%
+% GradFiltSystem を正しく実装できれば、テストは成功する。
 
 %%
 % （処理例）
 
-result = run(FrameDiffSystemTestCase);
+hrs = Hsv2RgbSystem();        
+gfs = GradFiltSystem();
 
-%%
-%
-vrObj = VideoReader('shuttle.avi');
-frameRate = get(vrObj,'FrameRate');
-vwObj = VideoWriter('shuttlediff.avi');
-set(vwObj,'FrameRate',frameRate);
-fdfObj = FrameDiffSystem();
-open(vwObj)
-while (hasFrame(vrObj))
-    frame = readFrame(vrObj);   % フレーム入力
-    frame = im2double(frame);   % 実数型への変換
-    frame = step(fdfObj,frame); % フレーム差分処理
-    frame = frame/2+0.5;
-    writeVideo(vwObj,frame);    % フレーム出力
-end
-close(vwObj)
+I = imread('cameraman.tif');     % 画像入力
+[mag,ang] = step(gfs,I);         % 勾配フィルタリング
+ang = (ang+pi)/(2*pi);           % 偏角の正規化
+mag = min(mag,1);                % 大きさの飽和処理
+[R,G,B] = step(hrs,ang,mag,mag); % 疑似カラー化
+J = cat(3,R,G,B);                % RGB配列結合
+imshow(J)                        % 画像表示
 
-%%
-% <<shuttlediff.png>>
-%
 %%
 % <html>
 % <hr>

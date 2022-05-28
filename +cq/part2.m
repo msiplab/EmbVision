@@ -1,6 +1,6 @@
 %% *EmbVision(CQ版) チュートリアル（２）*
-%
-% *フィルタリングと周波数特性*
+% 
+% *画像入出力と画素処理*
 %
 % 新潟大学
 % 村松　正吾，高橋　勇希
@@ -9,525 +9,355 @@
 % 
 
 %%
-% <part1.html Part1> |
-% <index.html メニュー> |
+% <part1.html Part1> | 
 % <part3.html Part3>
 
 %%
 % *概要*
 %
-% 本演習では、MATLABにて一次元信号のフィルタリングと周波数解析法、
-% 画像情報のフィルタリングと周波数解析法について簡単に学ぶ。
+% 本演習では、MATLABにて画像ファイルの情報を読み込む方法のほか、
+% 画像表示、画像ファイル出力、簡単な画素処理について学ぶ。
 %
 % 準備として、開いている全ての Figure を <matlab:doc('close') close> 関数で
 % 閉じておく。
 
 close all
 
-%% 一次元信号の周波数特性
-% まず、予め用意されているオーディオデータ chirp を
-% <matlab:doc('load') load> 関数を利用して読み出して準備する。
-
-load chirp
-
-%%
-% オーディオデータは変数 y に倍精度実数型配列として保持される。
-% なお、標本化周波数は変数 Fs に保持される。
-
-whos y Fs
+%% 画像入力
+% 
+% MATLABにおける画像入力は、コマンドプロンプト上にて、
+% <matlab:doc('imread') imread> 関数にファイル名を指定して実行される。
+ 
+I = imread('cameraman.tif');
 
 %%
-% 次に、予め用意されているオーディオデータ gong を読み出し、
-% <matlab:doc('length') length> 関数を利用して長さを揃え、
-% chirp のデータと混合する。
-
-c = y; % 変数 c に代入
-load gong
-g = y; % 変数 g に代入
-
-x = g(1:length(c))+c; % 長さを調整して混合
-
-%%
-% 変数 x には混合したオーディオデータが保持される。
-% <matlab:doc('plot') plot> 関数で確認しよう。
-
-plot(x)
-
-%%
-% オーディオ再生環境があれば <matlab:doc('audioplayer') audioplayer>
-% 関数を利用して、オーディオ再生も可能である。
+% cameraman.tif はグレースケール画像なので、
+% 変数 I は二次元配列として画像データを保持する。
 %
-% まず、オーディオ再生オブジェクトを生成する。
+% 特に指定をしなければ、データ型は符号なし整数８ビット型
+% ( <matlab:doc('uint8') uint8> ) となる。
+%
+% コマンドプロンプト上で、 <matlab:doc('whos') whos> 関数により確認できる。
+
+whos I
+
+%%
+% なお、Size は　'高さ $$\times $$ 幅'　で表示される。
+%
+% 画像のサイズを知るために、
+% <matlab:doc('size') size> 関数を利用することもできる。
+
+size(I)
+
+%%
+% 高さのみは、二番目の引数に '1' を指定する。
+
+size(I,1)
 
 %% 
-% 
-%   player = audioplayer(x,Fs);
-%   whos player
-%
+% 幅のみは、二番目の引数に '2' を指定する。
+
+size(I,2)
 
 %%
-% オーディオ再生は、
-% <matlab:doc('audioplayer/play') play> メソッドに
-% オブジェクト player を指定して実行される。
+% カラー画像の読込も可能である。
+
+RGB = imread('peppers.png');
 
 %%
-%
-%   play(player)
-%
+% 変数 RGB は 三次元配列として画像データを保持する。
 
-%%
-% <matlab:doc('spectrogram') spectrogram> 関数を利用することで、
-% 短時間フーリエ変換を利用したオーディオデータの周波数解析を実行できる。
-%
-% * 窓長: 256
-%
-% として実行しよう。 
-
-figure(1)
-spectrogram(x,256)
-caxis([ -70 10 ])
-colorbar
-
-%%
-% 上記の操作により周波数特性（スペクトログラム）が表示される。
-% 横軸は正規化周波数( $$ F_s/2 $$ を 1 と正規化)、
-% 縦軸は標本インデックス( $$ 1/F_s $$ 秒単位)である。
-%
-% なお、値の大きさ[dB] が分かり易いように
-% <matlab:doc('caxis') caxis> 関数と
-% <matlab:doc('colorbar') colorbar> 関数を併用した。
-%
-% <matalb:doc('view') view> 関数で視点を変えてみよう。
-
-view([-15 30])
-
-%%
-% <matlab:doc('zlim') zlim> 関数を利用して、
-% Z軸の座標を　-70 から 10 に調整する。
-
-zlim([ -70 10 ])
+whos RGB
 
 %%
 % [ <part2.html トップ> ]
 
-%% 一次元信号のフィルタリング
-% 次に、オーディオデータ x に、線形フィルタ処理
+%% 画像表示
 %
-% $$ y[n] = h[n] \ast x[n] = \sum_{k=0}^{N-1} h[k]x[n-k] $$
-%
-% を施してみよう。ここで、
-%
-% * $$ x[n] $$ : フィルタ入力
-% * $$ y[n] $$ : フィルタ出力 
-% * $$ h[n] $$ : フィルタ係数（インパルス応答）
-% * $$ N $$    : フィルタ次数
-%
-% とする。
-%
-% MATLAB では線形フィルタ処理に <matlab:doc('conv') conv> 関数を利用できる。
-%
-% フィルタ係数 
-%
-% $$ h[n] = \left\{\begin{array}{ll}
-%            1/3, & n=0,1,2 \\
-%            0, & \mathrm{otherwise}
-%           \end{array}\right. $$
+% MATLABにおける画像表示は、コマンドプロンプト上にて、
+% <matlab:doc('imshow') imshow> 関数にファイル名を指定して実行される。
 % 
-% として線形フィルタ処理を実行してみよう。
+% 変数 I の表示は以下の通り。
 
-h = [ 1 1 1 ]/3;
-figure(2)
-impz(h)
+imshow(I)
 
 %%
+% 変数RGBの表示は以下の通り。
 
-y = conv(h,x);
-
-%%
-% 変数 y にはフィルタ処理結果が保持されている。 
-% 出力 y の周波数特性（スペクトログラム）を確認しよう。
-
-figure(3)
-spectrogram(y,256);
-caxis([ -70 10 ])
-colorbar
+imshow(RGB)
 
 %%
-
-view([ -15 30 ])
-zlim([ -70 10 ])
-
-%%
-% 入力 x と出力 y のスペクトログラムを比較してみて欲しい。
-% どのようなことに気が付くだろうか？
-%
-% * 大よそ、正規化周波数0.4以上の高周波成分が減衰している。
-% * 特に、0.667付近の減衰が大きい。
-%
-% ということに注意して観察して欲しい。
-%
-% なお、処理結果をオーディオ再生により確認する場合は、
-%
-%   player = audioplayer(y,Fs);
-%   play(player)
-%
-% と実行すればよい。
+% カラー画像として表示される。
 
 %%
 % [ <part2.html トップ> ]
 
-%% 一次元フィルタの周波数応答
+%% 配列処理
+% 配列に対する演算を施すことで画像処理を実現できる。
 %
-% 線形フィルタによる周波数特性の変化は、
-% フィルタの周波数応答により確認できる。
-% 
-% 何故ならば、時間領域での畳込み演算は
+% まずは簡単な配列演算を紹介しよう。例として、以下の配列を用いる。
 %
-% $$ y[n] = h[n] \ast x[n] \ \stackrel{\mathrm{DTFT}}{\longleftrightarrow}\
-%   Y(e^{j\omega}) = H(e^{j\omega})X(e^{j\omega}) $$
+% $$\mathbf{X} =\left(\begin{array}{lll}
+%   1 & 2 & 3 \\ 4 & 5 & 6
+%   \end{array}\right)$$
 %
-% のように周波数（DTFT: 離散時間フーリエ変換）領域では
-% 積演算に対応するためである。ここで、
-% 
-% * $$ X(e^{j\omega}) $$ : 入力 $$ x[n] $$ の周波数特性
-% * $$ Y(e^{j\omega}) $$ : 出力 $$ y[n] $$ の周波数特性  
-% * $$ H(e^{j\omega}) $$ : フィルタ係数（インパルス応答） $$ h[n] $$ 
-%   の周波数応答
-%
-% である。
-%
-% フィルタ係数 $$ h[n] $$ の周波数応答は <matlab:doc('freqz') freqz> 関数
-% により確認できる。
+% MATLABコマンドプロンプト上で、
 
-figure(4)
-freqz(h)
+X = [ 1 2 3 ; 4 5 6 ];
 
 %%
-% 
-% 振幅応答を確認すると、正規化周波数 0.3 から　0.4 の間から高域に渡り
-% -6 [dB] 以上の減衰特性をもち、特に 0.6 から 0.7 の間で大きく減衰する特性が
-% 確認できる。
+% のように打ち込めばよい。
 %
-% なお、
-%
-% $$ H(e^{j\omega}) = \sum_{n=-\infty}^{\infty} h[n]e^{-j\omega n} 
-%    = h[0]e^{-j0} + h[1]e^{-j\omega} + h[2]e^{-j2\omega} $$
-%
-% $$ = \frac{1}{3}(e^{j\omega} + 1 + e^{-j\omega})e^{-j\omega} 
-%     = \frac{1}{3}(1 + 2\cos\omega)e^{-j\omega} $$
-%
-% より、 
-%
-% * $$ \omega = 0 $$ で、  $$ |H(e^{j\omega})| = 1 $$
-% * $$ \omega = \frac{2\pi}{3} $$ で、  $$ |H(e^{j\omega})| = 0 $$
-%
-% となることが確認できる。
+% 配列 X の情報を確認しよう。
 
-%%
-% [ <part2.html トップ> ]
-
-%% 二次元信号の周波数特性
-% では、画像データに対するフィルタリングに話を進めよう。
-% 先に示したオーディオデータと同様に線形フィルタ処理を施すことができる。
-% 
-% まず、 開いている全ての Figure を <matlab:doc('close') close> 関数で
-% で閉じた後、予め用意されている画像データ cameraman を
-% 読み込んで表示しよう。
-
-close all
-figure(1)
-X = imread('cameraman.tif');
-imshow(X)
-
-%%
-% 画像データは変数 X に符号なし整数８ビット型配列として保持されるので、
-% これを倍精度実数型に変換しよう。
-
-X = im2double(X);
 whos X
 
 %%
-% <matlab:doc('fft2') fft2> 関数を利用することで、
-% 画像データの二次元の周波数解析を実行できる。
-% 画像サイズに合わせて
+% 倍精度実数型 $$ 2 \times 3 $$ 配列であることがわかる。
 %
-% * 二次元FFT点数: $$ 256\times 256 $$
-%
-% と設定し二次元周波数解析を実行しよう。 
+% <matlab:doc('disp') disp> 関数を利用して X の内容を確認しよう。
 
-F = fft2(X,256,256);
-whos F
+disp(X)
 
 %%
-% 変数 F に二次元離散フーリエ変換(DFT)係数が保持される。
-% なお、複素数として結果が得られるため、絶対値をとって
-% 振幅特性を求めてみよう。
+% MATLAB上では配列に対し、多くの演算が利用できる。例えば、
+% 配列の転置は、' <matlab:doc('transpose') .'> ' で実行できる。
+% $$ \mathbf{X}^T $$ は、コマンドプロンプト上で、
 
-Fmag = abs(F);
-whos Fmag
-
-%%
-% 変数 Fmag には、振幅特性として実数配列が保持される。
-% <matlab:doc('surface') surface> 関数を利用して、
-% 特性を可視化しよう。
-%
-% surface プロットを調整するためのハンドルオブジェクトとして
-% 変数 hsrfc を用意しておこう。
-
-figure(2)
-hsrfc = surface(20*log10(Fmag));
-set(hsrfc,'EdgeColor','none');
+X.' 
 
 %%
-% ここでは、デシベルに換算している点に注意する。
+% のように実行できる。
 %
-% グラフが見やすいようカラーバーを設置する。
+% 配列全体を定数倍するときは、 ' <matlab:doc('mtimes') *> ' 演算子を、
+% 配列全体を定数で割るときは、' <matlab:doc('mdivide') /> ' 演算子を
+% 利用すればよい。
+%
+% 例えば、 $$ 255\mathbf{X} $$ は、
 
-colorbar
-caxis([ -20 80 ])
+255*X
 
 %%
-% 中心が直流となるように <matlab:doc('fftshift') fftshift> 関数を用いて
-% 配列をシフトする。
+% のように、 $$ \mathbf{X}/255 $$ は、
 
-set(hsrfc,'ZData',fftshift(hsrfc.ZData)); % Z軸のシフト
-set(hsrfc,'CData',fftshift(hsrfc.CData)); % カラー軸のシフト
+X/255
 
 %%
-% 正規化周波数となるよう座標の調整を行う。
+% のように実行できる。
+%
+% 次回以降、要素毎のべき乗を利用するので、ここでその演算方法を紹介しよう。
+% 配列の要素毎のべき乗は、' <matlab:doc('power') .^> ' 演算子により
 
-fstep = 1/256; % 周波数標本点の間隔
-set(hsrfc,'XData',-0.5:fstep:0.5-fstep);
-set(hsrfc,'YData',-0.5:fstep:0.5-fstep);
-xlabel('F_x (\times\pi rad/sample)')
-ylabel('F_y (\times\pi rad/sample)')
+X.^2
 
 %%
-% 視点を変える。
+% のように実行できる。要素毎の平方根も
 
-view([ -15 30 ])
-zlim([ -20 80 ])
-
-%%
-% [ <part2.html トップ> ]
-
-%% 二次元信号のフィルタリング
-% 次に、画像データ X に、二次元線形フィルタ処理
-%
-% $$ y[n_y,n_x] = h[n_y,n_x] \ast 
-% x[n_y,n_x] = \sum_{k_x=0}^{N_x-1}\sum_{k_y=0}^{N_y-1}
-% h[k_y,k_x]x[n_y-k_y,n_x-k_x] $$
-%
-% を施してみよう。ここで、
-%
-% * $$ x[n_y,n_x] $$ : フィルタ入力
-% * $$ y[n_y,n_x] $$ : フィルタ出力 
-% * $$ h[n_y,n_x] $$ : フィルタ係数（インパルス応答）
-% * $$ N_y $$        : 垂直フィルタ次数
-% * $$ N_x $$        : 水平フィルタ次数
-%
-% とする。
-%
-% MATLAB では二次元線形フィルタ処理に <matlab:doc('conv2') conv2> 関数もしくは
-% <matlab:doc('images/imfilter') imfilter> 関数を利用できる。
-%
-% フィルタ係数  $$ h[n_y,n_x] $$ として配列
-%
-% $$ \left(\begin{array}{ccc}
-%    1 &  1 & 1 \\
-%    0 &  0 & 0 \\
-%   -1 & -1 & -1 \\
-%    \end{array}\right) $$
-% 
-% を利用して線形フィルタ処理を実行してみよう。
-
-H = [ 1 1 1 ; 0 0 0 ; -1 -1 -1 ];
-Y = conv2(H,X);
+X.^(1/2)
 
 %%
-% 変数 Y にはフィルタ処理結果が保持されている。 
-% ただし、
+% のように計算できる。 
+% この場合は、以下のように <matlab:doc('sqrt') sqrt> 関数を利用しても良い。
 
-size(Y)
-
-%%
-% のように、もとの配列 X よりもサイズが縦横 2 画素づつ増加している。
-% これは、サイズ $$ M_y\times M_x $$ の画像にサイズ 
-% $$ L_y\times L_x $$ の線形フィルタをかけるとその出力のサイズが
-%
-% $$ (M_y+L_y-1)\times (M_x+L_x-1) $$ 
-%
-% に増加する性質による。
-%
-% 上下左右、1画素ずつ削って、入力画像 X のサイズに出力画像 Y のサイズを
-% 調整しよう。 <matlab:doc('end') end> 関数を利用した配列インデックスの
-% 最大値指定を利用すると便利である。
-
-Y = Y(2:end-1,2:end-1);
+sqrt(X)
 
 %%
-% また、出力画像 Y は、演算の結果、
+% サイズが同じ配列同士であれば、' <matlab:doc('plus') +> ' 演算子を利用して
+% 和をとることも可能である。
+%
+% $$ \mathbf{Y} =\left(\begin{array}{lll}
+%   7 & 8 & 9 \\ 10 & 11 & 12
+%   \end{array}\right)$$
+%
+% を定義して配列 X に足してみよう。
 
-min(Y(:))
+Y = [ 7 8 9 ; 10 11 12 ];
+
+X+Y
+
+%% 
+% さらに、これら演算を組み合わせれば、要素毎の自乗和の平方根
+%
+% $$ [\mathbf{M}]_{i,j} = \sqrt{[\mathbf{X}]_{i,j}^2+[\mathbf{Y}]_{i,j}^2} $$
+%
+% も
+
+M = sqrt(X.^2+Y.^2)
 
 %%
-% のように、負の値を含む。このため画像として表示する際には工夫が必要である。
+% のように実現できる。三角関数も利用できるので、
 %
-% 実数型画像の場合、imshow 関数は、画素値が 0 から 1 にスケールされていると
-% 仮定して表示を行うので、負の値が0.5 以下、正の値が0.5以上となるよう
-% Y の値を調整する。
-
-figure(3)
-imshow(Y+0.5)
-
-%%
-% 先のフィルタは、垂直方向の微分 $$ \frac{\partial X}{\partial y} $$ 
-% の離散近似を出力する。
+% $$ [\mathbf{A}]_{i,j} = \tan^{-1}\frac{[\mathbf{Y}]_{i,j}}{[\mathbf{X}]_{i,j}}$$
 %
-% 出力 Y の周波数特性を確認しよう。
+% のような複雑な演算も <matlab:doc('atan2') atan2> 関数を用いて、
 
-figure(4)
-F = fft2(Y,256,256);
-Fmag = abs(F);
-hsrfc = surface(20*log10(Fmag));
-set(hsrfc,'EdgeColor','none');
-colorbar
-caxis([ -20 80 ])
-set(hsrfc,'ZData',fftshift(hsrfc.ZData));
-set(hsrfc,'CData',fftshift(hsrfc.CData));
-set(hsrfc,'XData',-0.5:fstep:0.5-fstep);
-set(hsrfc,'YData',-0.5:fstep:0.5-fstep);
-xlabel('F_x (\times\pi rad/sample)')
-ylabel('F_y (\times\pi rad/sample)')
-view([ -15 30 ])
-zlim([ -20 80 ])
+A = atan2(Y,X)
 
 %%
-% 入力 X と出力 Y の周波数特性を比較してみて欲しい。
-% どのようなことに気が付くだろうか？
+% のように実現できる。
+
+%%
+% なお、変数名の直後に丸括弧 ' () ' 内で各次元のインデックスを指定することで
+% 配列の要素にアクセスすることが可能である。
 %
-% * 直流におけるピークがなくなる。
-% * 水平方向の高域に減衰が見られる。
+% インデックスは '1' から始まることに注意すると、
+% 配列 X の左上の要素へは、
+
+X(1,1)
+
+%%
+% のようにアクセスできる。他の要素へも同様にアクセスできる。
 %
-% ということに注意して観察して欲しい。
+% コロン( <matlab:doc(':') :> )によるインデックス指定を行うと、
+% より柔軟なアクセスが可能となる。例えば、配列 Y の 1 行目は、
+
+Y(1,:) 
+
+%%
+% のように、配列 M の 2 列目は、
+
+M(:,2)
+
+%%
+% のように、配列 A の 2行目の2列目から3列目は
+
+A(2,2:3)
+
+%%
+% のようにアクセスできる。
 
 %%
 % [ <part2.html トップ> ]
 
-%% 二次元フィルタの周波数応答
-%
-% 二次元線形フィルタによる周波数特性の変化は、
-% 一次元の場合と同様に、フィルタの周波数応答により確認できる。
-% 
-% 何故ならば、空間領域での畳込み演算は
-%
-% $$ y[n_y,n_x] = h[n_y,n_x] \ast x[n_y,n_x] \ 
-%    \stackrel{\mathrm{DSFT}}{\longleftrightarrow}\
-%   Y(e^{j\omega_y},e^{j\omega_x}) = 
-%   H(e^{j\omega_y},e^{j\omega_x})X(e^{j\omega_y},e^{j\omega_x}) $$
-%
-% のように周波数（DSFT: 離散空間フーリエ変換）領域では
-% 積演算に対応するためである。ここで、
-% 
-% * $$ X(e^{j\omega_y},e^{j\omega_x}) $$ : 入力 $$ x[n_y,n_x] $$ の周波数特性
-% * $$ Y(e^{j\omega_y},e^{j\omega_x}) $$ : 出力 $$ y[n_y,n_x] $$ の周波数特性  
-% * $$ H(e^{j\omega_y},e^{j\omega_x}) $$ : フィルタ係数（インパルス応答）
-% $$ h[n_y,n_x] $$ の周波数応答
-%
-% である。
-%
-% フィルタ係数 $$ h[n_y,n_x] $$ の周波数応答は
-% <matlab:doc('freqz2') freqz2> 関数により確認できる。
+%% 画素処理
+% カラー画像RGBの各R,G,B成分にアクセスするためにも、
+% コロンによるインデックス指定が利用できる。
 
-figure(5)
-freqz2(H)
+R = RGB(:,:,1);
+G = RGB(:,:,2);
+B = RGB(:,:,3);
 
 %%
+% 各R,G,B成分は、二次元配列となる。
+
+whos R G B
+
+%%
+% また、 <matlab:doc('images/rgb2gray') rgb2gray> 関数を利用することで、
+
+I = rgb2gray(RGB);
+
+%%
+% のようにカラー画像RGBをグレースケール画像 I に変換できる。
+%
+% なお、変数 I が保持していた内容は上記の操作により 
+% 変数 RGB のグレースケール画像によって上書きされる。
+
+whos I
+
+%%
+
+imshow(I)
+
+%%
+% 画像配列に対し、先に紹介した演算を施すためには、
+% しばしば実数型への変換が必要となる。
+%
+% 整数型から実数型への変換には、 <matlab:doc('images/im2single') im2single>
+% 関数、もしくは <matlab:doc('images/im2double') im2double>　関数を
+% 利用できる。それぞれ、画像を単精度実数型、倍精度実数型に変換する。
+
+I = im2double(I);
+whos I
+
+%%
+% 実数型への変換 im2single 関数、im2double 関数は画素値を 0 から 1 
+% の範囲に正規化する処理も同時に行われる。
+%
+% <matlab:doc('min') min>関数で最小値を <matlab:doc('max') max> 関数で
+% 最大値を確認しよう。
+
+min(I(:)) 
+
+%%
+
+max(I(:))
+
+%%
+% なお、'I(:)' のようにコロンを利用すると配列の列ベクトル化が行われる。
+% min 関数、max 関数に配列を与えると各列毎の評価となるため、全画素に渡る
+% 最小値、最大値を求めるためにここでは列ベクトル化を行った。
 % 
-% 振幅応答を確認すると、直流と水平方向の高周波数成分に対する減衰特性をもち、
-% 垂直方向については帯域通過特性をもつことが確認できる。
+% 0 から 1 の範囲に正規化された画像は、累乗則変換により、
+% 0 から 1 の範囲内で明るさを調整できる。
+
+J = I.^2;
+imshow(J)
+
+%%
+% <matalb:doc('fplot') fplot> 関数により上記の累乗則変換の特性を確認しよう。
+
+fplot(@(x) x.^2, [0 1])  
+xlabel('x') % 横軸のラベル
+ylabel('y') % 縦軸のラベル
+axis square % 縦横比の調整
+
+%%
+% ここで採用した累乗則変換は放物線を描き、画像を暗くする効果がある。 
+
+%%
+% [ <part2.html トップ> ]
+
+%% 画像出力
 %
-% なお、
+% <matlab:doc('imwrite') imwrite> 関数を利用することで、処理した結果画像を
+% ファイルに保存することも可能である。
 %
-% $$ H(e^{j\omega_y},e^{j\omega_x}) = \sum_{n_x=-\infty}^{\infty}
-% \sum_{n_y=-\infty}^{\infty} 
-% h[n_x,n_y]e^{-j\omega_y n_y}e^{-j\omega_x n_x} $$
-%
-% $$ = (e^{j\omega_y} - e^{-j\omega_y})(e^{j\omega_x} + 1 + e^{-j\omega_x}) $$
-%
-% $$ = 2\sin\omega_y(1 + 2\cos\omega_x)e^{-j\frac{\pi}{2}} $$
-%
-% より、 
-%
-% * $$ \omega_y = 0 $$ で、
-% $$ |H(e^{j\omega_y},e^{j\omega_x})| = 0 $$
-% * $$ \omega_y = \pi $$ で、
-% $$ |H(e^{j\omega_y},e^{j\omega_x})| = 0 $$
-% * $$ \omega_x = \frac{2\pi}{3} $$ で、
-% $$ |H(e^{j\omega_y},e^{j\omega_x})| = 0 $$
-% * $$ \omega_y = \pm\frac{\pi}{2}, \omega_x = 0 $$ で、
-% $$ |H(e^{j\omega_y},e^{j\omega_x})| = 6 $$
-%
-% となることが確認できる。
+% 画像 J をファイル darkpeppers.tif に保存しよう。
+
+imwrite(J,'darkpeppers.tif')
+
+%%
+% 画像ファイル darkpeppers.tif が出力される。
+
+dir *.tif
 
 %%
 % [ <part2.html トップ> ]
 
 %% 演習課題
 %
-% *課題2-1. 水平微分フィルタ*
+% *課題2-1. 明るさ調整*
 % 
-% フィルタ係数  $$ h[n_y,n_x] $$ として配列
-%
-% $$ \left(\begin{array}{ccc}
-%    1 &  0 & -1 \\
-%    1 &  0 & -1 \\
-%    1 &  0 & -1 \\
-%    \end{array}\right) $$
-% 
-% （水平微分の離散近似フィルタ）を用意し、
-% 画像ファイル cameraman.tif のグレースケール画像に対して
-% 線形フィルタ処理を施し、処理結果を画像ファイル cameramangradx.tif に保存せよ。
-% （負の値を考慮して、値0.5 によりかさ上げすること）。
-%
-% また、フィルタの周波数特性をグラフで確認せよ。
+% 画像ファイル peppers.png のグレースケール画像に対し、sqrt関数による明るさ
+% 調整を施し、処理結果を画像ファイル brightpeppers.tif に保存せよ。
+% また、変換の特性をグラフで確認せよ。
 %
 % (処理例）
 %
 %%
-% <<cameramangradx.png>>
+% <<brightpeppers.png>>
 %%
-% <<freqz2gradx.png>>
+% <<fplotsqrt.png>>
 %%
-% *課題2-2. 勾配の大きさと偏角*
+% *課題2-2. 色空間変換*
 %
-% 垂直微分フィルタ出力 $$ \frac{\partial X}{\partial y} $$ と 
-% 水平微分フィルタ出力 $$ \frac{\partial X}{\partial x} $$ から、
-%
-% * 勾配の大きさ : $$ \|\Delta X \| = \sqrt{
-% \left(\frac{\partial X}{\partial y}\right)^2
-% +\left(\frac{\partial X}{\partial x}\right)^2} $$
-% * 勾配の方向　 : $$ \angle \Delta X = \tan^{-1}
-% \left((\frac{\partial X}{\partial y})/(
-% \frac{\partial X}{\partial x})\right) $$
-%
-% を計算し、処理結果をそれぞれ画像ファイル cameramangradmag.tif と
-% cameramangradang.tif に保存せよ。ただし、勾配の方向については、
-% 値の範囲を 0 から 1 に換算すること。
+% 画像ファイル peppers.png の RGBカラー配列を <matlab:doc('rgb2hsv') rgb2hsv>
+% 関数で HSVカラー配列へ変換し、S 成分を2倍して 
+% <matlab:doc('hsv2rgb') hsv2rgb> にてRGBカラー配列に戻し、処理結果を
+% 画像ファイル highsatpeppers.jpg に保存せよ。
 %
 % (処理例）
 %
 %%
-% <<cameramangradmag.png>>
-%%
-% <<cameramangradang.png>>
+% <<highsatpeppers.png>>
+%
 
 %%
 % <html>
 % <hr>
 % </html>
 %%
-% <part1.html Part1> |
 % <index.html メニュー> |
 % <part2.html トップ> |
 % <part3.html Part3>
