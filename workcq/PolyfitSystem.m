@@ -1,7 +1,7 @@
 classdef PolyfitSystem < matlab.System
     % POLYFITSYSTEM
     properties(Nontunable)
-        Degree = 3;
+        Degree = 2;
     end
 
     properties(DiscreteState)
