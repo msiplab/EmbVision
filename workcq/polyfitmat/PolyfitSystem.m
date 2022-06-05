@@ -2,7 +2,7 @@ classdef PolyfitSystem < matlab.System
 % POLYFITSYSTEM 二値化画像から多項式近似をおこなう
     properties (Nontunable)
         % Nontunableでプロパティをプログラムの途中で変更されるのを防ぐ
-        Deg = 2;    % 多項式の次数
+        Degree = 2;    % 多項式の次数
     end
     methods
        % コンストラクタ
@@ -15,7 +15,7 @@ classdef PolyfitSystem < matlab.System
         end
         function P = stepImpl(obj,BW)
             [y,x] = find(BW);   % 画像を座標に変換
-            P = polyfit(x,y,obj.Deg);   % 多項式近似
+            P = polyfit(x,y,obj.Degree);   % 多項式近似
         end
 
         function resetImpl(obj)

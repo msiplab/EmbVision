@@ -18,7 +18,7 @@ classdef PolyfitSystemTestCase < matlab.unittest.TestCase
                % 期待値
                szExpctd = [ 1 deg+1 ];
                % ターゲットのインスタンス化
-               obj = PolyfitSystem('Deg',deg);
+               obj = PolyfitSystem('Degree',deg);
                % 実行結果
                p = step(obj,x,y);
                % サイズの検証
@@ -32,32 +32,33 @@ classdef PolyfitSystemTestCase < matlab.unittest.TestCase
             % 期待値
             vaExpctd = polyfit(x,y,deg);
             % ターゲットのインスタンス化
-            obj = PolyfitSystem('Deg',deg);
+            obj = PolyfitSystem('Degree',deg);
             % 実行結果
-            vaActual = step(obj,x,y);
+            vaActual = obj.step(x,y);
             % 配列の値の検証
             testCase.verifyEqual(vaActual,vaExpctd);
         end
-        function testDefaultKernel(testCase)
+        function testDefaultDegree(testCase)
             % 期待値　
             degExpctd = 3;
             % ターゲットクラスのインスタンス化
             obj = PolyfitSystem();
             % プロパティー Kernel の取得
-            degActual = get(obj,'Deg');
+            degActual = obj.Degree;
             % プロパティー Kernel の検証
             testCase.verifyEqual(degActual,degExpctd)
         end
-        function testSobelDeg(testCase)
+        function testSetDegree(testCase) 
             % 期待値
-            degExpctd = 3;
+            degExpctd = 2;
             % ターゲットクラスのインスタンス化
-            obj = PolyfitSystem('Deg',degExpctd);
-            % プロパティー Deg の取得
-            degActual = get(obj,'Deg');
-            % プロパティー Deg の検証
+            obj = PolyfitSystem('Degree',degExpctd);
+            % プロパティー Degree の取得
+            degActual = obj.Degree;
+            % プロパティー Degree の検証
             testCase.verifyEqual(degActual,degExpctd)
         end
+    
     end
 
 end

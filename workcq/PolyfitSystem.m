@@ -1,7 +1,7 @@
 classdef PolyfitSystem < matlab.System
     % POLYFITSYSTEM
-    properties (Nontunable)
-        Deg = 3;
+    properties(Nontunable)
+        Degree = 3;
     end
 
     properties(DiscreteState)
@@ -26,7 +26,7 @@ classdef PolyfitSystem < matlab.System
         function y = stepImpl(obj,x,y)
             % Implement algorithm. Calculate y as a function of input u and
             % discrete states.
-            y = polyfit(x,y,obj.Deg);
+            y = polyfit(x,y,obj.Degree);
         end
 
         function resetImpl(obj)
