@@ -13,10 +13,10 @@ classdef PolyvalColorSystem < matlab.System
             G = RGB(:,:,2);
             B = RGB(:,:,3);
 
-            % 色要素の画像位置に色を代入（新潟大学カラー）
+            % 色要素の画像位置に色を代入
             R(ind) = 0;
-            G(ind) = 133;
-            B(ind) = 85;
+            G(ind) = 200;
+            B(ind) = 200;
 
             output = cat(3, R, G, B);  % 出力
         end

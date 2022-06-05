@@ -16,7 +16,7 @@ classdef PolyvalColorSystemTestCase < matlab.unittest.TestCase
             RGB = zeros(256,256,3);  % 画像
             
             % 期待値の設定
-            superExpctd = cat(3,0.*eye(256),133.*eye(256),85.*eye(256));
+            superExpctd = cat(3,0.*eye(256),200.*eye(256),200.*eye(256));
             % ターゲットのインスタンス化
             obj = PolyvalColorSystem();
             % 実行結果（実現値の取得）
