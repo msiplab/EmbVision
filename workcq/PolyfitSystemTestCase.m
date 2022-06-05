@@ -24,17 +24,22 @@ classdef PolyfitSystemTestCase < matlab.unittest.TestCase
 
         function testCoefs(testCase)
             % 準備
-            x = rand(5,1); % 説明変数
-            y = x.^2;    % 目的変数
+            xmax = 4;
+            x = 1:xmax; % 説明変数
+            y = x.^2;   % 目的変数
+            BW = zeros(xmax^2,xmax); % 座標を二値画像に変換 
+            for idx = 1:length(x)
+                BW(y(idx),x(idx)) = 1;
+            end
             deg = 3;  % 次数
-            % 期待値
+            % 期待値の設定
             coefsExpctd = polyfit(x,y,deg);
             % ターゲットのインスタンス化
             obj = PolyfitSystem();
-            % 実行結果
-            coefsActual = obj.step(x,y);
+            % 実行結果（実現値の取得）
+            coefsActual = obj.step(BW);
             % 配列の値の検証
-            testCase.verifyEqual(coefsActual,coefsExpctd);
+            testCase.verifyEqual(coefsActual,coefsExpctd,'AbsTol',1e-9);
         end
 
         function testSetDegree(testCase)
@@ -48,20 +53,7 @@ classdef PolyfitSystemTestCase < matlab.unittest.TestCase
             testCase.verifyEqual(degActual,degExpctd)
         end
      
-        function testSize(testCase)
-            % 準備
-            x = [1 2 3]; % 説明変数
-            y = x.^2;    % 目的変数
-            deg = 2;  % 次数
-            % 期待値
-            szExpctd = [ 1 deg+1 ];
-            % ターゲットのインスタンス化
-            obj = PolyfitSystem('Degree',deg);
-            % 実行結果
-            coefs = obj.step(x,y);
-            % サイズの検証
-            testCase.verifySize(coefs,szExpctd);
-        end
+        
     end
 
 end

@@ -23,10 +23,11 @@ classdef PolyfitSystem < matlab.System
             % Perform one-time calculations, such as computing constants
         end
 
-        function y = stepImpl(obj,x,y)
+        function p = stepImpl(obj,BW)
             % Implement algorithm. Calculate y as a function of input u and
             % discrete states.
-            y = polyfit(x,y,obj.Degree);
+            [y,x] = find(BW); % 画像を座標に変換
+            p = polyfit(x,y,obj.Degree); % 多項式近似
         end
 
         function resetImpl(obj)
