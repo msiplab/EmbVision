@@ -1,5 +1,5 @@
 classdef PolyvalColorSystem < matlab.System
-% POLYVALSYSTEM 多項式を画像にプロットする
+% POLYVALCOLORSYSTEM 多項式を画像にプロットする
     methods(Access = protected)
         function setupImpl(obj,P,RGB)
         end
@@ -22,14 +22,6 @@ classdef PolyvalColorSystem < matlab.System
         end
         function resetImpl(obj)
         end
-        % 入力ポート数
-        function N = getNumInputsImpl(obj)
-            N = 2; 
-        end
-        % 出力ポート数        
-        function N = getNumOutputsImpl(obj)
-            N = 1;
-        end      
         % 入力ポート名
         function [inputName1, inputName2] = getInputNamesImpl(obj)
             inputName1 = 'P';

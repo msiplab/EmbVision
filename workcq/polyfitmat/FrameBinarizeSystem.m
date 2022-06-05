@@ -1,5 +1,5 @@
 classdef FrameBinarizeSystem < matlab.System
-% FRAMEBINARISYSTEM グレースケールを２値化画像に変換する
+% FRAMEBINARISYSTEM グレースケールを２値化画像に変換する
     methods(Access = protected)
         % セットアップ（最初のステップ直前に実行）
         function setupImpl(obj,srcImg)
@@ -7,14 +7,6 @@ classdef FrameBinarizeSystem < matlab.System
         function resImg = stepImpl(obj,srcImg)
             resImg = imbinarize(srcImg);
         end
-        % 入力ポート数
-        function N = getNumInputsImpl(obj)
-            N = 1; 
-        end
-        % 出力ポート数        
-        function N = getNumOutputsImpl(obj)
-            N = 1;
-        end      
         % 入力ポート名
         function inputName = getInputNamesImpl(obj)
             inputName = 'Gray';

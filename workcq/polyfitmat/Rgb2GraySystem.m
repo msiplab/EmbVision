@@ -12,14 +12,6 @@ classdef Rgb2GraySystem < matlab.System
         % リセット
         function resetImpl(obj)
         end
-        % 入力ポート数
-        function N = getNumInputsImpl(obj)
-            N = 1; 
-        end
-        % 出力ポート数        
-        function N = getNumOutputsImpl(obj)
-            N = 1;
-        end      
         % 入力ポート名
         function inputName = getInputNamesImpl(obj)
             inputName = 'RGB';

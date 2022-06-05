@@ -7,19 +7,11 @@ classdef PolyvalSystem < matlab.System
             x = 1:size(Gray,2); % 説明変数を画像の端から端とする
             y = min(max(int32(polyval(P,x)),1),size(Gray,1));   % 多項式から目的変数を求める
             ind = sub2ind(size(Gray),y,x);  % 座標から画像位置に変換
-            Gray(ind) = 128;    % 画像位置に指定の色を代入
+            Gray(ind) = 256;    % 画像位置に指定の色を代入
             output = Gray;  % 出力
         end
         function resetImpl(obj)
         end
-        % 入力ポート数
-        function N = getNumInputsImpl(obj)
-            N = 2; 
-        end
-        % 出力ポート数        
-        function N = getNumOutputsImpl(obj)
-            N = 1;
-        end      
         % 入力ポート名
         function [inputName1, inputName2] = getInputNamesImpl(obj)
             inputName1 = 'P';
