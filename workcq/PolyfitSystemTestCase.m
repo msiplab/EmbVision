@@ -20,23 +20,23 @@ classdef PolyfitSystemTestCase < matlab.unittest.TestCase
                % ターゲットのインスタンス化
                obj = PolyfitSystem('Degree',deg);
                % 実行結果
-               p = step(obj,x,y);
+               p = obj.step(x,y);
                % サイズの検証
                testCase.verifySize(p,szExpctd);
         end
-        function testValues(testCase)
+        function testCoefs(testCase)
             % 準備
             x = rand(5,1); % 説明変数
             y = x.^2;    % 目的変数
             deg = 3;  % 次数
             % 期待値
-            vaExpctd = polyfit(x,y,deg);
+            coefExpctd = polyfit(x,y,deg);
             % ターゲットのインスタンス化
             obj = PolyfitSystem('Degree',deg);
             % 実行結果
-            vaActual = obj.step(x,y);
+            coefActual = obj.step(x,y);
             % 配列の値の検証
-            testCase.verifyEqual(vaActual,vaExpctd);
+            testCase.verifyEqual(coefActual,coefExpctd);
         end
         function testDefaultDegree(testCase)
             % 期待値　
