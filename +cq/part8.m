@@ -1,6 +1,6 @@
-%% *EmbVision(CQ版) チュートリアル（７）*
+%% *EmbVision(CQ版) チュートリアル（８）*
 % 
-% *回帰分析と曲線検出 - MATLAB編 -*
+% *回帰分析と曲線検出 - Simulink/Raspberry Pi(TM)編 -*
 %
 % 新潟大学
 % 村松　正吾，高橋　勇希

@@ -1,6 +1,6 @@
 %% *EmbVision(CQ版) チュートリアル（６）*
 %
-% *映像ストリーム処理 - Simulink編 -*
+% *映像ストリーム処理 - Raspberry Pi(TM)編 -*
 %
 % 新潟大学
 % 村松　正吾，高橋　勇希
@@ -9,380 +9,329 @@
 % 
 
 %%
-% <part6.html Part5> |
-% <index.html メニュー> |
-% <part7.html Part7>
+% <part6.html Part6> |
+% <index.html メニュー>
 
-%%
+%% 
 % *概要*
 %
-% 本演習では、Simulinkにて映像ファイルの入力と表示を行うほか、
-% System object(TM) から Simulink ブロックを作成する方法と、
-% 同ブロックを利用した映像ストリーム処理について学ぶ。
+% 本演習では、Part6で作成したSimulink モデル を Raspberry Pi に実装し、
+% エクスターナルモードでのシミュレーションのほか、
+% スタンドアロンで実行する方法について学ぶ。
 
-%% Simulink モデルの作成
-% まず、新しい Simulink モデルを作成するために、新規にモデルファイルを作成しよう。
+%% Raspberry Pi 設定
+% シングルボードコンピュータ Raspberry Pi への実装コードを
+% Simulinkモデルを通じて生成することができる。
 %
-% ホームタグから、
+% なお、本演習は Windows(R)上のMATLABで実行する必要がある。
+%
+% 以下では、Raspberry Pi 用のサポートパッケージ
+%
+% * <http://jp.mathworks.com/help/simulink/ug/install-target-for-raspberry-pi-hardware.html Raspberry Pi>
+%
+% が既にインストールされている前提で話を進める。
+
+%%
+% [ <part7.html トップ> ]
+
+%% シミュレーションモデル
+% まず、本演習 Part6 で作成した Simulink モデル videogradfilt を 
+% Raspberry Pi 用に変更しよう。
+%
+% モデル videogradfilt を読み込み、 videogradfiltraspi として保存する。
+%
+%   open_system('videogradfilt')
+%   save_system('videogradfilt','videogradfiltraspi')
+
+%%
+% Raspberry Pi 用の実装コード生成を行う Simulink モデルは、
+% 全てのブロックがコード生成に対応している必要がある。
+% さらに、各種入出力ブロックは Raspberry Pi 用のブロックライブラリから
+% 選択して使用する必要がある。
+%
+% Raspberry Pi 用のブロックライブラリは、Simulinkライブラリブラウザーから
+%
+% * Simulink Support Package for Raspberry Pi hardware
 % 
-% # 「新規作成」
-% # →「Simulink モデル」
+% を選択すればよい。
 %
-% を選択するか、 MATLABコマンドウィンドウ上から
-% <matlab:doc('new_system') new_system> 関数と
-% <matlab:doc('open_system') open_system> 関数
-% を利用すればよい。
+% <<raspberrypi_blocks.png>>
 %
-% 例として、コマンドウィンドウ上から'videoio' というモデルを作成してみよう。 
+% あるいは、MATLAB(R) コマンドウィンドウ上から
 %
-%   new_system('videoio','Model')
-%   open_system('videoio')
-
-%%
-% 以下のようなウィンドウが現れる。
-%
-% <<videoio_slx_00.png>>
-%
-
-%%
-% モデルの保存は、メニューバー上のアイコン
-%
-% <<file_button.png>>
-%
-% をクリックするか、
-% MATLABコマンドウィンドウ上から
-%
-%   save_system('videoio')
-%
-% のように <matlab:doc('save_system') save_system> 関数を利用すればよい。
-
-%%
-% [ <part6.html トップ> ]
-
-%% Simulink ライブラリブラウザー
-% Simulink では、処理の構成要素となるブロックを並べて接続し、
-% 各ブロックのプロパティや動作条件を設定し、
-% システムのシミュレーションを行うことができる。
-%
-% まず、既存の構成ブロックを利用するために、メニューバー上のアイコン
-%
-% <<library_button.png>>
-%
-% をクリックしよう。すると、以下のような Simulinkライブラリブラウザーが現れる。
-%
-% <<library_browser.png>>
-
-%%
-% [ <part6.html トップ> ]
-
-%% 映像ファイル入出力モデル
-% では、例として映像ファイルの入力と出力を行うシステムモデルを構築しよう。
-%
-% まず、左側のリストから
-%
-% * <matlab:doc('vision') Computer Vision System Toolbox(TM)>
-%
-% を選択しよう。
-%
-% すると、ライブラリブラウザーは Computer Vision System Toolbox の
-% ブロック群を表示する。
-% 
-% <<cvs_library.png>>
-%
-% MATLAB コマンドウィンドウ上から
-%
-%   visionlib
+%   raspberrypilib
 % 
 % と打ち込んでも良い。
 
 %%
-% 右側のアイコン群から、「Sources」アイコン
-% 
-% <<cvs_sources.png>>
+% 映像入出力ブロックを Raspberry Pi 用の入出力ブロックに置き換えよう。
 %
-% をクリックし、「Computer Vision System Toolbox/Sources」 のブロック群を開こう。
+% * 「From Multimedia File」「RGB to Gray」→ 「V4L2 Video Capture」
+% * 「To Multimedia File」 → 「SDL Video Display」
 %
-% <<cvs_sources_blocks.png>>
+% <<videogradfiltraspi_slx_00.png>>
+%
+% 「V4L2 Video Capture」ブロックの出力Yはグレースケールに対応する。
+% 本モデルでは、残りの出力 Cb,Crを利用しないため、以下の終端ブロックを接続した。
+%
+% * <matlab:doc('simulink/terminator') Simulink/Commonly Used Blocks/Terminator>
+%
+% また、「SDL Video Display」ブロックでは RGB 入力ができるよう、
+% ブロックパラメータ Pixel format を RGB と編集した。
+
+%%
+% 早速、実行してみよう。
+%
+% <<videogradfiltraspi_slx_01.png>>
+%
+% すると、「SDL Video Display」ブロックの入力部でデータ型の不一致による
+% エラーが生じる。
+%
+% 原因は、「SDL Video Display」ブロックが8ビット符号なし整数型(uint8)を
+% 要求するのに対し、「HSV to RGB」ブロックが実数型(double)でデータを出力
+% するためである。
+%
+% この問題を回避するために、ゲイン調整とデータ型変換を行うブロック
+%
+% * <matlab:doc('simulink/gain') Simulink/Commonly Used Blocks/Gain>
+% * <matlab:doc('simulink/datatpeconversion') Simulink/Commonly Used Blocks/Convert>
+%
+% を「SDL Video Display」ブロックの入力部に挿入し実行しよう。
+%
+% <<videogradfiltraspi_slx_02.png>>
+%
+% 無事実行され、ダミーの映像処理が実行される。  
 %
 
 %%
-% ブロック群から 「From Multimedia File」を右クリックして、
-% モデル videoio にブロックを追加しよう。
+% ここで
 %
-% <<videoio_slx_01.png>>
-
-%%
-% 続けて、Simulink ライブラリブラウザー「Computer Vision System Toolbox」から
-% Sinks のアイコン
-% 
-% <<cvs_sinks.png>>
+% * 「V4L2 Video Capture」ブロックは水平と垂直を転置して出力する。
+% * 「SDL Video Display」ブロックは入力の水平と垂直を転置して表示する。
 %
-% をクリックし、「Computer Vision System Toolbox/Sinks」 のブロック群を開こう。 
+% という点に注意してほしい。
+% このことを確かめるために、「Computer Vision System Toolbox/Sinks」内にある
 %
-% <<cvs_sinks_blocks.png>>
-%
-
-%%
-% ブロック群から 「To Multimedia File」を右クリックして、
-% モデル videoio にブロックを追加しよう。
-%
-% <<videoio_slx_02.png>>
-
-%%
-% 「From Multimedia File」の出力端子をドラックして、「From Multimedia File」の
-% 入力端子に接続しよう。
-%
-% <<videoio_slx_03.png>>
-
-%%
-% モデルエディタ上の実行ボタンアイコン
-%
-% <<play_button.png>>
-%
-% を左クリックすると、作成したモデルのシミュレーションが実行される。
-%
-% <<videoio_slx_04.png>>
-
-%%
-% AVIファイル output.avi が出力される。
-% MATLABの外部のツールで再生して確認してほしい。
-%
-% 入力AVIファイルを変えたい場合には、「From Multimedia File」ブロックを
-% ダブルクリックして、パラメータダイアログを開き、「File name」を変更する。
-%
-% <<frommultimediafile_blockparameter.png>>
-%
-
-%%
-% ライブラリブラウザーから
-%
-% * <matlab:doc('imaq') Image Acquisition Toolbox(TM)>
-%
-% を選択して、「From Video Device」ブロックを利用すれば、
-% 接続されたカメラからの映像を入力として利用できる。
-%
-% <<imaq_blocks.png>>
-%
-% MATLAB コマンドウィンドウ上から
-%
-%   imaqlib
-% 
-% と打ち込んでも良い。詳細は割愛する。
-%
-
-%%
-% 出力AVIファイルを変えたい場合には、「To Multimedia File」ブロックを
-% ダブルクリックして、パラメータダイアログを開き、「File name」を変更する。
-% 
-% <<tomultimediafile_blockparameter.png>>
-
-%%
-% 出力先として「Computer Vision System Toolbox/Sinks」内にある
-%
-% * <matlab:doc('videoviewer') Video Viewer> ブロック
 % * <matlab:doc('vision/tovideodisplay') To Video Display> ブロック（Windows(R)のみ）
 % 
-% を利用すれば、Simulink 上でビューワーが現れ、
-% シミュレーションをしながら出力映像を確認することができる。詳細は割愛する。
+% を一時的に 「V4L2 Video Capture」の出力Yに接続して、シミュレーションを実行
+% してみよう。
+%
+% <<videogradfiltraspi_slx_03.png>>
+%
+% 「V4L2 Video Capture」の出力と「SDL Video Display」の表示を比べると
+% 互いに転置の関係にあることが分かる。
+%
+% したがって、勾配フィルタの方向を修正しなければならない。
+% 「Filt.Grad.」ブロックのKernelプロパティを
+%
+% <<gradfilt_kernel.png>>
+%
+% のように転置するよう編集して、勾配フィルタの方向を修正しよう。
+%
+% 再度、モデル videogradfiltraspi を実行しよう。
+%
+% <<videogradfiltraspi_slx_04.png>>
+%
+% 出力の彩色（勾配方向）が修正されていることが確認できる。
+%
+% 以降、「To Video Display」ブロックは不要なのでモデルから削除しておこう。
 
 %%
-% [ <part6.html トップ> ]
+% [ <part7.html トップ> ]
 
-%% MATLAB System ブロック
-% MATLAB System ブロックを利用すると、System object を Simulink ブロック
-% として利用することができる。
+%% ハードウェア実行の準備
+% Raspberry Pi 用に構築したモデルを実際のボード上で動作させてみよう。
+%
+% Simulink モデルを Raspberry Pi 上で動作させる方法には、
+%
+% * エクスターナルモードシミュレーション
+% * スタンドアロン実行
+%
+% の二種類がある。
+%
+% エクスターナルモードでは、Simulink モデルから Raspberry Pi 上で
+% 動作する実装コードを生成し、Raspberry Pi 上で実際に動作させ、
+% その出力を手元の Simulink 上で確認する。
+%
+% 一方、スタンドアロン実行では、Simulink モデルから Raspberry Pi 上で
+% 独立に動作する実装コードを生成し、Raspberry Pi 上で動作させる。
+
+%%
+% まず、準備として Raspberry Pi model B/B+ を用意し
+%
+% # MicroSD カード
+% # LAN ケーブル
+% # Web カメラ
+% # 電源ケーブル
 % 
-% 例として、本演習 Part4 で作成した Rgb2GraySystem をブロックとして
-% 利用してみよう。
+% の順に接続しよう。
+%
+% <<raspi_microsd.png>>
+%
+% <<raspi_cableconnection.png>>
+%
+% なお、MicroSD にはRaspberry Pi Support Package から
+% ファームウェアイメージの書き込みが完了しているものとする。
+%
+% * [ツール] > [ターゲットハードウェアで実行 ] > [ファームウェアの更新... ]
 
 %%
-% モデル videoio を videorgb2gray として保存する。
+% では、Simulink から Raspberry Pi への接続を行うための準備をしよう。
 %
-%   open_system('videoio')
-%   save_system('videoio','videorgb2gray')
-
-%%
-% Simulink ライブラリブラウザーから「Simulink/User-Defined Functions」の
-% ブロック群を表示し、その中から
+% Simulink モデル videogradfiltraspi のメニューバーから
 %
-% * MATLAB System ブロック
+% * [ツール] > [ターゲットハードウェアで実行 ] > [オプション ]
 %
-% を選択して、モデル videorgb2gray に追加しよう
+% へと進む。
 %
-% <<udf_blocks.png>>
-
-%%
-% モデル videorgb2gray は以下の様な状態となる。
+% <<videogradfiltraspi_slx_05.png>>
 %
-% <<videorgb2gray_slx_00.png>>
-
-%%
-% MATLAB System ブロックを映像入出力の間に挟み、プロパティダイアログを開いて
+% ターゲットハードウェアとして「Raspberry Pi」を選択する。
+%
+% <<videogradfiltraspi_slx_06.png>>
+%
+% 接続するボードの情報を確認する。
+%
+% <<videogradfiltraspi_slx_07.png>>
+%
+% 特に、「Board information」の「Host name」は、各ボード毎に設定が異なるので
+% 編集が必要となる。
+%
+% * 演習中に必要な情報を提供する。
+%
+% IPアドレスが分かれば、以下の用に編集すればよい。（192.168.11.2は一例）
+%
+% <<videogradfiltraspi_ipaddress.png>>
 % 
-% * System object名: Rgb2GraySystem
-%
-% を設定しよう。
-%
-% <<videorgb2gray_slx_01.png>>
+% 「OK」をクリックし準備を完了する。
 
 %%
-% 「OK」ボタンをクリックして、中央のブロックを適当に大きく広げると以下の様な
-% 状態となる。
+% [ <part7.html トップ> ]
+
+%% エクスターナルモード
+% では、Simulink モデル videogradfiltraspi をエクスターナルモードで動作
+% させてみよう。
+% 
+% まず、シミュレーションのモードを「ノーマル」から
 %
-% <<videorgb2gray_slx_02.png>>
+% * エクスターナル
+%
+% へと変更する。
+%
+% <<videogradfiltraspi_external.png>>
+%
+% 早速、実行してみよう。
+%
+% <<videogradfiltraspi_slx_08.png>>
+%
+% Raspberry Pi に接続した Web カメラの処理映像が Simulink 上で表示される。
 
 %%
-% 実行して、AVIファイル output.avi を確認してみよう。
+% [ <part7.html トップ> ]
+
+%% スタンドアロン実行
+% では、Simulink モデル videogradfiltraspi を Raspberry Pi 上で
+% スタンドアロン実行してみよう。
+%
+% スタンドアロン実行のために以下の準備を行う。
+%
+% # 電源ケーブルを一旦外す
+% # HDMIディスプレイ接続する
+% # 電源ケーブルを再度接続する
+%
+% <<raspi_hdmi.png>>
+%
+% 正しく接続されていれば、Rasbian の起動を Raspberry Pi に接続した
+% ディスプレイ上で確認できる。
+%
+% なお，Raspberry Pi Camera Module を利用するためには以下のサイトを参照してほしい。
+% 
+% http://www.mathworks.com/matlabcentral/answers/122199-simulink-with-raspberry-pi-camera-capture
 
 %%
-% [ <part6.html トップ> ] 
-
-%% アイコンのカスタマイズ
-% MATLAB System ブロックの入出力名は、呼び出される System object 上で
-% カスタマイズできる。
+% Simulink モデル videogradfiltraspi に戻り、
 %
-% 入出力ポート名などを指定してみよう。
-% ブロックパラメータダイアログから Rgb2GraySystem のソースコードを開こう。
+% * 「ハードウェアに展開」
 %
-% <<matlabsystem_blockparameter.png>>
+% のボタンをクリックしよう。
 %
-% 次に、methods(Access=protected) ブロックに、以下のメソッドを追記する。
+% <<videogradfiltraspi_slx_09.png>>
 %
-%   methods (Access=protected)
-%      ...（省略）
-%      % 入力ポート数
-%      function N = getNumInputsImpl(obj)
-%          N = 1; 
-%      end
-%      % 出力ポート数        
-%      function N = getOutputNamesImpl(obj)
-%          N = 1;
-%      end      
-%      % 入力ポート名
-%      function inputName = getInputNamesImpl(obj)
-%             inputName = 'RGB';
-%      end
-%      % 出力ポート名
-%      function outputName = getOutputNamesImpl(obj)
-%             outputName = 'Gray';
-%      end
-%      ...（省略）
-%   end
+% Windowsのコマンドウィンドウが立ち上がらり、Simulink モデルの左下に
+%
+% * 「モデルは'Raspberry Pi' に正常に配布されました。」
+%
+% と表示されれば成功である。
+%
+% <<videogradfiltraspi_slx_10.png>>
+%
+% Raspberry Pi に接続されたディスプレイ上にカメラからの映像の
+% 処理結果が表示される。
+% 
+% <<raspi_videogradfilt.png>>
+%
 
 %% 
-% さらに、
+% 以降、Simulink モデル videogradfiltraspi を閉じても、Raspberry Pi 上の
+% 処理は継続される。
 %
-% * <matlab:doc('matlab.system.mixin.CustomIcon') matlab.system.mixin.CustomIcon>
+%   close_system('videogradfiltraspi')
 %
-% を継承することで、アイコンをカスタマイズできる。
-% 
-% まず、ソースコードの classdef の行を以下のように修正する。
+
+%% 
+% MATLAB コマンドウィンドウ上で <matlab:help('raspberrypi') raspberrypi>
+% 関数を利用すると、接続中の Raspberry Pi の情報を取得できる。
 %
-%   classdef Rgb2GraySystem < matlab.System ...
-%         & matlab.system.mixin.CustomIcon
-%
-% 次に、methods(Access=protected) ブロックに、以下のメソッドを追記する。
-%
-%   methods (Access=protected)
-%      ...（省略）
-%      % アイコン
-%      function icon = getIconImpl(obj)
-%         icon = sprintf('RGB to Gray');
-%      end
-%      ...（省略）
-%   end
+%   h = raspberrypi
 
 %%
-% 「OK」ボタンをクリックして、ダイアログを閉じると以下の様に、
-% 中央ブロックの入出力名とアイコン名が指定通りの状態となる。
+% Raspberry Pi 上で動作中のモデル videogradfiltraspi を停止するには、
+% stop メソッドを利用する。
 %
-% <<videorgb2gray_slx_03.png>>
-
+%   h.stop('videogradfiltraspi')
+%
+    
+%%
+% 再度モデル videogradfiltraspi を開き、run メソッドを用いれば、
+% Raspberry Pi 上でモデルを再起動することもできる。
+%
+%   open_system('videogradfiltraspi')
+%   h.run('videogradfiltraspi')
 
 %%
-% [ <part6.html トップ> ]
-
-%% 演算精度と信号特性伝搬（オプション）
-%
-% * <matlab:doc('matlab.system.mixin.Propagates') matlab.system.mixin.Propagates>
-%
-% （準備中）
-
-%% フィードスルー（オプション）
-%
-% * <matlab:doc('matlab.system.mixin.Nondirect') matlab.system.mixin.Nondirect>
-%
-% （準備中）
-
-%%
-% [ <part6.html トップ> ]
+% [ <part7.html トップ> ]
 
 %% 演習課題
-% *演習課題6-1. Prewitt勾配フィルタ*
 %
-% 本演習Part6で作成した System object クラス
+% *演習課題7-1. Sobel勾配フィルタ* 
 %
-%   * Rgb2GraySystem
-%   * GradFiltSystem
-%   * Hsv2RgbSystem
-%
-% を MATLAB System ブロックとして利用し、以下の MATLAB コードを Simulink 上で
-% モデル化しよう。
-% 
-%   vrObj = VideoReader('vipmen.avi');
-%   frameRate = get(vrObj,'FrameRate');
-%   vwObj = VideoWriter('vipmengradfilt.avi');
-%   set(vwObj,'FrameRate',frameRate);
-%   rgsObj = Rgb2GraySystem();
-%   hrsObj = Hsv2RgbSystem();
-%   gfsObj = GradFiltSystem();
-%   open(vwObj)
-%   while (hasFrame(vrObj))
-%      frame     = readFrame(vrObj);         % フレーム入力
-%      graysc    = step(rgsObj,frame);       % グレースケール化
-%      [mag,ang] = step(gfsObj,graysc);      % 勾配フィルタリング
-%      ang       = (ang+pi)/(2*pi);          % 偏角の正規化
-%      mag       = min(mag,1);               % 大きさの飽和処理
-%      [r,g,b]   = step(hrsObj,ang,mag,mag); % 疑似カラー化
-%      frame     = cat(3,r,g,b);             % RGB配列結合
-%      writeVideo(vwObj,frame);              % フレーム出力 
-%   end
-%   close(vwObj)
-%
-% （モデル例）
-%
-% <<videogradfilt_slx_00.png>>
-%
-% ただし、以下のブロックを利用。
-%
-% * <matlab:doc('simulink/saturation') Simulink/Commonly Used Blocks/Saturation>
-% * <matlab:doc('simulink/constant') Simulink/Commonly Used Blocks/Constant>
-% * <matlab:doc('simulink/add') Simulink/Commonly Used Blocks/Sum>
-% * <matlab:doc('simulink/gain') Simulink/Commonly Used Blocks/Gain>
-%
-% （処理例）
-%
-% <<vipmengradfilt_avi.png>>
+% 演習課題5-1で紹介した Sobel カーネルに変えて Raspberry Pi 上で、
+% スタンドアロン実行しよう。
 
 %%
-% *演習課題6-2. Sobel勾配フィルタ*
-%
-% 演習課題6-1で作成した Prewitt 勾配フィルタモデルのフィルタカーネル
-% を演習課題5-1で紹介した Sobel カーネルに変えてシミュレーションを実行
-% してみよう。
 % 
-% * ヒント：GradFilterSystem ブロックのパラメータ Kernel を修正すればよい。
+% *演習課題7-2. モデルの自作と実行*（オプション） 
 %
-% （処理例）
+% 自ら映像処理モデルを創造設計し、
+% Raspberry Pi 上で、スタンドアロン実行しよう。
 %
-% <<vipmengradfilt_sobel_avi.png>>
+% 以下に期待される拡張例を示す。
+% 
+% * Raspberry Pi カメラモジュール制御
+% * 固定小数点実装
+% * 並列実装（RasPi2上のクアッドコア用）
+% * 物体の検出および認識
+% * 音声・音響信号処理
+% * GPIO/I2C 制御
+% * ネットワークアプリケーション開発
+%
 
 %%
 % <html>
 % <hr>
 % </html>
 %%
-% <part5.html Part5> |
+% <part6.html Part6> |
 % <index.html メニュー> |
-% <part6.html トップ> |
-% <part7.html Part7>
+% <part7.html トップ> 

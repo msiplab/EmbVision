@@ -1,6 +1,6 @@
 %% *EmbVision(CQ版) チュートリアル（５）*
 %
-% *映像ストリーム処理 - MATLAB編 -*
+% *映像ストリーム処理 - Simulink編 -*
 %
 % 新潟大学
 % 村松　正吾，高橋　勇希
@@ -9,528 +9,380 @@
 % 
 
 %%
-% <part4.html Part4> |
+% <part6.html Part5> |
 % <index.html メニュー> |
-% <part6.html Part6>
+% <part7.html Part7>
 
 %%
 % *概要*
 %
-% 本演習では、MATLABにて映像ファイルの情報を読み込む方法のほか、
-% 映像表示、映像ファイル出力、簡単な映像ストリーム処理について学ぶ。
+% 本演習では、Simulinkにて映像ファイルの入力と表示を行うほか、
+% System object(TM) から Simulink ブロックを作成する方法と、
+% 同ブロックを利用した映像ストリーム処理について学ぶ。
+
+%% Simulink モデルの作成
+% まず、新しい Simulink モデルを作成するために、新規にモデルファイルを作成しよう。
 %
-% 準備として、開いている全ての Figure を <matlab:doc('close') close> 関数で
-% 閉じておく。
-
-close all
-
-%% 映像入力
+% ホームタグから、
 % 
-% MATLABにおける映像入力は、
-% <matlab:doc('VideoReader') VideoReader> クラスの
-% <matlab:doc('VideoReader.readFrame') readFrame> メソッドを
-% 利用することで実現できる。
- 
-vrObj = VideoReader('shuttle.avi');
-frame = readFrame(vrObj);
+% # 「新規作成」
+% # →「Simulink モデル」
+%
+% を選択するか、 MATLABコマンドウィンドウ上から
+% <matlab:doc('new_system') new_system> 関数と
+% <matlab:doc('open_system') open_system> 関数
+% を利用すればよい。
+%
+% 例として、コマンドウィンドウ上から'videoio' というモデルを作成してみよう。 
+%
+%   new_system('videoio','Model')
+%   open_system('videoio')
 
 %%
-% 変数 frame は映像データの最初のフレームを保持する。
+% 以下のようなウィンドウが現れる。
+%
+% <<videoio_slx_00.png>>
+%
+
+%%
+% モデルの保存は、メニューバー上のアイコン
+%
+% <<file_button.png>>
+%
+% をクリックするか、
+% MATLABコマンドウィンドウ上から
+%
+%   save_system('videoio')
+%
+% のように <matlab:doc('save_system') save_system> 関数を利用すればよい。
+
+%%
+% [ <part6.html トップ> ]
+
+%% Simulink ライブラリブラウザー
+% Simulink では、処理の構成要素となるブロックを並べて接続し、
+% 各ブロックのプロパティや動作条件を設定し、
+% システムのシミュレーションを行うことができる。
+%
+% まず、既存の構成ブロックを利用するために、メニューバー上のアイコン
+%
+% <<library_button.png>>
+%
+% をクリックしよう。すると、以下のような Simulinkライブラリブラウザーが現れる。
+%
+% <<library_browser.png>>
+
+%%
+% [ <part6.html トップ> ]
+
+%% 映像ファイル入出力モデル
+% では、例として映像ファイルの入力と出力を行うシステムモデルを構築しよう。
+%
+% まず、左側のリストから
+%
+% * <matlab:doc('vision') Computer Vision System Toolbox(TM)>
+%
+% を選択しよう。
+%
+% すると、ライブラリブラウザーは Computer Vision System Toolbox の
+% ブロック群を表示する。
 % 
-% shuttle.avi はRGBカラー映像なので、変数 frame は三次元配列となる。
+% <<cvs_library.png>>
 %
-% 特に指定をしなければ、データ型は符号なし整数８ビット型 uint8となる。
-
-whos vrObj frame
-
-%%
-% frame を表示してみよう。
+% MATLAB コマンドウィンドウ上から
 %
-% 後ほど利用するため、imshow のハンドルオブジェクトも用意しておく。
-
-figure(1)
-hi1 = imshow(frame);
-
-%%
-% なお、変数 vrObj は、VideoReader のインスタンスオブジェクトとなっており、
-% 映像に関する情報をプロパティとして保持している。
-%
-% 主なプロパティを以下にまとめる。
-%
-% * BitsPerPixel: 一画素当たりのビット数 [bpp]
-% * FrameRate: フレームレート [bps]
-% * Height: 画面の高さ [pixels]
-% * Width: 画面の幅 [pixels]
-
-properties(vrObj)
-
-%%
-% したがって、画面の高さや幅、フレームレートなどの情報は
-% 以下のようにして取得できる。
-
-height    = get(vrObj,'Height');
-width     = get(vrObj,'Width');
-frameRate = get(vrObj,'FrameRate');
-
-%%
-% さらに、 readFrame メソッドを呼び出すと次のフレームを読み込む。
-%
-% なお、imshow のハンドルオブジェクト hi1 の CData プロパティに frame の
-% データを上書きすることで表示を更新している。
-
-frame = readFrame(vrObj);
-set(hi1,'CData',frame);
-
-%%
-% [ <part5.html トップ> ]
-
-%% 映像表示
-% 映像入力オブジェクト vrObj の時刻を 0 に戻して、全てのフレームを表示しよう。
-%
-% なお、 <matlab:doc('while') while> ループ内で全てのフレームが
-% 表示されるよう <matlab:doc('drawnow') drawnow> 関数で
-% 各フレームの描画を強制する。
-%
-% また、 <matlab:doc('VideoReader.hasFrame') hasFrame> メソッドで
-% 最終フレームか否かの情報を取得している。
-
-set(vrObj,'CurrentTime',0);
-while (hasFrame(vrObj))
-    frame = readFrame(vrObj);
-    set(hi1,'CData',frame);
-end
-
-%%
-% 他に、 <matlab:doc('movie') movie> 関数での映像表示も可能である。
-% ここでは説明を割愛する。
-
-%%
-% [ <part5.html トップ> ]
-
-%% 映像出力
-% MATLABにおける映像出力は <matlab:doc('VideoWriter') VideoWriter> クラスの
-% <matlab:doc('VideoWriter.writeVideo') writeVideo> メソッドを利用することで
-% 実現できる。
-%
-% 映像入力オブジェクト vrObj の時刻を 0　に戻して、映像のコピーを
-% AVIファイル shuttleclone.avi に出力してみよう。
-
-set(vrObj,'CurrentTime',0);
-vwObj = VideoWriter('shuttleclone.avi');
-properties(vwObj)
-
-%%
-
-set(vwObj,'FrameRate',frameRate);
-open(vwObj)
-while (hasFrame(vrObj))
-    frame = readFrame(vrObj);
-    writeVideo(vwObj,frame);
-end
-close(vwObj)
-
-%%
-% AVIファイル shuttleclone.avi が出力される。
-%
-% 保存されたAVIファイルはMATLABの外部のツールで再生することができる。
-%
-% <<shuttleclone.png>>
+%   visionlib
 % 
+% と打ち込んでも良い。
 
 %%
-% [ <part5.html トップ> ]
-
-%% 映像処理
-% 映像フレームの入力と出力の間に各フレームに対する処理を挿入することで、
-% 映像ストリーム処理を実現できる。
-%
-% 以下では、演習（４）で作成した
-%
-% * Rgb2GraySystem
-% * Hsv2RgbSystem
-% * GradFiltSystem
-%
-% を利用して、フレーム毎の勾配フィルタ出力を映像化しよう。
+% 右側のアイコン群から、「Sources」アイコン
 % 
-% まず、フレーム処理オブジェクトを生成する。
-
-rgsObj = Rgb2GraySystem();
-hrsObj = Hsv2RgbSystem();
-gfsObj = GradFiltSystem();
-
-%%
-% 次に、映像入力オブジェクト vrObj の時刻を 0　に戻し、
-% 出力映像を保存するAVIファイル shuttlegrad.avi の準備をする。
-
-set(vrObj,'CurrentTime',0);
-vwObj = VideoWriter('shuttlegrad.avi');
-set(vwObj,'FrameRate',frameRate);
-open(vwObj)
-
-%%
-% 映像処理を開始する。
-
-while (hasFrame(vrObj))
-    frame     = readFrame(vrObj);         % フレーム入力
-    graysc    = step(rgsObj,frame);       % グレースケール化
-    [mag,ang] = step(gfsObj,graysc);      % 勾配フィルタリング
-    ang       = (ang+pi)/(2*pi);          % 偏角の正規化
-    mag       = min(mag,1);               % 大きさの飽和処理
-    [r,g,b]   = step(hrsObj,ang,mag,mag); % 疑似カラー化
-    frame     = cat(3,r,g,b);             % RGB配列結合
-    writeVideo(vwObj,frame);              % フレーム出力 
-end
-close(vwObj)
-
-%%
-% 処理が終了すると、AVIファイル shuttlegrad.avi に処理結果が保存される。
+% <<cvs_sources.png>>
 %
-% <<shuttlegrad.png>>
+% をクリックし、「Computer Vision System Toolbox/Sources」 のブロック群を開こう。
+%
+% <<cvs_sources_blocks.png>>
+%
+
+%%
+% ブロック群から 「From Multimedia File」を右クリックして、
+% モデル videoio にブロックを追加しよう。
+%
+% <<videoio_slx_01.png>>
+
+%%
+% 続けて、Simulink ライブラリブラウザー「Computer Vision System Toolbox」から
+% Sinks のアイコン
 % 
+% <<cvs_sinks.png>>
+%
+% をクリックし、「Computer Vision System Toolbox/Sinks」 のブロック群を開こう。 
+%
+% <<cvs_sinks_blocks.png>>
+%
 
 %%
-% [ <part5.html トップ> ]
+% ブロック群から 「To Multimedia File」を右クリックして、
+% モデル videoio にブロックを追加しよう。
+%
+% <<videoio_slx_02.png>>
 
-%% フレーム間処理（オプション）
-% 過去のフレームを記憶する System object クラスを定義することもできる。
+%%
+% 「From Multimedia File」の出力端子をドラックして、「From Multimedia File」の
+% 入力端子に接続しよう。
 %
-% 連続する2枚のフレームの平均を出力する FrameAveSystem クラスを作成するため、
-% 以下のテストケース FrameAveSystemTestCase を用意する。
+% <<videoio_slx_03.png>>
+
+%%
+% モデルエディタ上の実行ボタンアイコン
 %
-%   classdef FrameAveSystemTestCase < matlab.unittest.TestCase
-%       %FRAMEAVESYSTEMTESTCASE FrameAveSystem のテストケース
-%       properties
-%       end
-%       methods (Test)
-%           function testFirstFrame(testCase)
-%               % 準備
-%               width  = 12;
-%               height = 16;
-%               % 入力フレーム
-%               frame1 = rand(height,width,3);
-%               % 期待値
-%               cnt0Expctd = [];
-%               cnt1Expctd = 1;
-%               res1Expctd = frame1;
-%               % ターゲットクラスのインスタンス化
-%               obj = FrameAveSystem();
-%               % 初期状態の検証
-%               state      = getDiscreteState(obj);
-%               cnt0Actual = state.Count;
-%               testCase.verifyEqual(cnt0Actual,cnt0Expctd)            
-%               % 処理結果
-%               res1Actual = step(obj,frame1);
-%               state      = getDiscreteState(obj);
-%               cnt1Actual = state.Count;
-%               % 処理結果の検証
-%               testCase.verifyEqual(res1Actual,res1Expctd,'RelTol',1e-6)
-%               testCase.verifyEqual(cnt1Actual,cnt1Expctd)            
-%           end
-%           function testThreeFrames(testCase)
-%               % 準備
-%               width  = 12;
-%               height = 16;
-%               % 入力フレーム
-%               frame1 = rand(height,width,3);
-%               frame2 = rand(height,width,3);
-%               frame3 = rand(height,width,3);            
-%               % 期待値
-%               cnt1Expctd = 1;
-%               cnt2Expctd = 2;            
-%               cnt3Expctd = 3;                        
-%               res1Expctd = frame1;
-%               res2Expctd = (frame1+frame2)/2;
-%               res3Expctd = (frame2+frame3)/2;
-%               % ターゲットクラスのインスタンス化
-%               obj = FrameAveSystem();
-%               % 第１フレーム処理結果
-%               res1Actual = step(obj,frame1);
-%               state      = getDiscreteState(obj);
-%               cnt1Actual = state.Count;
-%               % 第２フレーム処理結果
-%               res2Actual = step(obj,frame2);
-%               state      = getDiscreteState(obj);
-%               cnt2Actual = state.Count;            
-%               % 第３フレーム処理結果
-%               res3Actual = step(obj,frame3);
-%               state      = getDiscreteState(obj);
-%               cnt3Actual = state.Count;            
-%               % 処理結果の検証
-%               testCase.verifyEqual(cnt1Actual,cnt1Expctd)                        
-%               testCase.verifyEqual(cnt2Actual,cnt2Expctd)                                    
-%               testCase.verifyEqual(cnt3Actual,cnt3Expctd)                                                
-%               testCase.verifyEqual(res1Actual,res1Expctd,'RelTol',1e-6)
-%               testCase.verifyEqual(res2Actual,res2Expctd,'RelTol',1e-6)            
-%               testCase.verifyEqual(res3Actual,res3Expctd,'RelTol',1e-6)                        
-%           end        
-%           function testReset(testCase)
-%               % 準備
-%               width  = 12;
-%               height = 16;
-%               % 入力フレーム
-%               frame1 = rand(height,width,3);
-%               % 期待値
-%               cnt0Expctd = [];
-%               cnt1Expctd = 1;
-%               cntrExpctd = 0;
-%               % ターゲットクラスのインスタンス化
-%               obj = FrameAveSystem();
-%               % 初期状態の検証
-%               state      = getDiscreteState(obj);
-%               cnt0Actual = state.Count;
-%               testCase.verifyEqual(cnt0Actual,cnt0Expctd)            
-%               % 第一フレーム処理後の状態の検証
-%               step(obj,frame1);
-%               state      = getDiscreteState(obj);
-%               cnt1Actual = state.Count;
-%               testCase.verifyEqual(cnt1Actual,cnt1Expctd)                        
-%               % リセット後の状態の検証
-%               reset(obj);
-%               state      = getDiscreteState(obj);
-%               cntrActual = state.Count;
-%               testCase.verifyEqual(cntrActual,cntrExpctd)                        
-%           end        
-%       end
+% <<play_button.png>>
+%
+% を左クリックすると、作成したモデルのシミュレーションが実行される。
+%
+% <<videoio_slx_04.png>>
+
+%%
+% AVIファイル output.avi が出力される。
+% MATLABの外部のツールで再生して確認してほしい。
+%
+% 入力AVIファイルを変えたい場合には、「From Multimedia File」ブロックを
+% ダブルクリックして、パラメータダイアログを開き、「File name」を変更する。
+%
+% <<frommultimediafile_blockparameter.png>>
+%
+
+%%
+% ライブラリブラウザーから
+%
+% * <matlab:doc('imaq') Image Acquisition Toolbox(TM)>
+%
+% を選択して、「From Video Device」ブロックを利用すれば、
+% 接続されたカメラからの映像を入力として利用できる。
+%
+% <<imaq_blocks.png>>
+%
+% MATLAB コマンドウィンドウ上から
+%
+%   imaqlib
+% 
+% と打ち込んでも良い。詳細は割愛する。
+%
+
+%%
+% 出力AVIファイルを変えたい場合には、「To Multimedia File」ブロックを
+% ダブルクリックして、パラメータダイアログを開き、「File name」を変更する。
+% 
+% <<tomultimediafile_blockparameter.png>>
+
+%%
+% 出力先として「Computer Vision System Toolbox/Sinks」内にある
+%
+% * <matlab:doc('videoviewer') Video Viewer> ブロック
+% * <matlab:doc('vision/tovideodisplay') To Video Display> ブロック（Windows(R)のみ）
+% 
+% を利用すれば、Simulink 上でビューワーが現れ、
+% シミュレーションをしながら出力映像を確認することができる。詳細は割愛する。
+
+%%
+% [ <part6.html トップ> ]
+
+%% MATLAB System ブロック
+% MATLAB System ブロックを利用すると、System object を Simulink ブロック
+% として利用することができる。
+% 
+% 例として、本演習 Part4 で作成した Rgb2GraySystem をブロックとして
+% 利用してみよう。
+
+%%
+% モデル videoio を videorgb2gray として保存する。
+%
+%   open_system('videoio')
+%   save_system('videoio','videorgb2gray')
+
+%%
+% Simulink ライブラリブラウザーから「Simulink/User-Defined Functions」の
+% ブロック群を表示し、その中から
+%
+% * MATLAB System ブロック
+%
+% を選択して、モデル videorgb2gray に追加しよう
+%
+% <<udf_blocks.png>>
+
+%%
+% モデル videorgb2gray は以下の様な状態となる。
+%
+% <<videorgb2gray_slx_00.png>>
+
+%%
+% MATLAB System ブロックを映像入出力の間に挟み、プロパティダイアログを開いて
+% 
+% * System object名: Rgb2GraySystem
+%
+% を設定しよう。
+%
+% <<videorgb2gray_slx_01.png>>
+
+%%
+% 「OK」ボタンをクリックして、中央のブロックを適当に大きく広げると以下の様な
+% 状態となる。
+%
+% <<videorgb2gray_slx_02.png>>
+
+%%
+% 実行して、AVIファイル output.avi を確認してみよう。
+
+%%
+% [ <part6.html トップ> ] 
+
+%% アイコンのカスタマイズ
+% MATLAB System ブロックの入出力名は、呼び出される System object 上で
+% カスタマイズできる。
+%
+% 入出力ポート名などを指定してみよう。
+% ブロックパラメータダイアログから Rgb2GraySystem のソースコードを開こう。
+%
+% <<matlabsystem_blockparameter.png>>
+%
+% 次に、methods(Access=protected) ブロックに、以下のメソッドを追記する。
+%
+%   methods (Access=protected)
+%      ...（省略）
+%      % 入力ポート数
+%      function N = getNumInputsImpl(obj)
+%          N = 1; 
+%      end
+%      % 出力ポート数        
+%      function N = getOutputNamesImpl(obj)
+%          N = 1;
+%      end      
+%      % 入力ポート名
+%      function inputName = getInputNamesImpl(obj)
+%             inputName = 'RGB';
+%      end
+%      % 出力ポート名
+%      function outputName = getOutputNamesImpl(obj)
+%             outputName = 'Gray';
+%      end
+%      ...（省略）
+%   end
+
+%% 
+% さらに、
+%
+% * <matlab:doc('matlab.system.mixin.CustomIcon') matlab.system.mixin.CustomIcon>
+%
+% を継承することで、アイコンをカスタマイズできる。
+% 
+% まず、ソースコードの classdef の行を以下のように修正する。
+%
+%   classdef Rgb2GraySystem < matlab.System ...
+%         & matlab.system.mixin.CustomIcon
+%
+% 次に、methods(Access=protected) ブロックに、以下のメソッドを追記する。
+%
+%   methods (Access=protected)
+%      ...（省略）
+%      % アイコン
+%      function icon = getIconImpl(obj)
+%         icon = sprintf('RGB to Gray');
+%      end
+%      ...（省略）
 %   end
 
 %%
-% テストケース FrameAveSystemTestCase の検証を満たすように実装した
-% FrameAveSystem クラスの例を以下に示す。
+% 「OK」ボタンをクリックして、ダイアログを閉じると以下の様に、
+% 中央ブロックの入出力名とアイコン名が指定通りの状態となる。
 %
-%   classdef FrameAveSystem < matlab.System
-%       properties
-%           preFrame % 前フレーム
-%       end
-%       properties (DiscreteState)
-%           Count    % フレームカウント
-%       end
-%       properties (Access = private)
-%       end
-%       methods (Access = protected)
-%           % セットアップ（最初のステップ直前に実行）
-%           function setupImpl(obj,srcFrame)
-%               % 前フレームの初期化
-%               obj.preFrame = srcFrame;
-%               % フレームカウントの初期化
-%               obj.Count = 0;
-%           end
-%           % ステップ
-%           function resFrame = stepImpl(obj,srcFrame)
-%               % フレーム平均処理 
-%               resFrame = (obj.preFrame + srcFrame)/2;
-%               % 前フレームの更新←現フレーム
-%               obj.preFrame = srcFrame;
-%               % フレームカウントのインクリメント
-%               obj.Count = obj.Count+1;
-%           end
-%           % リセット
-%           function resetImpl(obj)
-%               % フレームカウントのリセット
-%               obj.Count = 0;
-%           end
-%       end
-%   end
+% <<videorgb2gray_slx_03.png>>
+
 
 %%
+% [ <part6.html トップ> ]
 
-result = run(FrameAveSystemTestCase);
-
-%%
-% FrameAveSystem の実行例を以下に示す。
+%% 演算精度と信号特性伝搬（オプション）
 %
-fasObj = FrameAveSystem();
-
-set(vrObj,'CurrentTime',0);
-vwObj = VideoWriter('shuttleave.avi');
-set(vwObj,'FrameRate',frameRate);
-open(vwObj)
-while (hasFrame(vrObj))
-    frame = readFrame(vrObj);   % フレーム入力
-    frame = im2double(frame);   % 実数型へ変換
-    frame = step(fasObj,frame); % フレーム平均処理
-    writeVideo(vwObj,frame);    % フレーム出力 
-end
-close(vwObj)
-
-%%
-% 処理が終了すると、AVIファイル shuttleave.avi に処理結果が保存される。
+% * <matlab:doc('matlab.system.mixin.Propagates') matlab.system.mixin.Propagates>
 %
-% <<shuttleave.png>>
+% （準備中）
+
+%% フィードスルー（オプション）
+%
+% * <matlab:doc('matlab.system.mixin.Nondirect') matlab.system.mixin.Nondirect>
+%
+% （準備中）
 
 %%
-% [ <part5.html トップ> ]
+% [ <part6.html トップ> ]
 
 %% 演習課題
-% *演習課題5-1. Sobel微分フィルタ*
+% *演習課題6-1. Prewitt勾配フィルタ*
 %
-% 垂直微分フィルタ係数として配列
+% 本演習Part6で作成した System object クラス
 %
-% $$ \left(\begin{array}{ccc}
-%    1 &  2 &  1 \\
-%    0 &  0 &  0 \\
-%   -1 & -2 & -1 \\
-%    \end{array}\right) $$
+%   * Rgb2GraySystem
+%   * GradFiltSystem
+%   * Hsv2RgbSystem
 %
-% を、水平微分フィルタ係数として配列
-%
-% $$ \left(\begin{array}{ccc}
-%    1 &  0 & -1 \\
-%    2 &  0 & -2 \\
-%    1 &  0 & -1 \\
-%    \end{array}\right) $$
+% を MATLAB System ブロックとして利用し、以下の MATLAB コードを Simulink 上で
+% モデル化しよう。
 % 
-% を利用した勾配フィルタオブジェクト
-%
-%    gfs = GradFiltSystem('Kernel',[ 1 2 1 ; 0 0 0 ; -1 -2 -1 ]); 
-%
-% を生成し、映像データ shuttle.avi に対する以下の処理を各フレームに対して
-% 施してみよう。
-% また、その処理結果をAVIファイル shuttlesobel.avi に保存しよう。
-%
-%    graysc    = step(rgsObj,frame);       % グレースケール化
-%    [mag,ang] = step(gfsObj,graysc);      % 勾配フィルタリング
-%    ang       = (ang+pi)/(2*pi);          % 偏角の正規化
-%    mag       = min(mag,1);               % 大きさの飽和処理
-%    [r,g,b]   = step(hrsObj,ang,mag,mag); % 疑似カラー化
-%    frame     = cat(3,r,g,b);             % RGB配列結合
-%
-% (処理例）
-%
-% <<shuttlesobel.png>>
-
-%%
-% *演習課題5-2. フレーム差分*（オプション）
-%
-% 以下のテストケース FrameDiffSystemTestCase の検証を満たすように
-% 連続する2枚のフレームの差分を出力する FrameDiffSystem クラスを作成しよう。
-%
-%   classdef FrameDiffSystemTestCase < matlab.unittest.TestCase
-%       %FRAMEDIFFSYSTEMTESTCASE FrameDiffSystem のテストケース
-%       properties
-%       end
-%       methods (Test)
-%           function testFirstFrame(testCase)
-%               % 準備
-%               width  = 12;
-%               height = 16;
-%               % 入力フレーム
-%               frame1 = rand(height,width);
-%               % 期待値
-%               cnt0Expctd = [];
-%               cnt1Expctd = 1;
-%               res1Expctd = zeros(height,width);
-%               % ターゲットクラスのインスタンス化
-%               obj = FrameDiffSystem();
-%               % 初期状態の検証
-%               state      = getDiscreteState(obj);
-%               cnt0Actual = state.Count;
-%               testCase.verifyEqual(cnt0Actual,cnt0Expctd)            
-%               % 処理結果
-%               res1Actual = step(obj,frame1);
-%               state      = getDiscreteState(obj);
-%               cnt1Actual = state.Count;
-%               % 処理結果の検証
-%               testCase.verifyEqual(res1Actual,res1Expctd,'RelTol',1e-6)
-%               testCase.verifyEqual(cnt1Actual,cnt1Expctd)            
-%           end
-%           function testThreeFrames(testCase)
-%               % 準備
-%               width  = 12;
-%               height = 16;
-%               % 入力フレーム
-%               frame1 = rand(height,width);
-%               frame2 = rand(height,width);
-%               frame3 = rand(height,width);            
-%               % 期待値
-%               cnt1Expctd = 1;
-%               cnt2Expctd = 2;            
-%               cnt3Expctd = 3;                        
-%               res1Expctd = zeros(height,width);
-%               res2Expctd = (frame2-frame1);
-%               res3Expctd = (frame3-frame2);
-%               % ターゲットクラスのインスタンス化
-%               obj = FrameDiffSystem();
-%               % 第１フレーム処理結果
-%               res1Actual = step(obj,frame1);
-%               state      = getDiscreteState(obj);
-%               cnt1Actual = state.Count;
-%               % 第２フレーム処理結果
-%               res2Actual = step(obj,frame2);
-%               state      = getDiscreteState(obj);
-%               cnt2Actual = state.Count;            
-%               % 第３フレーム処理結果
-%               res3Actual = step(obj,frame3);
-%               state      = getDiscreteState(obj);
-%               cnt3Actual = state.Count;            
-%               % 処理結果の検証
-%               testCase.verifyEqual(cnt1Actual,cnt1Expctd)                        
-%               testCase.verifyEqual(cnt2Actual,cnt2Expctd)                                    
-%               testCase.verifyEqual(cnt3Actual,cnt3Expctd)                                                
-%               testCase.verifyEqual(res1Actual,res1Expctd,'RelTol',1e-6)
-%               testCase.verifyEqual(res2Actual,res2Expctd,'RelTol',1e-6)            
-%               testCase.verifyEqual(res3Actual,res3Expctd,'RelTol',1e-6)                        
-%           end        
-%           function testReset(testCase)
-%               % 準備
-%               width  = 12;
-%               height = 16;
-%               % 入力フレーム
-%               frame1 = rand(height,width);
-%               % 期待値
-%               cnt0Expctd = [];
-%               cnt1Expctd = 1;
-%               cntrExpctd = 0;
-%               % ターゲットクラスのインスタンス化
-%               obj = FrameDiffSystem();
-%               % 初期状態の検証
-%               state      = getDiscreteState(obj);
-%               cnt0Actual = state.Count;
-%               testCase.verifyEqual(cnt0Actual,cnt0Expctd)            
-%               % 第一フレーム処理後の状態の検証
-%               step(obj,frame1);
-%               state      = getDiscreteState(obj);
-%               cnt1Actual = state.Count;
-%               testCase.verifyEqual(cnt1Actual,cnt1Expctd)                        
-%               % リセット後の状態の検証
-%               reset(obj);
-%               state      = getDiscreteState(obj);
-%               cntrActual = state.Count;
-%               testCase.verifyEqual(cntrActual,cntrExpctd)                        
-%           end        
-%       end
+%   vrObj = VideoReader('vipmen.avi');
+%   frameRate = get(vrObj,'FrameRate');
+%   vwObj = VideoWriter('vipmengradfilt.avi');
+%   set(vwObj,'FrameRate',frameRate);
+%   rgsObj = Rgb2GraySystem();
+%   hrsObj = Hsv2RgbSystem();
+%   gfsObj = GradFiltSystem();
+%   open(vwObj)
+%   while (hasFrame(vrObj))
+%      frame     = readFrame(vrObj);         % フレーム入力
+%      graysc    = step(rgsObj,frame);       % グレースケール化
+%      [mag,ang] = step(gfsObj,graysc);      % 勾配フィルタリング
+%      ang       = (ang+pi)/(2*pi);          % 偏角の正規化
+%      mag       = min(mag,1);               % 大きさの飽和処理
+%      [r,g,b]   = step(hrsObj,ang,mag,mag); % 疑似カラー化
+%      frame     = cat(3,r,g,b);             % RGB配列結合
+%      writeVideo(vwObj,frame);              % フレーム出力 
 %   end
-
-%%
+%   close(vwObj)
+%
+% （モデル例）
+%
+% <<videogradfilt_slx_00.png>>
+%
+% ただし、以下のブロックを利用。
+%
+% * <matlab:doc('simulink/saturation') Simulink/Commonly Used Blocks/Saturation>
+% * <matlab:doc('simulink/constant') Simulink/Commonly Used Blocks/Constant>
+% * <matlab:doc('simulink/add') Simulink/Commonly Used Blocks/Sum>
+% * <matlab:doc('simulink/gain') Simulink/Commonly Used Blocks/Gain>
+%
 % （処理例）
-
-result = run(FrameDiffSystemTestCase);
+%
+% <<vipmengradfilt_avi.png>>
 
 %%
+% *演習課題6-2. Sobel勾配フィルタ*
 %
-vrObj = VideoReader('shuttle.avi');
-frameRate = get(vrObj,'FrameRate');
-vwObj = VideoWriter('shuttlediff.avi');
-set(vwObj,'FrameRate',frameRate);
-fdfObj = FrameDiffSystem();
-open(vwObj)
-while (hasFrame(vrObj))
-    frame = readFrame(vrObj);   % フレーム入力
-    frame = im2double(frame);   % 実数型への変換
-    frame = step(fdfObj,frame); % フレーム差分処理
-    frame = frame/2+0.5;
-    writeVideo(vwObj,frame);    % フレーム出力
-end
-close(vwObj)
+% 演習課題6-1で作成した Prewitt 勾配フィルタモデルのフィルタカーネル
+% を演習課題5-1で紹介した Sobel カーネルに変えてシミュレーションを実行
+% してみよう。
+% 
+% * ヒント：GradFilterSystem ブロックのパラメータ Kernel を修正すればよい。
+%
+% （処理例）
+%
+% <<vipmengradfilt_sobel_avi.png>>
 
-%%
-% <<shuttlediff.png>>
-%
 %%
 % <html>
 % <hr>
 % </html>
 %%
-% <part4.html Part4> |
+% <part5.html Part5> |
 % <index.html メニュー> |
-% <part5.html トップ> |
-% <part6.html Part6>
+% <part6.html トップ> |
+% <part7.html Part7>

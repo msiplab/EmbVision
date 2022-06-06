@@ -1,4 +1,5 @@
-classdef GradFiltSystem < matlab.System
+classdef GradFiltSystem < matlab.System ...
+         & matlab.system.mixin.CustomIcon
     properties
         Kernel = [ 
              1  1  1 ; % 初期化したプロパティ
@@ -32,5 +33,26 @@ classdef GradFiltSystem < matlab.System
         % リセット
         function resetImpl(obj)
         end
+         % 入力ポート数
+        function N = getNumInputsImpl(obj)
+            N = 1; 
+        end
+        % 出力ポート数        
+        function N = getNumOutputsImpl(obj)
+            N = 2;
+        end      
+        % 入力ポート名
+        function inputName = getInputNamesImpl(obj)
+            inputName = 'Gray';
+        end
+        % 出力ポート名        
+        function [outputName1,outputName2] = getOutputNamesImpl(obj)
+            outputName1 = 'Mag.';
+            outputName2 = 'Ang.';
+        end
+        % アイコン
+        function icon = getIconImpl(obj)
+           icon = sprintf('Grad. Filt.');
+        end        
     end
 end

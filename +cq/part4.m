@@ -1,6 +1,6 @@
 %% *EmbVision(CQ版) チュートリアル（４）*
-% 
-% *回帰分析と曲線検出*
+%
+% *映像ストリーム処理 - MATLAB編 -*
 %
 % 新潟大学
 % 村松　正吾，高橋　勇希
@@ -9,212 +9,528 @@
 % 
 
 %%
-% <part3.html Part3> |
+% <part4.html Part4> |
 % <index.html メニュー> |
-% <part5.html Part5>
+% <part6.html Part6>
 
 %%
 % *概要*
 %
-% 本演習では、System object の応用例として、
-% 多項式回帰を利用した画像からの曲線検出を実装する。
+% 本演習では、MATLABにて映像ファイルの情報を読み込む方法のほか、
+% 映像表示、映像ファイル出力、簡単な映像ストリーム処理について学ぶ。
 %
 % 準備として、開いている全ての Figure を <matlab:doc('close') close> 関数で
 % 閉じておく。
 
 close all
 
-%% 回帰分析
+%% 映像入力
 % 
-% 回帰分析では、ある変数 $y$ とある変数 $x$ の間を
-%
-% $$ y = f(x) $$
-%
-% のように関係づける未知の関数 $f(\cdot)$ を仮定する。
-% 回帰分析は、このような未知の関数 $f(\cdot)$ を観測可能なデータから推論する
-% 統計的手法である。
-% 
-% 変数 $x$ を説明変数とよび、変数 $y$ を目的変数とよぶ。
-% また、この未知関数の推論をフィッティングとよぶ。
-% 
-% 以下では、回帰分析の一例としてデータの多項式近似を試みる。
-% まず、多項式回帰を試すためのデータを用意しよう。
-
-load census 
-
+% MATLABにおける映像入力は、
+% <matlab:doc('VideoReader') VideoReader> クラスの
+% <matlab:doc('VideoReader.readFrame') readFrame> メソッドを
+% 利用することで実現できる。
+ 
+vrObj = VideoReader('shuttle.avi');
+frame = readFrame(vrObj);
 
 %%
-% <matlab:doc('load') load>コマンドで読み込まれた変数 cdate, popは
-% いずれも21次元ベクトルであり、その内容は以下のとおり。
+% 変数 frame は映像データの最初のフレームを保持する。
 % 
-% * cdate: 1790年から1990年までの10年ごとの年度
-% * pop: cdateの年度に対応するアメリカの人口数( $10^6$ 人単位)
+% shuttle.avi はRGBカラー映像なので、変数 frame は三次元配列となる。
+%
+% 特に指定をしなければ、データ型は符号なし整数８ビット型 uint8となる。
+
+whos vrObj frame
+
+%%
+% frame を表示してみよう。
+%
+% 後ほど利用するため、imshow のハンドルオブジェクトも用意しておく。
+
+figure(1)
+hi1 = imshow(frame);
+
+%%
+% なお、変数 vrObj は、VideoReader のインスタンスオブジェクトとなっており、
+% 映像に関する情報をプロパティとして保持している。
+%
+% 主なプロパティを以下にまとめる。
+%
+% * BitsPerPixel: 一画素当たりのビット数 [bpp]
+% * FrameRate: フレームレート [bps]
+% * Height: 画面の高さ [pixels]
+% * Width: 画面の幅 [pixels]
+
+properties(vrObj)
+
+%%
+% したがって、画面の高さや幅、フレームレートなどの情報は
+% 以下のようにして取得できる。
+
+height    = get(vrObj,'Height');
+width     = get(vrObj,'Width');
+frameRate = get(vrObj,'FrameRate');
+
+%%
+% さらに、 readFrame メソッドを呼び出すと次のフレームを読み込む。
+%
+% なお、imshow のハンドルオブジェクト hi1 の CData プロパティに frame の
+% データを上書きすることで表示を更新している。
+
+frame = readFrame(vrObj);
+set(hi1,'CData',frame);
+
+%%
+% [ <part5.html トップ> ]
+
+%% 映像表示
+% 映像入力オブジェクト vrObj の時刻を 0 に戻して、全てのフレームを表示しよう。
+%
+% なお、 <matlab:doc('while') while> ループ内で全てのフレームが
+% 表示されるよう <matlab:doc('drawnow') drawnow> 関数で
+% 各フレームの描画を強制する。
+%
+% また、 <matlab:doc('VideoReader.hasFrame') hasFrame> メソッドで
+% 最終フレームか否かの情報を取得している。
+
+set(vrObj,'CurrentTime',0);
+while (hasFrame(vrObj))
+    frame = readFrame(vrObj);
+    set(hi1,'CData',frame);
+end
+
+%%
+% 他に、 <matlab:doc('movie') movie> 関数での映像表示も可能である。
+% ここでは説明を割愛する。
+
+%%
+% [ <part5.html トップ> ]
+
+%% 映像出力
+% MATLABにおける映像出力は <matlab:doc('VideoWriter') VideoWriter> クラスの
+% <matlab:doc('VideoWriter.writeVideo') writeVideo> メソッドを利用することで
+% 実現できる。
+%
+% 映像入力オブジェクト vrObj の時刻を 0　に戻して、映像のコピーを
+% AVIファイル shuttleclone.avi に出力してみよう。
+
+set(vrObj,'CurrentTime',0);
+vwObj = VideoWriter('shuttleclone.avi');
+properties(vwObj)
+
+%%
+
+set(vwObj,'FrameRate',frameRate);
+open(vwObj)
+while (hasFrame(vrObj))
+    frame = readFrame(vrObj);
+    writeVideo(vwObj,frame);
+end
+close(vwObj)
+
+%%
+% AVIファイル shuttleclone.avi が出力される。
+%
+% 保存されたAVIファイルはMATLABの外部のツールで再生することができる。
+%
+% <<shuttleclone.png>>
 % 
-% <matlab:doc('plot') plot>関数で、cdateをX軸、popをY軸にしてX-Yプロットを
-% 表示しよう。
-
-plot(cdate,pop,'o')  
-xlabel('year')
-ylabel('population')
 
 %%
-% プロットされたグラフを見ると二次関数のような増え方をしている。
+% [ <part5.html トップ> ]
+
+%% 映像処理
+% 映像フレームの入力と出力の間に各フレームに対する処理を挿入することで、
+% 映像ストリーム処理を実現できる。
 %
-% MATLABは多項式近似を行う <matlab:doc('polyfit') polyfit>関数を提供している。
-% $x$ を説明変数の観測データ， $y$ を目的変数の観測データとして同じ次元の
-% ベクトルで与えられたとすれば、コマンド
+% 以下では、演習（４）で作成した
+%
+% * Rgb2GraySystem
+% * Hsv2RgbSystem
+% * GradFiltSystem
+%
+% を利用して、フレーム毎の勾配フィルタ出力を映像化しよう。
 % 
-% >> p = polyfit(x,y,n) 
+% まず、フレーム処理オブジェクトを生成する。
+
+rgsObj = Rgb2GraySystem();
+hrsObj = Hsv2RgbSystem();
+gfsObj = GradFiltSystem();
+
+%%
+% 次に、映像入力オブジェクト vrObj の時刻を 0　に戻し、
+% 出力映像を保存するAVIファイル shuttlegrad.avi の準備をする。
+
+set(vrObj,'CurrentTime',0);
+vwObj = VideoWriter('shuttlegrad.avi');
+set(vwObj,'FrameRate',frameRate);
+open(vwObj)
+
+%%
+% 映像処理を開始する。
+
+while (hasFrame(vrObj))
+    frame     = readFrame(vrObj);         % フレーム入力
+    graysc    = step(rgsObj,frame);       % グレースケール化
+    [mag,ang] = step(gfsObj,graysc);      % 勾配フィルタリング
+    ang       = (ang+pi)/(2*pi);          % 偏角の正規化
+    mag       = min(mag,1);               % 大きさの飽和処理
+    [r,g,b]   = step(hrsObj,ang,mag,mag); % 疑似カラー化
+    frame     = cat(3,r,g,b);             % RGB配列結合
+    writeVideo(vwObj,frame);              % フレーム出力 
+end
+close(vwObj)
+
+%%
+% 処理が終了すると、AVIファイル shuttlegrad.avi に処理結果が保存される。
+%
+% <<shuttlegrad.png>>
 % 
-% は、未知の関数 $f(x)$ を $n$ 次多項式
-%
-% $$ p(x) = p_1x^n+p_2x^{n-1}+\cdots+p_nx+p_{n+1} $$
-%
-% で近似する。ただし、 $p_1,p_2,\cdots,p_{n+1}$ は未知パラメータで、
-% データとの整合性が最小自乗誤差の意味で最適になるように選択される。
 
 %%
-% polyfit　関数をデータに適用して近似多項式を求めてみよう。
+% [ <part5.html トップ> ]
 
-n = 2;
-p = polyfit(cdate,pop,n); 
-
-%%
-% づづけて、得られた近似多項式を <matlab:doc('polyval') polyval> 関数により
-% 評価しよう。 <matlab:doc('linspace') linspace> 関数で、年度 cdate の最小値と
-% 最大値の間を100点等間隔にサンプルする。
-
-x = linspace(min(cdate),max(cdate),100);
-y = polyval(p, x);  
-hold on  
-plot(x,y) 
-
-%%
-% [ <part4.html トップ> ]
-
-%% 曲線検出
+%% フレーム間処理（オプション）
+% 過去のフレームを記憶する System object クラスを定義することもできる。
 %
-% System object の応用例として、曲線を含む二値画像から多項式近似により
-% 曲線を近似するモジュールを作成する。
+% 連続する2枚のフレームの平均を出力する FrameAveSystem クラスを作成するため、
+% 以下のテストケース FrameAveSystemTestCase を用意する。
 %
-% 以下のテストクラスを定義する。
-
-%%
-%   classdef PolyfitSystemTestCase < matlab.unittest.TestCase
-%       methods(Test)
-%           % Test methods
-%           function testDefaultDegree(testCase)
-%               % 期待値　
-%               degExpctd = 3;
-%               % ターゲットクラスのインスタンス化
-%               obj = PolyfitSystem();
-%               % プロパティ Degree の取得
-%               degActual = obj.Degree;
-%               % プロパティ Degree の検証
-%               testCase.verifyEqual(degActual,degExpctd)
-%           end
-%           function testCoefs(testCase)
+%   classdef FrameAveSystemTestCase < matlab.unittest.TestCase
+%       %FRAMEAVESYSTEMTESTCASE FrameAveSystem のテストケース
+%       properties
+%       end
+%       methods (Test)
+%           function testFirstFrame(testCase)
 %               % 準備
-%               xmax = 4;
-%               x = 1:xmax; % 説明変数
-%               y = x.^2;   % 目的変数
-%               BW = zeros(xmax^2,xmax); % 座標を二値画像に変換 
-%               for idx = 1:length(x)
-%                   BW(y(idx),x(idx)) = 1;
-%               end
-%               deg = 3;  % 次数
-%               % 期待値の設定
-%               coefsExpctd = polyfit(x,y,deg);
-%               % ターゲットのインスタンス化
-%               obj = PolyfitSystem();
-%               % 実行結果（実現値の取得）
-%               coefsActual = obj.step(BW);
-%               % 配列の値の検証
-%               testCase.verifyEqual(coefsActual,coefsExpctd,'AbsTol',1e-9);
-%           end
-%           function testSetDegree(testCase)
+%               width  = 12;
+%               height = 16;
+%               % 入力フレーム
+%               frame1 = rand(height,width,3);
 %               % 期待値
-%               degExpctd = 2;
+%               cnt0Expctd = [];
+%               cnt1Expctd = 1;
+%               res1Expctd = frame1;
 %               % ターゲットクラスのインスタンス化
-%               obj = PolyfitSystem('Degree',degExpctd);
-%               % プロパティー Degree の取得
-%               degActual = obj.Degree;
-%               % プロパティー Degree の検証
-%               testCase.verifyEqual(degActual,degExpctd)
+%               obj = FrameAveSystem();
+%               % 初期状態の検証
+%               state      = getDiscreteState(obj);
+%               cnt0Actual = state.Count;
+%               testCase.verifyEqual(cnt0Actual,cnt0Expctd)            
+%               % 処理結果
+%               res1Actual = step(obj,frame1);
+%               state      = getDiscreteState(obj);
+%               cnt1Actual = state.Count;
+%               % 処理結果の検証
+%               testCase.verifyEqual(res1Actual,res1Expctd,'RelTol',1e-6)
+%               testCase.verifyEqual(cnt1Actual,cnt1Expctd)            
+%           end
+%           function testThreeFrames(testCase)
+%               % 準備
+%               width  = 12;
+%               height = 16;
+%               % 入力フレーム
+%               frame1 = rand(height,width,3);
+%               frame2 = rand(height,width,3);
+%               frame3 = rand(height,width,3);            
+%               % 期待値
+%               cnt1Expctd = 1;
+%               cnt2Expctd = 2;            
+%               cnt3Expctd = 3;                        
+%               res1Expctd = frame1;
+%               res2Expctd = (frame1+frame2)/2;
+%               res3Expctd = (frame2+frame3)/2;
+%               % ターゲットクラスのインスタンス化
+%               obj = FrameAveSystem();
+%               % 第１フレーム処理結果
+%               res1Actual = step(obj,frame1);
+%               state      = getDiscreteState(obj);
+%               cnt1Actual = state.Count;
+%               % 第２フレーム処理結果
+%               res2Actual = step(obj,frame2);
+%               state      = getDiscreteState(obj);
+%               cnt2Actual = state.Count;            
+%               % 第３フレーム処理結果
+%               res3Actual = step(obj,frame3);
+%               state      = getDiscreteState(obj);
+%               cnt3Actual = state.Count;            
+%               % 処理結果の検証
+%               testCase.verifyEqual(cnt1Actual,cnt1Expctd)                        
+%               testCase.verifyEqual(cnt2Actual,cnt2Expctd)                                    
+%               testCase.verifyEqual(cnt3Actual,cnt3Expctd)                                                
+%               testCase.verifyEqual(res1Actual,res1Expctd,'RelTol',1e-6)
+%               testCase.verifyEqual(res2Actual,res2Expctd,'RelTol',1e-6)            
+%               testCase.verifyEqual(res3Actual,res3Expctd,'RelTol',1e-6)                        
+%           end        
+%           function testReset(testCase)
+%               % 準備
+%               width  = 12;
+%               height = 16;
+%               % 入力フレーム
+%               frame1 = rand(height,width,3);
+%               % 期待値
+%               cnt0Expctd = [];
+%               cnt1Expctd = 1;
+%               cntrExpctd = 0;
+%               % ターゲットクラスのインスタンス化
+%               obj = FrameAveSystem();
+%               % 初期状態の検証
+%               state      = getDiscreteState(obj);
+%               cnt0Actual = state.Count;
+%               testCase.verifyEqual(cnt0Actual,cnt0Expctd)            
+%               % 第一フレーム処理後の状態の検証
+%               step(obj,frame1);
+%               state      = getDiscreteState(obj);
+%               cnt1Actual = state.Count;
+%               testCase.verifyEqual(cnt1Actual,cnt1Expctd)                        
+%               % リセット後の状態の検証
+%               reset(obj);
+%               state      = getDiscreteState(obj);
+%               cntrActual = state.Count;
+%               testCase.verifyEqual(cntrActual,cntrExpctd)                        
+%           end        
+%       end
+%   end
+
+%%
+% テストケース FrameAveSystemTestCase の検証を満たすように実装した
+% FrameAveSystem クラスの例を以下に示す。
+%
+%   classdef FrameAveSystem < matlab.System
+%       properties
+%           preFrame % 前フレーム
+%       end
+%       properties (DiscreteState)
+%           Count    % フレームカウント
+%       end
+%       properties (Access = private)
+%       end
+%       methods (Access = protected)
+%           % セットアップ（最初のステップ直前に実行）
+%           function setupImpl(obj,srcFrame)
+%               % 前フレームの初期化
+%               obj.preFrame = srcFrame;
+%               % フレームカウントの初期化
+%               obj.Count = 0;
+%           end
+%           % ステップ
+%           function resFrame = stepImpl(obj,srcFrame)
+%               % フレーム平均処理 
+%               resFrame = (obj.preFrame + srcFrame)/2;
+%               % 前フレームの更新←現フレーム
+%               obj.preFrame = srcFrame;
+%               % フレームカウントのインクリメント
+%               obj.Count = obj.Count+1;
+%           end
+%           % リセット
+%           function resetImpl(obj)
+%               % フレームカウントのリセット
+%               obj.Count = 0;
 %           end
 %       end
 %   end
 
 %%
-% 上記のテストクラスを満足するターゲットクラスとして以下のSystem objectを定義しよう。
-%
-%   classdef PolyfitSystem < matlab.System
-%       % POLYFITSYSTEM
-%       properties(Nontunable)
-%           Degree = 3;
-%       end
-%       methods
-%          % コンストラクタ
-%          function obj = PolyfitSystem(varargin)
-%             setProperties(obj,nargin,varargin{:})
-%          end
-%       end
-%       methods(Access = protected)
-%           function p = stepImpl(obj,BW)
-%               % Implement algorithm. Calculate y as a function of input u and
-%               % discrete states.
-%               [y,x] = find(BW); % 画像を座標に変換
-%               p = polyfit(x,y,obj.Degree); % 多項式近似
-%           end
-%       end
-%   end
+
+result = run(FrameAveSystemTestCase);
 
 %%
+% FrameAveSystem の実行例を以下に示す。
 %
+fasObj = FrameAveSystem();
 
-% sz = [288 352];
-% BW = zeros(sz);
-% ndata = 21;
-% x = randi(sz(2),ndata,1);
-% deg = 3;
-% c = 1e-6*randn(deg,1);
-% y = round(x.^(deg:-1:1)*c+sz(1)/2);
-% for idx = 1:ndata
-%     BW(y(idx),x(idx)) = 1;
-% end
-% p = polyfit(x,y,deg);
-% obj = PolyfitSystem('Degree',deg);
-% obj.step(BW)
+set(vrObj,'CurrentTime',0);
+vwObj = VideoWriter('shuttleave.avi');
+set(vwObj,'FrameRate',frameRate);
+open(vwObj)
+while (hasFrame(vrObj))
+    frame = readFrame(vrObj);   % フレーム入力
+    frame = im2double(frame);   % 実数型へ変換
+    frame = step(fasObj,frame); % フレーム平均処理
+    writeVideo(vwObj,frame);    % フレーム出力 
+end
+close(vwObj)
 
 %%
-% [ <part4.html トップ> ]
-
-%% 曲線描画
+% 処理が終了すると、AVIファイル shuttleave.avi に処理結果が保存される。
 %
+% <<shuttleave.png>>
 
 %%
-% [ <part4.html トップ> ]
+% [ <part5.html トップ> ]
 
 %% 演習課題
+% *演習課題5-1. Sobel微分フィルタ*
 %
-% *課題4-1. XXX*
-% 
-% ...
-% 
-
-%%
-% *課題4-2. XXX*
+% 垂直微分フィルタ係数として配列
 %
-% ...
+% $$ \left(\begin{array}{ccc}
+%    1 &  2 &  1 \\
+%    0 &  0 &  0 \\
+%   -1 & -2 & -1 \\
+%    \end{array}\right) $$
+%
+% を、水平微分フィルタ係数として配列
+%
+% $$ \left(\begin{array}{ccc}
+%    1 &  0 & -1 \\
+%    2 &  0 & -2 \\
+%    1 &  0 & -1 \\
+%    \end{array}\right) $$
+% 
+% を利用した勾配フィルタオブジェクト
+%
+%    gfs = GradFiltSystem('Kernel',[ 1 2 1 ; 0 0 0 ; -1 -2 -1 ]); 
+%
+% を生成し、映像データ shuttle.avi に対する以下の処理を各フレームに対して
+% 施してみよう。
+% また、その処理結果をAVIファイル shuttlesobel.avi に保存しよう。
+%
+%    graysc    = step(rgsObj,frame);       % グレースケール化
+%    [mag,ang] = step(gfsObj,graysc);      % 勾配フィルタリング
+%    ang       = (ang+pi)/(2*pi);          % 偏角の正規化
+%    mag       = min(mag,1);               % 大きさの飽和処理
+%    [r,g,b]   = step(hrsObj,ang,mag,mag); % 疑似カラー化
+%    frame     = cat(3,r,g,b);             % RGB配列結合
 %
 % (処理例）
+%
+% <<shuttlesobel.png>>
 
+%%
+% *演習課題5-2. フレーム差分*（オプション）
+%
+% 以下のテストケース FrameDiffSystemTestCase の検証を満たすように
+% 連続する2枚のフレームの差分を出力する FrameDiffSystem クラスを作成しよう。
+%
+%   classdef FrameDiffSystemTestCase < matlab.unittest.TestCase
+%       %FRAMEDIFFSYSTEMTESTCASE FrameDiffSystem のテストケース
+%       properties
+%       end
+%       methods (Test)
+%           function testFirstFrame(testCase)
+%               % 準備
+%               width  = 12;
+%               height = 16;
+%               % 入力フレーム
+%               frame1 = rand(height,width);
+%               % 期待値
+%               cnt0Expctd = [];
+%               cnt1Expctd = 1;
+%               res1Expctd = zeros(height,width);
+%               % ターゲットクラスのインスタンス化
+%               obj = FrameDiffSystem();
+%               % 初期状態の検証
+%               state      = getDiscreteState(obj);
+%               cnt0Actual = state.Count;
+%               testCase.verifyEqual(cnt0Actual,cnt0Expctd)            
+%               % 処理結果
+%               res1Actual = step(obj,frame1);
+%               state      = getDiscreteState(obj);
+%               cnt1Actual = state.Count;
+%               % 処理結果の検証
+%               testCase.verifyEqual(res1Actual,res1Expctd,'RelTol',1e-6)
+%               testCase.verifyEqual(cnt1Actual,cnt1Expctd)            
+%           end
+%           function testThreeFrames(testCase)
+%               % 準備
+%               width  = 12;
+%               height = 16;
+%               % 入力フレーム
+%               frame1 = rand(height,width);
+%               frame2 = rand(height,width);
+%               frame3 = rand(height,width);            
+%               % 期待値
+%               cnt1Expctd = 1;
+%               cnt2Expctd = 2;            
+%               cnt3Expctd = 3;                        
+%               res1Expctd = zeros(height,width);
+%               res2Expctd = (frame2-frame1);
+%               res3Expctd = (frame3-frame2);
+%               % ターゲットクラスのインスタンス化
+%               obj = FrameDiffSystem();
+%               % 第１フレーム処理結果
+%               res1Actual = step(obj,frame1);
+%               state      = getDiscreteState(obj);
+%               cnt1Actual = state.Count;
+%               % 第２フレーム処理結果
+%               res2Actual = step(obj,frame2);
+%               state      = getDiscreteState(obj);
+%               cnt2Actual = state.Count;            
+%               % 第３フレーム処理結果
+%               res3Actual = step(obj,frame3);
+%               state      = getDiscreteState(obj);
+%               cnt3Actual = state.Count;            
+%               % 処理結果の検証
+%               testCase.verifyEqual(cnt1Actual,cnt1Expctd)                        
+%               testCase.verifyEqual(cnt2Actual,cnt2Expctd)                                    
+%               testCase.verifyEqual(cnt3Actual,cnt3Expctd)                                                
+%               testCase.verifyEqual(res1Actual,res1Expctd,'RelTol',1e-6)
+%               testCase.verifyEqual(res2Actual,res2Expctd,'RelTol',1e-6)            
+%               testCase.verifyEqual(res3Actual,res3Expctd,'RelTol',1e-6)                        
+%           end        
+%           function testReset(testCase)
+%               % 準備
+%               width  = 12;
+%               height = 16;
+%               % 入力フレーム
+%               frame1 = rand(height,width);
+%               % 期待値
+%               cnt0Expctd = [];
+%               cnt1Expctd = 1;
+%               cntrExpctd = 0;
+%               % ターゲットクラスのインスタンス化
+%               obj = FrameDiffSystem();
+%               % 初期状態の検証
+%               state      = getDiscreteState(obj);
+%               cnt0Actual = state.Count;
+%               testCase.verifyEqual(cnt0Actual,cnt0Expctd)            
+%               % 第一フレーム処理後の状態の検証
+%               step(obj,frame1);
+%               state      = getDiscreteState(obj);
+%               cnt1Actual = state.Count;
+%               testCase.verifyEqual(cnt1Actual,cnt1Expctd)                        
+%               % リセット後の状態の検証
+%               reset(obj);
+%               state      = getDiscreteState(obj);
+%               cntrActual = state.Count;
+%               testCase.verifyEqual(cntrActual,cntrExpctd)                        
+%           end        
+%       end
+%   end
+
+%%
+% （処理例）
+
+result = run(FrameDiffSystemTestCase);
+
+%%
+%
+vrObj = VideoReader('shuttle.avi');
+frameRate = get(vrObj,'FrameRate');
+vwObj = VideoWriter('shuttlediff.avi');
+set(vwObj,'FrameRate',frameRate);
+fdfObj = FrameDiffSystem();
+open(vwObj)
+while (hasFrame(vrObj))
+    frame = readFrame(vrObj);   % フレーム入力
+    frame = im2double(frame);   % 実数型への変換
+    frame = step(fdfObj,frame); % フレーム差分処理
+    frame = frame/2+0.5;
+    writeVideo(vwObj,frame);    % フレーム出力
+end
+close(vwObj)
+
+%%
+% <<shuttlediff.png>>
+%
 %%
 % <html>
 % <hr>
 % </html>
 %%
-% <part3.html Part3> |
+% <part4.html Part4> |
 % <index.html メニュー> |
-% <part4.html トップ> |
-% <part5.html Part5>
+% <part5.html トップ> |
+% <part6.html Part6>

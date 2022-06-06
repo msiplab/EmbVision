@@ -1,43 +1,28 @@
-classdef Rgb2GraySystem < matlab.System ...
-         & matlab.system.mixin.CustomIcon
-    % RGB2GRAYSYSTEM RGB ‚©‚ç ƒOƒŒ[ƒXƒP[ƒ‹‚Ö‚Ì•ÏŠ·
+classdef Rgb2GraySystem < matlab.System
+    % RGB2GRAYSYSTEM RGB ã‹ã‚‰ ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«ã¸ã®å¤‰æ›
     %
-    properties
-    end
-    properties (DiscreteState)
-    end
-    properties (Access = private)
-    end
     methods (Access = protected)
-        % ƒZƒbƒgƒAƒbƒviÅ‰‚ÌƒXƒeƒbƒv’¼‘O‚ÉŽÀsj
+        % ã‚»ãƒƒãƒˆã‚¢ãƒƒãƒ—ï¼ˆæœ€åˆã®ã‚¹ãƒ†ãƒƒãƒ—ç›´å‰ã«å®Ÿè¡Œï¼‰
         function setupImpl(obj,srcImg)
         end
-        % ƒXƒeƒbƒv
+        % ã‚¹ãƒ†ãƒƒãƒ—
         function resImg = stepImpl(obj,srcImg)
             resImg = rgb2gray(srcImg);
         end
-        % ƒŠƒZƒbƒg
+        % ãƒªã‚»ãƒƒãƒˆ
         function resetImpl(obj)
         end
-        % “ü—Íƒ|[ƒg”
-        function N = getNumInputsImpl(obj)
-            N = 1; 
-        end
-        % o—Íƒ|[ƒg”        
-        function N = getNumOutputsImpl(obj)
-            N = 1;
-        end      
-        % “ü—Íƒ|[ƒg–¼
+        % å…¥åŠ›ãƒãƒ¼ãƒˆå
         function inputName = getInputNamesImpl(obj)
             inputName = 'RGB';
         end
-        % o—Íƒ|[ƒg–¼        
+        % å‡ºåŠ›ãƒãƒ¼ãƒˆå        
         function outputName = getOutputNamesImpl(obj)
             outputName = 'Gray';
         end
-        % ƒAƒCƒRƒ“
+        % ã‚¢ã‚¤ã‚³ãƒ³
         function icon = getIconImpl(obj)
-           icon = sprintf('RGB to Gray');
+           icon = 'RGB to Gray';
         end        
     end
 end
