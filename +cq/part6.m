@@ -10,7 +10,7 @@
 
 %%
 % <part5.html Part5> |
-% <index.html メニュー>
+% <index.html メニュー> |
 % <part7.html Part7>
 
 %% 
@@ -335,5 +335,5 @@
 %%
 % <part5.html Part5> |
 % <index.html メニュー> |
-% <part6.html トップ> 
+% <part6.html トップ> |
 % <part7.html Part7>

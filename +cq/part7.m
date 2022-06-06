@@ -9,9 +9,9 @@
 % 
 
 %%
-% <part3.html Part3> |
+% <part6.html Part6> |
 % <index.html メニュー> |
-% <part5.html Part5>
+% <part8.html Part8>
 
 %%
 % *概要*
@@ -90,7 +90,7 @@ hold on
 plot(x,y) 
 
 %%
-% [ <part4.html トップ> ]
+% [ <part7.html トップ> ]
 
 %% 曲線検出
 %
@@ -187,23 +187,23 @@ plot(x,y)
 % obj.step(BW)
 
 %%
-% [ <part4.html トップ> ]
+% [ <part7.html トップ> ]
 
 %% 曲線描画
 %
 
 %%
-% [ <part4.html トップ> ]
+% [ <part7.html トップ> ]
 
 %% 演習課題
 %
-% *課題4-1. XXX*
+% *課題7-1. XXX*
 % 
 % ...
 % 
 
 %%
-% *課題4-2. XXX*
+% *課題7-2. XXX*
 %
 % ...
 %
@@ -214,7 +214,7 @@ plot(x,y)
 % <hr>
 % </html>
 %%
-% <part3.html Part3> |
+% <part6.html Part6> |
 % <index.html メニュー> |
-% <part4.html トップ> |
-% <part5.html Part5>
+% <part7.html トップ> |
+% <part8.html Part8>
