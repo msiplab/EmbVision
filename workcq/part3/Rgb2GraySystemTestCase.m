@@ -11,7 +11,7 @@ classdef Rgb2GraySystemTestCase < matlab.unittest.TestCase
             % ターゲットのインスタンス化
             obj = Rgb2GraySystem();
             % 実行結果
-            y = step(obj,u);
+            y = obj.step(u);
             % サイズの検証
             testCase.verifySize(y,szExpctd);
         end
@@ -23,7 +23,7 @@ classdef Rgb2GraySystemTestCase < matlab.unittest.TestCase
             % ターゲットのインスタンス化
             obj = Rgb2GraySystem();
             % 実行結果
-            arrayActual = step(obj,u);
+            arrayActual = obj.step(u);
             % 配列の値の検証
             testCase.verifyEqual(arrayActual,arrayExpctd);
         end

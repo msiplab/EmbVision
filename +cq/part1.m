@@ -243,6 +243,11 @@ B = RGB(:,:,3);
 whos R G B
 
 %%
+% ' <matlab:doc('imsplit') imsplit> ' 関数も同じ機能を与える。
+
+[R,G,B] = imsplit(RGB);
+
+%%
 % また、 <matlab:doc('images/rgb2gray') rgb2gray> 関数を利用することで、
 
 I = rgb2gray(RGB);
@@ -293,6 +298,11 @@ max(I(:))
 
 J = I.^2;
 imshow(J)
+
+%%
+% ' <matlab:doc('imadjust') imadjust> ' 関数も同じ機能を与える。
+
+J = imadjust(I,[],[],2);
 
 %%
 % <matalb:doc('fplot') fplot> 関数により上記の累乗則変換の特性を確認しよう。

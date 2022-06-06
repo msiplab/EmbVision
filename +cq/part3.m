@@ -397,7 +397,7 @@ result = run(Rgb2GraySystemTestCase);
 %               % ターゲットクラスのインスタンス化
 %               obj = GradFiltSystem();
 %               % プロパティー Kernel の取得
-%               kernelActual = get(obj,'Kernel');
+%               kernelActual = obj.Kernel;
 %               % プロパティー Kernel の検証
 %               testCase.verifyEqual(kernelActual,kernelExpctd)
 %           end
@@ -441,7 +441,7 @@ result = run(Rgb2GraySystemTestCase);
 %         % ターゲットクラスのインスタンス化
 %         obj = GradFiltSystem('Kernel',kernelExpctd);
 %         % プロパティー Kernel の取得
-%         kernelActual = get(obj,'Kernel');
+%         kernelActual = obj.Kernel;
 %         % プロパティー Kernel の検証
 %         testCase.verifyEqual(kernelActual,kernelExpctd)
 %      end     
@@ -552,7 +552,7 @@ result = run(Hsv2RgbSystemTestCase);
 %               % ターゲットクラスのインスタンス化
 %               obj = GradFiltSystem();
 %               % プロパティー Kernel の取得
-%               kernelActual = get(obj,'Kernel');
+%               kernelActual = obj.Kernel;
 %               % プロパティー Kernel の検証
 %               testCase.verifyEqual(kernelActual,kernelExpctd)
 %           end
@@ -564,7 +564,7 @@ result = run(Hsv2RgbSystemTestCase);
 %               % ターゲットクラスのインスタンス化
 %               obj = GradFiltSystem('Kernel',kernelExpctd);
 %               % プロパティー Kernel の取得
-%               kernelActual = get(obj,'Kernel');
+%               kernelActual = obj.Kernel;
 %               % プロパティー Kernel の検証
 %               testCase.verifyEqual(kernelActual,kernelExpctd)
 %           end        
