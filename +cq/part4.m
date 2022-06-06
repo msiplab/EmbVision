@@ -9,9 +9,9 @@
 % 
 
 %%
-% <part4.html Part4> |
+% <part3.html Part3> |
 % <index.html メニュー> |
-% <part6.html Part6>
+% <part5.html Part5>
 
 %%
 % *概要*
@@ -32,7 +32,7 @@ close all
 % 利用することで実現できる。
  
 vrObj = VideoReader('shuttle.avi');
-frame = readFrame(vrObj);
+frame = vrObj.readFrame();
 
 %%
 % 変数 frame は映像データの最初のフレームを保持する。
@@ -68,9 +68,9 @@ properties(vrObj)
 % したがって、画面の高さや幅、フレームレートなどの情報は
 % 以下のようにして取得できる。
 
-height    = get(vrObj,'Height');
-width     = get(vrObj,'Width');
-frameRate = get(vrObj,'FrameRate');
+height    = vrObj.Height;
+width     = vrObj.Width;
+frameRate = vrObj.FrameRate;
 
 %%
 % さらに、 readFrame メソッドを呼び出すと次のフレームを読み込む。
@@ -78,11 +78,11 @@ frameRate = get(vrObj,'FrameRate');
 % なお、imshow のハンドルオブジェクト hi1 の CData プロパティに frame の
 % データを上書きすることで表示を更新している。
 
-frame = readFrame(vrObj);
-set(hi1,'CData',frame);
+frame = vrObj.readFrame();
+hi1.CData = frame;
 
 %%
-% [ <part5.html トップ> ]
+% [ <part4.html トップ> ]
 
 %% 映像表示
 % 映像入力オブジェクト vrObj の時刻を 0 に戻して、全てのフレームを表示しよう。
@@ -94,10 +94,11 @@ set(hi1,'CData',frame);
 % また、 <matlab:doc('VideoReader.hasFrame') hasFrame> メソッドで
 % 最終フレームか否かの情報を取得している。
 
-set(vrObj,'CurrentTime',0);
-while (hasFrame(vrObj))
-    frame = readFrame(vrObj);
-    set(hi1,'CData',frame);
+vrObj.CurrentTime = 0;
+while (vrObj.hasFrame())
+    frame = vrObj.readFrame();
+    hi1.CData = frame;
+    drawnow
 end
 
 %%
@@ -105,7 +106,7 @@ end
 % ここでは説明を割愛する。
 
 %%
-% [ <part5.html トップ> ]
+% [ <part4.html トップ> ]
 
 %% 映像出力
 % MATLABにおける映像出力は <matlab:doc('VideoWriter') VideoWriter> クラスの
@@ -115,19 +116,19 @@ end
 % 映像入力オブジェクト vrObj の時刻を 0　に戻して、映像のコピーを
 % AVIファイル shuttleclone.avi に出力してみよう。
 
-set(vrObj,'CurrentTime',0);
+vrObj.CurrentTime = 0;
 vwObj = VideoWriter('shuttleclone.avi');
 properties(vwObj)
 
 %%
 
-set(vwObj,'FrameRate',frameRate);
-open(vwObj)
-while (hasFrame(vrObj))
-    frame = readFrame(vrObj);
-    writeVideo(vwObj,frame);
+vwObj.FrameRate = frameRate;
+vwObj.open()
+while (vrObj.hasFrame())
+    frame = vrObj.readFrame();
+    vwObj.writeVideo(frame);
 end
-close(vwObj)
+vwObj.close()
 
 %%
 % AVIファイル shuttleclone.avi が出力される。
@@ -138,13 +139,13 @@ close(vwObj)
 % 
 
 %%
-% [ <part5.html トップ> ]
+% [ <part4.html トップ> ]
 
 %% 映像処理
 % 映像フレームの入力と出力の間に各フレームに対する処理を挿入することで、
 % 映像ストリーム処理を実現できる。
 %
-% 以下では、演習（４）で作成した
+% 以下では、演習（３）で作成した
 %
 % * Rgb2GraySystem
 % * Hsv2RgbSystem
@@ -162,25 +163,25 @@ gfsObj = GradFiltSystem();
 % 次に、映像入力オブジェクト vrObj の時刻を 0　に戻し、
 % 出力映像を保存するAVIファイル shuttlegrad.avi の準備をする。
 
-set(vrObj,'CurrentTime',0);
+vrObj.CurrentTime = 0;
 vwObj = VideoWriter('shuttlegrad.avi');
-set(vwObj,'FrameRate',frameRate);
-open(vwObj)
+vwObj.FrameRate = frameRate;
+vwObj.open()
 
 %%
 % 映像処理を開始する。
 
-while (hasFrame(vrObj))
-    frame     = readFrame(vrObj);         % フレーム入力
-    graysc    = step(rgsObj,frame);       % グレースケール化
-    [mag,ang] = step(gfsObj,graysc);      % 勾配フィルタリング
+while (vrObj.hasFrame())
+    frame     = vrObj.readFrame();        % フレーム入力
+    graysc    = rgsObj.step(frame);       % グレースケール化
+    [mag,ang] = gfsObj.step(graysc);      % 勾配フィルタリング
     ang       = (ang+pi)/(2*pi);          % 偏角の正規化
     mag       = min(mag,1);               % 大きさの飽和処理
-    [r,g,b]   = step(hrsObj,ang,mag,mag); % 疑似カラー化
+    [r,g,b]   = hrsObj.step(ang,mag,mag); % 疑似カラー化
     frame     = cat(3,r,g,b);             % RGB配列結合
-    writeVideo(vwObj,frame);              % フレーム出力 
+    vwObj.writeVideo(frame);              % フレーム出力 
 end
-close(vwObj)
+vwObj.close()
 
 %%
 % 処理が終了すると、AVIファイル shuttlegrad.avi に処理結果が保存される。
@@ -189,7 +190,7 @@ close(vwObj)
 % 
 
 %%
-% [ <part5.html トップ> ]
+% [ <part4.html トップ> ]
 
 %% フレーム間処理（オプション）
 % 過去のフレームを記憶する System object クラスを定義することもできる。
@@ -215,12 +216,12 @@ close(vwObj)
 %               % ターゲットクラスのインスタンス化
 %               obj = FrameAveSystem();
 %               % 初期状態の検証
-%               state      = getDiscreteState(obj);
+%               state      = obj.getDiscreteState();
 %               cnt0Actual = state.Count;
 %               testCase.verifyEqual(cnt0Actual,cnt0Expctd)            
 %               % 処理結果
-%               res1Actual = step(obj,frame1);
-%               state      = getDiscreteState(obj);
+%               res1Actual = obj.step(frame1);
+%               state      = obj.getDiscreteState();
 %               cnt1Actual = state.Count;
 %               % 処理結果の検証
 %               testCase.verifyEqual(res1Actual,res1Expctd,'RelTol',1e-6)
@@ -244,16 +245,16 @@ close(vwObj)
 %               % ターゲットクラスのインスタンス化
 %               obj = FrameAveSystem();
 %               % 第１フレーム処理結果
-%               res1Actual = step(obj,frame1);
-%               state      = getDiscreteState(obj);
+%               res1Actual = obj.step(frame1);
+%               state      = obj.getDiscreteState();
 %               cnt1Actual = state.Count;
 %               % 第２フレーム処理結果
-%               res2Actual = step(obj,frame2);
-%               state      = getDiscreteState(obj);
+%               res2Actual = obj.step(frame2);
+%               state      = obj.getDiscreteState();
 %               cnt2Actual = state.Count;            
 %               % 第３フレーム処理結果
-%               res3Actual = step(obj,frame3);
-%               state      = getDiscreteState(obj);
+%               res3Actual = obj.step(frame3);
+%               state      = obj.getDiscreteState();
 %               cnt3Actual = state.Count;            
 %               % 処理結果の検証
 %               testCase.verifyEqual(cnt1Actual,cnt1Expctd)                        
@@ -276,17 +277,17 @@ close(vwObj)
 %               % ターゲットクラスのインスタンス化
 %               obj = FrameAveSystem();
 %               % 初期状態の検証
-%               state      = getDiscreteState(obj);
+%               state      = obj.getDiscreteState();
 %               cnt0Actual = state.Count;
 %               testCase.verifyEqual(cnt0Actual,cnt0Expctd)            
 %               % 第一フレーム処理後の状態の検証
-%               step(obj,frame1);
-%               state      = getDiscreteState(obj);
+%               obj.step(frame1);
+%               state      = obju.getDiscreteState();
 %               cnt1Actual = state.Count;
 %               testCase.verifyEqual(cnt1Actual,cnt1Expctd)                        
 %               % リセット後の状態の検証
-%               reset(obj);
-%               state      = getDiscreteState(obj);
+%               obj.reset();
+%               state      = obj.getDiscreteState();
 %               cntrActual = state.Count;
 %               testCase.verifyEqual(cntrActual,cntrExpctd)                        
 %           end        
@@ -340,17 +341,17 @@ result = run(FrameAveSystemTestCase);
 %
 fasObj = FrameAveSystem();
 
-set(vrObj,'CurrentTime',0);
+vrObj.CurrentTime = 0;
 vwObj = VideoWriter('shuttleave.avi');
-set(vwObj,'FrameRate',frameRate);
-open(vwObj)
-while (hasFrame(vrObj))
-    frame = readFrame(vrObj);   % フレーム入力
+vwObj.FrameRate = frameRate;
+vwObj.open()
+while (vrObj.hasFrame())
+    frame = vrObj.readFrame();  % フレーム入力
     frame = im2double(frame);   % 実数型へ変換
-    frame = step(fasObj,frame); % フレーム平均処理
-    writeVideo(vwObj,frame);    % フレーム出力 
+    frame = fasObj.step(frame); % フレーム平均処理
+    vwObj.writeVideo(frame);    % フレーム出力 
 end
-close(vwObj)
+vwObj.close()
 
 %%
 % 処理が終了すると、AVIファイル shuttleave.avi に処理結果が保存される。
@@ -358,10 +359,10 @@ close(vwObj)
 % <<shuttleave.png>>
 
 %%
-% [ <part5.html トップ> ]
+% [ <part4.html トップ> ]
 
 %% 演習課題
-% *演習課題5-1. Sobel微分フィルタ*
+% *演習課題4-1. Sobel微分フィルタ*
 %
 % 垂直微分フィルタ係数として配列
 %
@@ -387,11 +388,11 @@ close(vwObj)
 % 施してみよう。
 % また、その処理結果をAVIファイル shuttlesobel.avi に保存しよう。
 %
-%    graysc    = step(rgsObj,frame);       % グレースケール化
-%    [mag,ang] = step(gfsObj,graysc);      % 勾配フィルタリング
+%    graysc    = rgsObj.step(frame);       % グレースケール化
+%    [mag,ang] = gfsObj.step(graysc);      % 勾配フィルタリング
 %    ang       = (ang+pi)/(2*pi);          % 偏角の正規化
 %    mag       = min(mag,1);               % 大きさの飽和処理
-%    [r,g,b]   = step(hrsObj,ang,mag,mag); % 疑似カラー化
+%    [r,g,b]   = hrsObj.step(ang,mag,mag); % 疑似カラー化
 %    frame     = cat(3,r,g,b);             % RGB配列結合
 %
 % (処理例）
@@ -422,12 +423,12 @@ close(vwObj)
 %               % ターゲットクラスのインスタンス化
 %               obj = FrameDiffSystem();
 %               % 初期状態の検証
-%               state      = getDiscreteState(obj);
+%               state      = obj.getDiscreteState();
 %               cnt0Actual = state.Count;
 %               testCase.verifyEqual(cnt0Actual,cnt0Expctd)            
 %               % 処理結果
-%               res1Actual = step(obj,frame1);
-%               state      = getDiscreteState(obj);
+%               res1Actual = obj.step(frame1);
+%               state      = obj.getDiscreteState();
 %               cnt1Actual = state.Count;
 %               % 処理結果の検証
 %               testCase.verifyEqual(res1Actual,res1Expctd,'RelTol',1e-6)
@@ -451,16 +452,16 @@ close(vwObj)
 %               % ターゲットクラスのインスタンス化
 %               obj = FrameDiffSystem();
 %               % 第１フレーム処理結果
-%               res1Actual = step(obj,frame1);
-%               state      = getDiscreteState(obj);
+%               res1Actual = obj.step(frame1);
+%               state      = obj.getDiscreteState();
 %               cnt1Actual = state.Count;
 %               % 第２フレーム処理結果
-%               res2Actual = step(obj,frame2);
-%               state      = getDiscreteState(obj);
+%               res2Actual = obj.step(frame2);
+%               state      = obj.getDiscreteState();
 %               cnt2Actual = state.Count;            
 %               % 第３フレーム処理結果
-%               res3Actual = step(obj,frame3);
-%               state      = getDiscreteState(obj);
+%               res3Actual = obj.step(frame3);
+%               state      = obj.getDiscreteState();
 %               cnt3Actual = state.Count;            
 %               % 処理結果の検証
 %               testCase.verifyEqual(cnt1Actual,cnt1Expctd)                        
@@ -483,17 +484,17 @@ close(vwObj)
 %               % ターゲットクラスのインスタンス化
 %               obj = FrameDiffSystem();
 %               % 初期状態の検証
-%               state      = getDiscreteState(obj);
+%               state      = obj.getDiscreteState();
 %               cnt0Actual = state.Count;
 %               testCase.verifyEqual(cnt0Actual,cnt0Expctd)            
 %               % 第一フレーム処理後の状態の検証
-%               step(obj,frame1);
-%               state      = getDiscreteState(obj);
+%               obj.step(frame1);
+%               state      = obj.getDiscreteState();
 %               cnt1Actual = state.Count;
 %               testCase.verifyEqual(cnt1Actual,cnt1Expctd)                        
 %               % リセット後の状態の検証
-%               reset(obj);
-%               state      = getDiscreteState(obj);
+%               obj.reset();
+%               state      = obj.getDiscreteState();
 %               cntrActual = state.Count;
 %               testCase.verifyEqual(cntrActual,cntrExpctd)                        
 %           end        
@@ -508,19 +509,19 @@ result = run(FrameDiffSystemTestCase);
 %%
 %
 vrObj = VideoReader('shuttle.avi');
-frameRate = get(vrObj,'FrameRate');
+frameRate = vrObj.get('FrameRate');
 vwObj = VideoWriter('shuttlediff.avi');
-set(vwObj,'FrameRate',frameRate);
+vwObj.FrameRate = frameRate;
 fdfObj = FrameDiffSystem();
-open(vwObj)
-while (hasFrame(vrObj))
-    frame = readFrame(vrObj);   % フレーム入力
+vwObj.open()
+while (vrObj.hasFrame())
+    frame = vrObj.readFrame();  % フレーム入力
     frame = im2double(frame);   % 実数型への変換
-    frame = step(fdfObj,frame); % フレーム差分処理
+    frame = fdfObj.step(frame); % フレーム差分処理
     frame = frame/2+0.5;
-    writeVideo(vwObj,frame);    % フレーム出力
+    vwObj.writeVideo(frame);    % フレーム出力
 end
-close(vwObj)
+vwObj.close()
 
 %%
 % <<shuttlediff.png>>
@@ -530,7 +531,7 @@ close(vwObj)
 % <hr>
 % </html>
 %%
-% <part4.html Part4> |
+% <part3.html Part3> |
 % <index.html メニュー> |
-% <part5.html トップ> |
-% <part6.html Part6>
+% <part4.html トップ> |
+% <part5.html Part5>
