@@ -3,15 +3,15 @@
 % *MATLAB(R)/Simulink(R) & Raspberry Pi で学ぶ組込みビジョン！*
 %
 % 本資料は、新潟大学工学部電気電子工学科専門科目「電気電子創造設計」(2014年度開講）
-% の課題として作成したものを，CQ出版社Interface 2022年7月号記事として再編集した
+% の課題として作成したものをCQ出版社Interface 2022年9月号記事用に再編集した
 % ものです。
 %
 % *メニュー*
 %
-% # <part1.html 回帰分析>
-% # <part2.html 画像入力と画素処理>
-% # <part3.html フィルタリングと周波数特性>
-% # <part4.html クラス定義と単体テスト>
+% # <part1.html 画像入力と画素処理>
+% # <part2.html フィルタリングと周波数特性>
+% # <part3.html クラス定義と単体テスト>
+% # <part4.html 回帰分析と曲線検出>
 % # <part5.html 映像ストリーム処理 - MATLAB編 ->
 % # <part6.html 映像ストリーム処理 - Simulink編 ->
 % # <part7.html 映像ストリーム処理 - Raspberry Pi(TM)編 ->

@@ -1,6 +1,6 @@
 %% *EmbVision(CQ版) チュートリアル（３）*
 %
-% *フィルタリングと周波数特性*
+% *クラス定義と単体テスト*
 %
 % 新潟大学
 % 村松　正吾，高橋　勇希
@@ -16,511 +16,603 @@
 %%
 % *概要*
 %
-% 本演習では、MATLABにて一次元信号のフィルタリングと周波数解析法、
-% 画像情報のフィルタリングと周波数解析法について簡単に学ぶ。
+% 本演習では、MATLABでのオブジェクト指向プログラミングと
+% 単体テスト機能について簡単に学ぶ。
+
+%% オブジェクト指向プログラミング(OOP)
+% プログラムのモジュール化は高い信頼性と広い拡張性をもたらす。
+% オブジェクト指向プログラミング
+% （ <matlab:doc('object-oriented-programming') OOP> ）では、
 %
-% 準備として、開いている全ての Figure を <matlab:doc('close') close> 関数で
-% 閉じておく。
-
-close all
-
-%% 一次元信号の周波数特性
-% まず、予め用意されているオーディオデータ chirp を
-% <matlab:doc('load') load> 関数を利用して読み出して準備する。
-
-load chirp
-
-%%
-% オーディオデータは変数 y に倍精度実数型配列として保持される。
-% なお、標本化周波数は変数 Fs に保持される。
-
-whos y Fs
-
-%%
-% 次に、予め用意されているオーディオデータ gong を読み出し、
-% <matlab:doc('length') length> 関数を利用して長さを揃え、
-% chirp のデータと混合する。
-
-c = y; % 変数 c に代入
-load gong
-g = y; % 変数 g に代入
-
-x = g(1:length(c))+c; % 長さを調整して混合
-
-%%
-% 変数 x には混合したオーディオデータが保持される。
-% <matlab:doc('plot') plot> 関数で確認しよう。
-
-plot(x)
-
-%%
-% オーディオ再生環境があれば <matlab:doc('audioplayer') audioplayer>
-% 関数を利用して、オーディオ再生も可能である。
+% *状態（プロパティ）* と *振舞い（メソッド）*
 %
-% まず、オーディオ再生オブジェクトを生成する。
+% をもつプログラムモジュールをクラスとして定義し、
+%
+% *クラスの実体（インスタンスオブジェクト）*
+%
+% を生成しながら組合せ、相互に作用させて大規模なプログラムを構築する。
+%
+% MATLABでもOOPを利用することができる。
+% 
+% バージョンアップを重ねる毎に
+% OOP機能が強化されてきており、今では
+% <matlab:doc('matlab.System') System object(TM)>  基底クラスの継承により、
+%
+% * ストリーム処理
+% * コード生成
+% * Simulink ブロック定義
+%
+% が容易となっている。
+
+%%
+% [ <part3.html トップ> ]
+
+%% System objectクラスの定義
+% では、例としてRGB画像 から グレースケール画像に変換する
+% System object クラスの型枠を定義してみよう。
+%
+% ホームタグから、
+% 
+% # 「新規作成」
+% # →「System object >」
+% # →「標準」
+%
+% を選択するとエディタが開き以下のようなコードの編集準備が整う。
+
+%%
+%   classdef Untitled < matlab.System
+%     % Untitled Add summary here
+%     %
+%     % This template includes the minimum set of functions required
+%     % to define a System object with discrete state.
+%     properties
+%         % Public, tunable properties.
+%     end
+%     properties (DiscreteState)
+%     end
+%     properties (Access = private)
+%         % Pre-computed constants.
+%     end
+%     methods (Access = protected)
+%         function setupImpl(obj,u)
+%             % Implement tasks that need to be performed only once,
+%             % such as pre-computed constants.
+%         end
+%         function y = stepImpl(obj,u)
+%             % Implement algorithm. Calculate y as a function of
+%             % input u and discrete states.
+%             y = u;
+%         end
+%         function resetImpl(obj)
+%             % Initialize discrete-state properties.
+%         end
+%      end
+%   end
+
+%%
+% <matlab:doc('classdef') classdef> 直後の  Untitled  を
+% 
+% Rgb2GraySystem  
+%
+% と書き換え、先頭行が以下のようになるよう編集しよう。
+
+%%
+%   classdef Rgb2GraySystem < matlab.System
+%     % RGB2GRAYSYSTEM RGB to Grayscale Converter
+%     %
+%   
+
+%%
+% 編集したファイルを Rgb2GraySystem.m として保存しよう。
+%
+% なお、 classdef  に続く文字列はクラス名となる。
+% クラス名はファイル名と一致させる必要がある。
+
+%%
+% 利用手順を以下にまとめる。
+%
+% # インスタンスオブジェクトを生成（コンストラクタの呼出し）
+% #  step メソッドを実行（stepImplの呼出し）
+
+%%
+%   >> u = 1;
+%   >> obj = Rgb2GraySystem(); % コンストラクタの呼出し
+%   >> y = step(obj,u)         % stepImpl の呼出し
+%   
+%   y =
+%
+%        1
+
+%%
+% 現時点で  Rgb2GraySystem のクラス定義は自動生成されたままである。
+%
+% stepImpl メソッドは、入力 u をそのまま出力する。
+%
+%   function y = stepImpl(obj,u)
+%      y = u;
+%   end
+%
+% クラス Rgb2GraySystem が所望の機能を満たすためには状態（プロパティ）と
+% 振舞い（メソッド）を適切に実装しなければならない。
+%
+% 以下では、 *テスト駆動開発* により Rgb2GraySystem クラスの実装を進める。
+
+%%
+% [ <part3.html トップ> ]
+
+%% テスト駆動開発
+% プログラムの信頼性を向上させるためには、テスト用のコードを充実させると良い。
+% 
+% MATLABでは、モジュール毎の <matlab:doc('matlab.unittest') 単体テスト> 
+% を自動化するフレームワークが提供されている。
+%
+% 単体テストはクラス単位で行うテストで、実装コードよりもテストの記述を
+% 優先するテスト駆動開発に欠かせない。
+%
+% テストを優先して充実させることで
+% バグが少なく改変や拡張に強いプログラムを開発できる。
+% 
+% 一般に、テスト駆動開発では、
+% 
+% * テストメソッドの実装 
+% * → ダミーメソッドでの失敗の確認
+% * → ターゲットメソッドの実装
+% * → ターゲットメソッドでの成功の確認
+% 
+% を繰返し、テストクラスとターゲットクラスを充実させる。
+
+%%
+% 以下の手順で、 Rgb2GraySystem のクラス実装を進めよう。
+% 
+% # テストクラス Rgb2GraySystemTestCase の定義
+% # テストクラス Rgb2GraySystemTestCase へのメソッド testSize の実装
+% # ターゲットクラス Rgb2GraySystem のメソッド testSize の失敗の確認
+% # ターゲットクラス Rgb2GraySystem のメソッド stepImpl の実装
+% # ターゲットクラス Rgb2GraySystem のメソッド testSize の成功の確認
+
+%% テストクラスの定義
+% では、テストクラス Rgb2GraySystemTestCase を定義してみよう。
+%
+% ホームタグから、
+% 
+% # 「新規作成」
+% # →「クラス」
+%
+% を選択するとエディタが開き以下のようなコードの編集準備が整う。
+% 
+%   classdef Untitled
+%   %UNTITLED このクラスの概要をここに記述
+%      %   詳細説明をここに記述
+%      properties
+%      end
+%      methods
+%      end
+%   end
+
+%%
+% <matlab:doc('matlab.unittest.TestCase') matlab.unittest.TestCase> 
+% クラスを継承して、テストクラス Rgb2GraySystemTestCase を定義すればよい。
+%
+% すなわち、先頭部 classdef の行を
+%
+%   classdef Rgb2GraySystemTestCase < matlab.unittest.TestCase
+%   %RGB2GRAYSYSTEMTESTCASER Rgb2GraySystem のテストケース
+%
+% と書き換えればよい。
+%
+% また、 Test 属性の付いた <matlab:doc('methods') methods> ブロック
+%
+%   methods (Test)
+%   end
+% 
+% を用意する。
+
+%%
+% 編集後のコード全体は以下のようになる。
+%
+%   classdef Rgb2GraySystemTestCase < matlab.unittest.TestCase
+%       %RGB2GRAYSYSTEMTESTCASE Rgb2GraySystem のテストケース
+%       properties
+%       end
+%       methods (Test)
+%       end
+%   end
+%
+% 編集したファイルを Rgb2GraySystemTestCase.m として保存しよう。
+
+%%
+% [ <part3.html トップ> ]
+
+%% テストメソッドの追加
+% では、テストクラス Rgb2GraySystemTestCase に
+% テストメソッドを追加しよう。
+% 
+% Test 属性のついた methods ブロック内に
+% テストの内容を記述したメソッドを追加すればよい。
+% 同ブロック内の全てのメソッドが自動的にテストの対象となる。
+%
+% テストメソッド
+%   
+%   function testSize(testCase)
+%      % 準備
+%      u = zeros(1,2,3);   % 1行2列3成分の三次元零配列
+%      % 期待値
+%      szExpctd = [ 1 2 ]; % 1行2列の二次元配列
+%      % ターゲットのインスタンス化
+%      obj = Rgb2GraySystem();
+%      % 実行結果
+%      y = step(obj,u);
+%      % サイズの検証
+%      testCase.verifySize(y,szExpctd);
+%   end
+%
+% を Rgb2GraySystemTestCase の methos (Test) ブロックに追加しよう。
+%
+% なお、 <matlab:doc('matlab.unittest.qualifications.Verifiable.verifySize')
+% verifySize> は、値が指定されたサイズであることを検証する。
+%
+% <matlab:doc('zeros') zeros> 関数は、指定されたサイズの零配列を
+% 生成する。
+
+%%
+% コマンドウィンドウ上で <matlab:doc('matlab.unittest.TestCase.run') run> 
+% メソッドを呼び出してテストを実行しよう。
+%
+%   >> result = run(Rgb2GraySystemTestCase);
+%
+% Rgb2GraySystem の実装が不十分なので、検証は失敗に終わる。
+
+%% ターゲットクラスの実装
+% 検証の失敗を回避するためにクラス Rgb2GraySystem の stepImpl メソッド
+% を
+% 
+%   function y = stepImpl(obj,u)
+%      y = zeros(size(u,1),size(u,2));
+%   end
+%
+% と定義しなおして、再度テストを実行しよう。
+%
+%   >> result = run(Rgb2GraySystemTestCase);
+%  
+%   Rgb2GraySystemTestCase を実行しています
+%   .
+%   Rgb2GraySystemTestCase が完了しました
+%   __________
+
+%%
+% 結果は失敗から成功に変わる。
+
+%% テストクラスとターゲットクラスの充実化
+% 以降、以下の手順を繰り返してテストクラスとターゲットクラスを充実させる。
+%
+% # テストクラスへのテストメソッドの実装
+% # ターゲットクラスのテスト失敗の確認
+% # ターゲットクラスへのメソッドの実装
+% # ターゲットクラスのテスト成功の確認
+
+%%
+% 次のテストクラス
+%
+%   classdef Rgb2GraySystemTestCase < matlab.unittest.TestCase
+%       %RGB2GRAYSYSTEMTESTCASE Rgb2GraySystem のテストケース
+%       properties
+%       end
+%       methods (Test)
+%           function testSize(testCase)
+%               % 準備
+%               u = zeros(1,2,3);   % 1行2列3成分の三次元配列
+%               % 期待値
+%               szExpctd = [ 1 2 ]; % 1行2列の二次元配列
+%               % ターゲットのインスタンス化
+%               obj = Rgb2GraySystem();
+%               % 実行結果
+%               y = step(obj,u);
+%               % サイズの検証
+%               testCase.verifySize(y,szExpctd);
+%           end
+%           function testValues(testCase)
+%               % 準備
+%               u = rand(4,6,3);        % 三次元ランダム配列
+%               % 期待値
+%               arrayExpctd = rgb2gray(u); % グレースケールの期待値
+%               % ターゲットのインスタンス化
+%               obj = Rgb2GraySystem();
+%               % 実行結果
+%               arrayActual = step(obj,u);
+%               % 配列の値の検証
+%               testCase.verifyEqual(arrayActual,arrayExpctd);
+%           end
+%       end
+%   end
+%
+% を満足するように、 Rgb2GraySystem クラスを実装しよう。
+%
+% なお、 <matlab:doc('matlab.unittest.qualifications.Verifiable.verifyEqual')
+% verifyEqual> は、値が指定値と等しいことを検証する。
+% 
+% <matlab:doc('rand') rand> 関数は、0から1の実数型の一様乱数を生成
+% する。
+
+result = run(Rgb2GraySystemTestCase);
+
+%%
+% Rgb2GraySystem を正しく実装できれば、テストは成功する。
+
+%%
+% [ <part3.html トップ> ]
+
+%% プロパティの利用
+% クラスは振舞い（メソッド）の他に状態（プロパティ）を持つことができる。
+%
+% クラスの状態は <matlab:doc('properties') properties> ブロック内で
+% プロパティ名を列挙する。
+%
+% 例えば、 Kernel という名前のプロパティをもつ GradFiltSystem という名の
+% System object クラスの定義は
+%
+%   classdef GradFiltSystem < matlab.System
+%       properties
+%          Kernel % 追加したプロパティ
+%       end
+%       properties (DiscreteState)
+%       end
+%       properties (Access = private)
+%       end
+%       methods (Access = protected)
+%           % セットアップ（最初のステップ直前に実行）
+%           function setupImpl(obj,srcImg)
+%           end
+%           % ステップ
+%           function resImg = stepImpl(obj,srcImg)
+%              resImg = srcImg;
+%           end
+%           % リセット
+%           function resetImpl(obj)
+%           end
+%        end
+%    end
+%
+% のように記述される。
 
 %% 
-% 
-%   player = audioplayer(x,Fs);
-%   whos player
+% プロパティには初期値を与えることもできる。
+% プロパティ Kernel の初期値が
 %
+%   Kernel = [  1  1  1 ; 
+%               0  0  0 ;
+%              -1 -1 -1 ];
+%
+% となることを期待するテストクラスを実装しよう。
+%
+%   classdef GradFiltSystemTestCase < matlab.unittest.TestCase
+%       %GRADFILTSYSTEMTESTCASE GradFiltSystem のテストケース
+%       properties
+%       end
+%       methods (Test)
+%           function testDefaultKernel(testCase)
+%               % 期待値　
+%               kernelExpctd = [  1  1  1 ;
+%                                 0  0  0 ;
+%                               -1 -1 -1 ];
+%               % ターゲットクラスのインスタンス化
+%               obj = GradFiltSystem();
+%               % プロパティー Kernel の取得
+%               kernelActual = get(obj,'Kernel');
+%               % プロパティー Kernel の検証
+%               testCase.verifyEqual(kernelActual,kernelExpctd)
+%           end
+%       end
+%   end
 
 %%
-% オーディオ再生は、
-% <matlab:doc('audioplayer/play') play> メソッドに
-% オブジェクト player を指定して実行される。
+% GradFiltSystem クラスを上のテストが通るように Kernel プロパティを
+% 編集する。
+%
+%   properties
+%       Kernel = [  1  1  1 ; % 初期化したプロパティ
+%                   0  0  0 ;
+%                  -1 -1 -1 ];
+%   end
 
 %%
+% なお、メソッド内でプロパティにアクセスは、
 %
-%   play(player)
+%   function y = stepImpl(obj,u)
+%      y = conv2(obj.Kernel,u); 
+%   end
 %
-
-%%
-% <matlab:doc('spectrogram') spectrogram> 関数を利用することで、
-% 短時間フーリエ変換を利用したオーディオデータの周波数解析を実行できる。
-%
-% * 窓長: 256
-%
-% として実行しよう。 
-
-figure(1)
-spectrogram(x,256)
-caxis([ -70 10 ])
-colorbar
-
-%%
-% 上記の操作により周波数特性（スペクトログラム）が表示される。
-% 横軸は正規化周波数( $$ F_s/2 $$ を 1 と正規化)、
-% 縦軸は標本インデックス( $$ 1/F_s $$ 秒単位)である。
-%
-% なお、値の大きさ[dB] が分かり易いように
-% <matlab:doc('caxis') caxis> 関数と
-% <matlab:doc('colorbar') colorbar> 関数を併用した。
-%
-% <matalb:doc('view') view> 関数で視点を変えてみよう。
-
-view([-15 30])
-
-%%
-% <matlab:doc('zlim') zlim> 関数を利用して、
-% Z軸の座標を　-70 から 10 に調整する。
-
-zlim([ -70 10 ])
-
-%%
-% [ <part3.html トップ> ]
-
-%% 一次元信号のフィルタリング
-% 次に、オーディオデータ x に、線形フィルタ処理
-%
-% $$ y[n] = h[n] \ast x[n] = \sum_{k=0}^{N-1} h[k]x[n-k] $$
-%
-% を施してみよう。ここで、
-%
-% * $$ x[n] $$ : フィルタ入力
-% * $$ y[n] $$ : フィルタ出力 
-% * $$ h[n] $$ : フィルタ係数（インパルス応答）
-% * $$ N $$    : フィルタ次数
-%
-% とする。
-%
-% MATLAB では線形フィルタ処理に <matlab:doc('conv') conv> 関数を利用できる。
-%
-% フィルタ係数 
-%
-% $$ h[n] = \left\{\begin{array}{ll}
-%            1/3, & n=0,1,2 \\
-%            0, & \mathrm{otherwise}
-%           \end{array}\right. $$
-% 
-% として線形フィルタ処理を実行してみよう。
-
-h = [ 1 1 1 ]/3;
-figure(2)
-impz(h)
-
-%%
-
-y = conv(h,x);
-
-%%
-% 変数 y にはフィルタ処理結果が保持されている。 
-% 出力 y の周波数特性（スペクトログラム）を確認しよう。
-
-figure(3)
-spectrogram(y,256);
-caxis([ -70 10 ])
-colorbar
-
-%%
-
-view([ -15 30 ])
-zlim([ -70 10 ])
-
-%%
-% 入力 x と出力 y のスペクトログラムを比較してみて欲しい。
-% どのようなことに気が付くだろうか？
-%
-% * 大よそ、正規化周波数0.4以上の高周波成分が減衰している。
-% * 特に、0.667付近の減衰が大きい。
-%
-% ということに注意して観察して欲しい。
-%
-% なお、処理結果をオーディオ再生により確認する場合は、
-%
-%   player = audioplayer(y,Fs);
-%   play(player)
-%
-% と実行すればよい。
+% のように、第一引数（上の例では変数 obj ）を介してドット(.)により行う。
 
 %%
 % [ <part3.html トップ> ]
 
-%% 一次元フィルタの周波数応答
+%% コンストラクタ
+% プロパティ Kernel は、 GradFiltSystem クラスの
+% インスタンスオブジェクトを生成する際に変更することもできる。
+% まず、以下のテストメソッドを GradFiltSystemTestCase に追加しよう。
 %
-% 線形フィルタによる周波数特性の変化は、
-% フィルタの周波数応答により確認できる。
-% 
-% 何故ならば、時間領域での畳込み演算は
-%
-% $$ y[n] = h[n] \ast x[n] \ \stackrel{\mathrm{DTFT}}{\longleftrightarrow}\
-%   Y(e^{j\omega}) = H(e^{j\omega})X(e^{j\omega}) $$
-%
-% のように周波数（DTFT: 離散時間フーリエ変換）領域では
-% 積演算に対応するためである。ここで、
-% 
-% * $$ X(e^{j\omega}) $$ : 入力 $$ x[n] $$ の周波数特性
-% * $$ Y(e^{j\omega}) $$ : 出力 $$ y[n] $$ の周波数特性  
-% * $$ H(e^{j\omega}) $$ : フィルタ係数（インパルス応答） $$ h[n] $$ 
-%   の周波数応答
-%
-% である。
-%
-% フィルタ係数 $$ h[n] $$ の周波数応答は <matlab:doc('freqz') freqz> 関数
-% により確認できる。
-
-figure(4)
-freqz(h)
+%   methods (Test)
+%      ...（省略）
+%      function testSobelKernel(testCase)
+%         % 期待値
+%         kernelExpctd = [  1  2  1 ;
+%                           0  0  0 ;
+%                          -1 -2 -1 ];
+%         % ターゲットクラスのインスタンス化
+%         obj = GradFiltSystem('Kernel',kernelExpctd);
+%         % プロパティー Kernel の取得
+%         kernelActual = get(obj,'Kernel');
+%         % プロパティー Kernel の検証
+%         testCase.verifyEqual(kernelActual,kernelExpctd)
+%      end     
+%      ...（省略）
+%   end
 
 %%
-% 
-% 振幅応答を確認すると、正規化周波数 0.3 から　0.4 の間から高域に渡り
-% -6 [dB] 以上の減衰特性をもち、特に 0.6 から 0.7 の間で大きく減衰する特性が
-% 確認できる。
+% 上のテストを通過するようにコンストラクタを定義しよう。
 %
-% なお、
+% コンストラクタは、 属性を指定しないmethodsブロック（パブリック）内で
+% クラス名と同じ名前のメソッドとして定義する。
 %
-% $$ H(e^{j\omega}) = \sum_{n=-\infty}^{\infty} h[n]e^{-j\omega n} 
-%    = h[0]e^{-j0} + h[1]e^{-j\omega} + h[2]e^{-j2\omega} $$
-%
-% $$ = \frac{1}{3}(e^{j\omega} + 1 + e^{-j\omega})e^{-j\omega} 
-%     = \frac{1}{3}(1 + 2\cos\omega)e^{-j\omega} $$
-%
-% より、 
-%
-% * $$ \omega = 0 $$ で、  $$ |H(e^{j\omega})| = 1 $$
-% * $$ \omega = \frac{2\pi}{3} $$ で、  $$ |H(e^{j\omega})| = 0 $$
-%
-% となることが確認できる。
+%   methods
+%      % コンストラクタ
+%      function obj = GradFiltSystem(varargin)
+%         setProperties(obj,nargin,varargin{:})
+%      end
+%   end
+%   methods (Access = protected)
+%      ...
+%   end
 
 %%
-% [ <part3.html トップ> ]
-
-%% 二次元信号の周波数特性
-% では、画像データに対するフィルタリングに話を進めよう。
-% 先に示したオーディオデータと同様に線形フィルタ処理を施すことができる。
-% 
-% まず、 開いている全ての Figure を <matlab:doc('close') close> 関数で
-% で閉じた後、予め用意されている画像データ cameraman を
-% 読み込んで表示しよう。
-
-close all
-figure(1)
-X = imread('cameraman.tif');
-imshow(X)
-
-%%
-% 画像データは変数 X に符号なし整数８ビット型配列として保持されるので、
-% これを倍精度実数型に変換しよう。
-
-X = im2double(X);
-whos X
-
-%%
-% <matlab:doc('fft2') fft2> 関数を利用することで、
-% 画像データの二次元の周波数解析を実行できる。
-% 画像サイズに合わせて
+% <matlab:doc('varargin') varargin> は可変長の引数入力を受け取る。
+% <matlab:doc('matlab.System.setProperties') setProperties> は、
 %
-% * 二次元FFT点数: $$ 256\times 256 $$
+% _'プロパティ名1'_, _プロパティ値1_,_'プロパティ名2'_, _プロパティ値2_,...
 %
-% と設定し二次元周波数解析を実行しよう。 
-
-F = fft2(X,256,256);
-whos F
-
-%%
-% 変数 F に二次元離散フーリエ変換(DFT)係数が保持される。
-% なお、複素数として結果が得られるため、絶対値をとって
-% 振幅特性を求めてみよう。
-
-Fmag = abs(F);
-whos Fmag
-
-%%
-% 変数 Fmag には、振幅特性として実数配列が保持される。
-% <matlab:doc('surface') surface> 関数を利用して、
-% 特性を可視化しよう。
-%
-% surface プロットを調整するためのハンドルオブジェクトとして
-% 変数 hsrfc を用意しておこう。
-
-figure(2)
-hsrfc = surface(20*log10(Fmag));
-set(hsrfc,'EdgeColor','none');
-
-%%
-% ここでは、デシベルに換算している点に注意する。
-%
-% グラフが見やすいようカラーバーを設置する。
-
-colorbar
-caxis([ -20 80 ])
-
-%%
-% 中心が直流となるように <matlab:doc('fftshift') fftshift> 関数を用いて
-% 配列をシフトする。
-
-set(hsrfc,'ZData',fftshift(hsrfc.ZData)); % Z軸のシフト
-set(hsrfc,'CData',fftshift(hsrfc.CData)); % カラー軸のシフト
-
-%%
-% 正規化周波数となるよう座標の調整を行う。
-
-fstep = 1/256; % 周波数標本点の間隔
-set(hsrfc,'XData',-0.5:fstep:0.5-fstep);
-set(hsrfc,'YData',-0.5:fstep:0.5-fstep);
-xlabel('F_x (\times\pi rad/sample)')
-ylabel('F_y (\times\pi rad/sample)')
-
-%%
-% 視点を変える。
-
-view([ -15 30 ])
-zlim([ -20 80 ])
-
-%%
-% [ <part3.html トップ> ]
-
-%% 二次元信号のフィルタリング
-% 次に、画像データ X に、二次元線形フィルタ処理
-%
-% $$ y[n_y,n_x] = h[n_y,n_x] \ast 
-% x[n_y,n_x] = \sum_{k_x=0}^{N_x-1}\sum_{k_y=0}^{N_y-1}
-% h[k_y,k_x]x[n_y-k_y,n_x-k_x] $$
-%
-% を施してみよう。ここで、
-%
-% * $$ x[n_y,n_x] $$ : フィルタ入力
-% * $$ y[n_y,n_x] $$ : フィルタ出力 
-% * $$ h[n_y,n_x] $$ : フィルタ係数（インパルス応答）
-% * $$ N_y $$        : 垂直フィルタ次数
-% * $$ N_x $$        : 水平フィルタ次数
-%
-% とする。
-%
-% MATLAB では二次元線形フィルタ処理に <matlab:doc('conv2') conv2> 関数もしくは
-% <matlab:doc('images/imfilter') imfilter> 関数を利用できる。
-%
-% フィルタ係数  $$ h[n_y,n_x] $$ として配列
-%
-% $$ \left(\begin{array}{ccc}
-%    1 &  1 & 1 \\
-%    0 &  0 & 0 \\
-%   -1 & -1 & -1 \\
-%    \end{array}\right) $$
-% 
-% を利用して線形フィルタ処理を実行してみよう。
-
-H = [ 1 1 1 ; 0 0 0 ; -1 -1 -1 ];
-Y = conv2(H,X);
-
-%%
-% 変数 Y にはフィルタ処理結果が保持されている。 
-% ただし、
-
-size(Y)
-
-%%
-% のように、もとの配列 X よりもサイズが縦横 2 画素づつ増加している。
-% これは、サイズ $$ M_y\times M_x $$ の画像にサイズ 
-% $$ L_y\times L_x $$ の線形フィルタをかけるとその出力のサイズが
-%
-% $$ (M_y+L_y-1)\times (M_x+L_x-1) $$ 
-%
-% に増加する性質による。
-%
-% 上下左右、1画素ずつ削って、入力画像 X のサイズに出力画像 Y のサイズを
-% 調整しよう。 <matlab:doc('end') end> 関数を利用した配列インデックスの
-% 最大値指定を利用すると便利である。
-
-Y = Y(2:end-1,2:end-1);
-
-%%
-% また、出力画像 Y は、演算の結果、
-
-min(Y(:))
-
-%%
-% のように、負の値を含む。このため画像として表示する際には工夫が必要である。
-%
-% 実数型画像の場合、imshow 関数は、画素値が 0 から 1 にスケールされていると
-% 仮定して表示を行うので、負の値が0.5 以下、正の値が0.5以上となるよう
-% Y の値を調整する。
-
-figure(3)
-imshow(Y+0.5)
-
-%%
-% 先のフィルタは、垂直方向の微分 $$ \frac{\partial X}{\partial y} $$ 
-% の離散近似を出力する。
-%
-% 出力 Y の周波数特性を確認しよう。
-
-figure(4)
-F = fft2(Y,256,256);
-Fmag = abs(F);
-hsrfc = surface(20*log10(Fmag));
-set(hsrfc,'EdgeColor','none');
-colorbar
-caxis([ -20 80 ])
-set(hsrfc,'ZData',fftshift(hsrfc.ZData));
-set(hsrfc,'CData',fftshift(hsrfc.CData));
-set(hsrfc,'XData',-0.5:fstep:0.5-fstep);
-set(hsrfc,'YData',-0.5:fstep:0.5-fstep);
-xlabel('F_x (\times\pi rad/sample)')
-ylabel('F_y (\times\pi rad/sample)')
-view([ -15 30 ])
-zlim([ -20 80 ])
-
-%%
-% 入力 X と出力 Y の周波数特性を比較してみて欲しい。
-% どのようなことに気が付くだろうか？
-%
-% * 直流におけるピークがなくなる。
-% * 水平方向の高域に減衰が見られる。
-%
-% ということに注意して観察して欲しい。
-
-%%
-% [ <part3.html トップ> ]
-
-%% 二次元フィルタの周波数応答
-%
-% 二次元線形フィルタによる周波数特性の変化は、
-% 一次元の場合と同様に、フィルタの周波数応答により確認できる。
-% 
-% 何故ならば、空間領域での畳込み演算は
-%
-% $$ y[n_y,n_x] = h[n_y,n_x] \ast x[n_y,n_x] \ 
-%    \stackrel{\mathrm{DSFT}}{\longleftrightarrow}\
-%   Y(e^{j\omega_y},e^{j\omega_x}) = 
-%   H(e^{j\omega_y},e^{j\omega_x})X(e^{j\omega_y},e^{j\omega_x}) $$
-%
-% のように周波数（DSFT: 離散空間フーリエ変換）領域では
-% 積演算に対応するためである。ここで、
-% 
-% * $$ X(e^{j\omega_y},e^{j\omega_x}) $$ : 入力 $$ x[n_y,n_x] $$ の周波数特性
-% * $$ Y(e^{j\omega_y},e^{j\omega_x}) $$ : 出力 $$ y[n_y,n_x] $$ の周波数特性  
-% * $$ H(e^{j\omega_y},e^{j\omega_x}) $$ : フィルタ係数（インパルス応答）
-% $$ h[n_y,n_x] $$ の周波数応答
-%
-% である。
-%
-% フィルタ係数 $$ h[n_y,n_x] $$ の周波数応答は
-% <matlab:doc('freqz2') freqz2> 関数により確認できる。
-
-figure(5)
-freqz2(H)
-
-%%
-% 
-% 振幅応答を確認すると、直流と水平方向の高周波数成分に対する減衰特性をもち、
-% 垂直方向については帯域通過特性をもつことが確認できる。
-%
-% なお、
-%
-% $$ H(e^{j\omega_y},e^{j\omega_x}) = \sum_{n_x=-\infty}^{\infty}
-% \sum_{n_y=-\infty}^{\infty} 
-% h[n_x,n_y]e^{-j\omega_y n_y}e^{-j\omega_x n_x} $$
-%
-% $$ = (e^{j\omega_y} - e^{-j\omega_y})(e^{j\omega_x} + 1 + e^{-j\omega_x}) $$
-%
-% $$ = 2\sin\omega_y(1 + 2\cos\omega_x)e^{-j\frac{\pi}{2}} $$
-%
-% より、 
-%
-% * $$ \omega_y = 0 $$ で、
-% $$ |H(e^{j\omega_y},e^{j\omega_x})| = 0 $$
-% * $$ \omega_y = \pi $$ で、
-% $$ |H(e^{j\omega_y},e^{j\omega_x})| = 0 $$
-% * $$ \omega_x = \frac{2\pi}{3} $$ で、
-% $$ |H(e^{j\omega_y},e^{j\omega_x})| = 0 $$
-% * $$ \omega_y = \pm\frac{\pi}{2}, \omega_x = 0 $$ で、
-% $$ |H(e^{j\omega_y},e^{j\omega_x})| = 6 $$
-%
-% となることが確認できる。
+% の組合せでの設定を可能とする。
 
 %%
 % [ <part3.html トップ> ]
 
 %% 演習課題
 %
-% *課題3-1. 水平微分フィルタ*
+% *課題3-1. HSV2RGBクラス*
 % 
-% フィルタ係数  $$ h[n_y,n_x] $$ として配列
+% 次のテストクラス
 %
-% $$ \left(\begin{array}{ccc}
-%    1 &  0 & -1 \\
-%    1 &  0 & -1 \\
-%    1 &  0 & -1 \\
-%    \end{array}\right) $$
-% 
-% （水平微分の離散近似フィルタ）を用意し、
-% 画像ファイル cameraman.tif のグレースケール画像に対して
-% 線形フィルタ処理を施し、処理結果を画像ファイル cameramangradx.tif に保存せよ。
-% （負の値を考慮して、値0.5 によりかさ上げすること）。
+%   classdef Hsv2RgbSystemTestCase < matlab.unittest.TestCase
+%       %HSV2RGBSYSTEMTESTCASE Hsv2RgbSystem のテストケース
+%       properties
+%       end
+%       methods (Test)
+%           function testSize(testCase)
+%               % 準備
+%               h = zeros(1,2);
+%               s = zeros(1,2);
+%               v = zeros(1,2);
+%               % 期待値
+%               szRExpctd = [ 1 2 ];
+%               szGExpctd = [ 1 2 ];
+%               szBExpctd = [ 1 2 ];
+%               % ターゲットのインスタンス化
+%               obj = Hsv2RgbSystem();
+%               % 実行結果
+%               [r,g,b] = step(obj,h,s,v);
+%               % サイズの検証
+%               testCase.verifySize(r,szRExpctd);
+%               testCase.verifySize(g,szGExpctd);
+%               testCase.verifySize(b,szBExpctd);
+%           end
+%           function testValues(testCase)
+%               % 準備
+%               h = rand(4,6);
+%               s = rand(4,6);
+%               v = rand(4,6);
+%               hsv = cat(3,h,s,v); % 三次元配列化
+%               % 期待値
+%               rgbExpctd = hsv2rgb(hsv); 
+%               % ターゲットのインスタンス化
+%               obj = Hsv2RgbSystem();
+%               % 実行結果
+%               [rActual,gActual,bActual] = step(obj,h,s,v);
+%               % 配列の値の検証
+%               testCase.verifyEqual(rActual,rgbExpctd(:,:,1));
+%               testCase.verifyEqual(gActual,rgbExpctd(:,:,2));
+%               testCase.verifyEqual(bActual,rgbExpctd(:,:,3));
+%           end
+%       end
+%   end
 %
-% また、フィルタの周波数特性をグラフで確認せよ。
+% を満足するように、 Hsv2RgbSystem クラスを実装しよう。
 %
-% (処理例）
-%
+% なお、 <matlab:doc('cat') cat> 関数は指定した次元の方向に配列の結合を
+% 行う。
+
+result = run(Hsv2RgbSystemTestCase);
+
 %%
-% <<cameramangradx.png>>
+% Hsv2RgbSystem を正しく実装できれば、テストは成功する。
+
 %%
-% <<freqz2gradx.png>>
+% *課題3-2. 勾配フィルタクラス*
+%
+% 次のテストクラス
+%
+%   classdef GradFiltSystemTestCase < matlab.unittest.TestCase
+%       %GRADFILTSYSTEMTESTCASE GradFiltSystem のテストケース
+%       properties
+%       end
+%       methods (Test)
+%           function testDefaultKernel(testCase)
+%               % 期待値
+%               kernelExpctd = [  1  1  1 ;
+%                                 0  0  0 ;
+%                                -1 -1 -1 ];
+%               % ターゲットクラスのインスタンス化
+%               obj = GradFiltSystem();
+%               % プロパティー Kernel の取得
+%               kernelActual = get(obj,'Kernel');
+%               % プロパティー Kernel の検証
+%               testCase.verifyEqual(kernelActual,kernelExpctd)
+%           end
+%           function testSobelKernel(testCase)
+%               % 期待値
+%               kernelExpctd = [  1  2  1 ;
+%                                 0  0  0 ;
+%                                -1 -2 -1 ];
+%               % ターゲットクラスのインスタンス化
+%               obj = GradFiltSystem('Kernel',kernelExpctd);
+%               % プロパティー Kernel の取得
+%               kernelActual = get(obj,'Kernel');
+%               % プロパティー Kernel の検証
+%               testCase.verifyEqual(kernelActual,kernelExpctd)
+%           end        
+%           function testStepWithPrewittKernel(testCase)
+%               % 準備
+%               H = [  1  1  1 ;
+%                      0  0  0 ;
+%                     -1 -1 -1 ];
+%               % 期待値の準備
+%               I  = imread('cameraman.tif');
+%               X  = im2double(I);
+%               Yv = conv2(H  ,X);        % 垂直勾配の計算
+%               Yv = Yv(2:end-1,2:end-1); % 処理画像のクリッピング
+%               Yh = conv2(H.',X);        % 水平勾配の計算　
+%               Yh = Yh(2:end-1,2:end-1); % 処理画像のクリッピング
+%               magExpctd = sqrt(Yv.^2+Yh.^2); % 勾配の大きさの期待値
+%               angExpctd = atan2(Yv,Yh);     % 勾配の偏角のの期待値
+%               % ターゲットクラスのインスタンス化
+%               obj = GradFiltSystem();
+%               % 処理結果
+%               [magActual,angActual] = step(obj,X);
+%               % 処理結果の検証
+%               testCase.verifyEqual(magActual,magExpctd,'AbsTol',1e-6)
+%               testCase.verifyEqual(angActual,angExpctd,'AbsTol',1e-6)
+%           end        
+%       end
+%   end
+%
+% を満足するように、 GradFiltSystem クラスを実装しよう。
+
+result = run(GradFiltSystemTestCase);
+
 %%
-% *課題3-2. 勾配の大きさと偏角*
-%
-% 垂直微分フィルタ出力 $$ \frac{\partial X}{\partial y} $$ と 
-% 水平微分フィルタ出力 $$ \frac{\partial X}{\partial x} $$ から、
-%
-% * 勾配の大きさ : $$ \|\Delta X \| = \sqrt{
-% \left(\frac{\partial X}{\partial y}\right)^2
-% +\left(\frac{\partial X}{\partial x}\right)^2} $$
-% * 勾配の方向　 : $$ \angle \Delta X = \tan^{-1}
-% \left((\frac{\partial X}{\partial y})/(
-% \frac{\partial X}{\partial x})\right) $$
-%
-% を計算し、処理結果をそれぞれ画像ファイル cameramangradmag.tif と
-% cameramangradang.tif に保存せよ。ただし、勾配の方向については、
-% 値の範囲を 0 から 1 に換算すること。
-%
-% (処理例）
-%
+% GradFiltSystem を正しく実装できれば、テストは成功する。
+
 %%
-% <<cameramangradmag.png>>
-%%
-% <<cameramangradang.png>>
+% （処理例）
+
+hrs = Hsv2RgbSystem();        
+gfs = GradFiltSystem();
+
+I = imread('cameraman.tif');     % 画像入力
+[mag,ang] = step(gfs,I);         % 勾配フィルタリング
+ang = (ang+pi)/(2*pi);           % 偏角の正規化
+mag = min(mag,1);                % 大きさの飽和処理
+[R,G,B] = step(hrs,ang,mag,mag); % 疑似カラー化
+J = cat(3,R,G,B);                % RGB配列結合
+imshow(J)                        % 画像表示
 
 %%
 % <html>
