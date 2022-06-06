@@ -9,9 +9,9 @@
 % 
 
 %%
-% <part6.html Part5> |
+% <part4.html Part4> |
 % <index.html メニュー> |
-% <part7.html Part7>
+% <part6.html Part6>
 
 %%
 % *概要*
@@ -57,7 +57,7 @@
 % のように <matlab:doc('save_system') save_system> 関数を利用すればよい。
 
 %%
-% [ <part6.html トップ> ]
+% [ <part5.html トップ> ]
 
 %% Simulink ライブラリブラウザー
 % Simulink では、処理の構成要素となるブロックを並べて接続し、
@@ -73,7 +73,7 @@
 % <<library_browser.png>>
 
 %%
-% [ <part6.html トップ> ]
+% [ <part5.html トップ> ]
 
 %% 映像ファイル入出力モデル
 % では、例として映像ファイルの入力と出力を行うシステムモデルを構築しよう。
@@ -186,7 +186,7 @@
 % シミュレーションをしながら出力映像を確認することができる。詳細は割愛する。
 
 %%
-% [ <part6.html トップ> ]
+% [ <part5.html トップ> ]
 
 %% MATLAB System ブロック
 % MATLAB System ブロックを利用すると、System object を Simulink ブロック
@@ -235,7 +235,7 @@
 % 実行して、AVIファイル output.avi を確認してみよう。
 
 %%
-% [ <part6.html トップ> ] 
+% [ <part5.html トップ> ] 
 
 %% アイコンのカスタマイズ
 % MATLAB System ブロックの入出力名は、呼び出される System object 上で
@@ -249,15 +249,7 @@
 % 次に、methods(Access=protected) ブロックに、以下のメソッドを追記する。
 %
 %   methods (Access=protected)
-%      ...（省略）
-%      % 入力ポート数
-%      function N = getNumInputsImpl(obj)
-%          N = 1; 
-%      end
-%      % 出力ポート数        
-%      function N = getOutputNamesImpl(obj)
-%          N = 1;
-%      end      
+%      ...（省略） 
 %      % 入力ポート名
 %      function inputName = getInputNamesImpl(obj)
 %             inputName = 'RGB';
@@ -270,18 +262,9 @@
 %   end
 
 %% 
-% さらに、
-%
-% * <matlab:doc('matlab.system.mixin.CustomIcon') matlab.system.mixin.CustomIcon>
-%
-% を継承することで、アイコンをカスタマイズできる。
+% さらに、アイコンもカスタマイズできる。
 % 
-% まず、ソースコードの classdef の行を以下のように修正する。
-%
-%   classdef Rgb2GraySystem < matlab.System ...
-%         & matlab.system.mixin.CustomIcon
-%
-% 次に、methods(Access=protected) ブロックに、以下のメソッドを追記する。
+% methods(Access=protected) ブロックに、以下のメソッドを追記する。
 %
 %   methods (Access=protected)
 %      ...（省略）
@@ -298,29 +281,13 @@
 %
 % <<videorgb2gray_slx_03.png>>
 
-
 %%
-% [ <part6.html トップ> ]
-
-%% 演算精度と信号特性伝搬（オプション）
-%
-% * <matlab:doc('matlab.system.mixin.Propagates') matlab.system.mixin.Propagates>
-%
-% （準備中）
-
-%% フィードスルー（オプション）
-%
-% * <matlab:doc('matlab.system.mixin.Nondirect') matlab.system.mixin.Nondirect>
-%
-% （準備中）
-
-%%
-% [ <part6.html トップ> ]
+% [ <part5.html トップ> ]
 
 %% 演習課題
-% *演習課題6-1. Prewitt勾配フィルタ*
+% *演習課題5-1. Prewitt勾配フィルタ*
 %
-% 本演習Part6で作成した System object クラス
+% 本演習Part4で作成した System object クラス
 %
 %   * Rgb2GraySystem
 %   * GradFiltSystem
@@ -330,24 +297,24 @@
 % モデル化しよう。
 % 
 %   vrObj = VideoReader('vipmen.avi');
-%   frameRate = get(vrObj,'FrameRate');
+%   frameRate = vrObj.FrameRate;
 %   vwObj = VideoWriter('vipmengradfilt.avi');
-%   set(vwObj,'FrameRate',frameRate);
+%   vwObj.FrameRate = frameRate;
 %   rgsObj = Rgb2GraySystem();
 %   hrsObj = Hsv2RgbSystem();
 %   gfsObj = GradFiltSystem();
-%   open(vwObj)
-%   while (hasFrame(vrObj))
-%      frame     = readFrame(vrObj);         % フレーム入力
-%      graysc    = step(rgsObj,frame);       % グレースケール化
-%      [mag,ang] = step(gfsObj,graysc);      % 勾配フィルタリング
+%   vwObj.open()
+%   while (vrObj.hasFrame())
+%      frame     = vrObj.readFrame();        % フレーム入力
+%      graysc    = rgsObj.step(frame);       % グレースケール化
+%      [mag,ang] = gfsObj.step(graysc);      % 勾配フィルタリング
 %      ang       = (ang+pi)/(2*pi);          % 偏角の正規化
 %      mag       = min(mag,1);               % 大きさの飽和処理
-%      [r,g,b]   = step(hrsObj,ang,mag,mag); % 疑似カラー化
+%      [r,g,b]   = hrsObj.step(ang,mag,mag); % 疑似カラー化
 %      frame     = cat(3,r,g,b);             % RGB配列結合
-%      writeVideo(vwObj,frame);              % フレーム出力 
+%      vwObj.writeVideo(frame);              % フレーム出力 
 %   end
-%   close(vwObj)
+%   vwObj.close()
 %
 % （モデル例）
 %
@@ -365,10 +332,10 @@
 % <<vipmengradfilt_avi.png>>
 
 %%
-% *演習課題6-2. Sobel勾配フィルタ*
+% *演習課題5-2. Sobel勾配フィルタ*
 %
-% 演習課題6-1で作成した Prewitt 勾配フィルタモデルのフィルタカーネル
-% を演習課題5-1で紹介した Sobel カーネルに変えてシミュレーションを実行
+% 演習課題4-1で作成した Prewitt 勾配フィルタモデルのフィルタカーネル
+% を演習課題4-1で紹介した Sobel カーネルに変えてシミュレーションを実行
 % してみよう。
 % 
 % * ヒント：GradFilterSystem ブロックのパラメータ Kernel を修正すればよい。
@@ -382,7 +349,7 @@
 % <hr>
 % </html>
 %%
-% <part5.html Part5> |
+% <part4.html Part4> |
 % <index.html メニュー> |
-% <part6.html トップ> |
-% <part7.html Part7>
+% <part5.html トップ> |
+% <part6.html Part6>

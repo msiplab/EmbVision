@@ -44,7 +44,7 @@ classdef GradFiltSystemTestCase < matlab.unittest.TestCase
             % ターゲットクラスのインスタンス化
             obj = GradFiltSystem();
             % 処理結果
-            [magActual,angActual] = step(obj,X);
+            [magActual,angActual] = obj.step(X);
             % 処理結果の検証
             testCase.verifyEqual(magActual,magExpctd,'AbsTol',1e-6)
             testCase.verifyEqual(angActual,angExpctd,'AbsTol',1e-6)

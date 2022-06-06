@@ -1,5 +1,4 @@
-classdef Hsv2RgbSystem < matlab.System ...
-         & matlab.system.mixin.CustomIcon
+classdef Hsv2RgbSystem < matlab.System 
     % HSV2RGBSYSTEM HSV から RGB への変換
     %    
     methods (Access = protected)
@@ -11,14 +10,6 @@ classdef Hsv2RgbSystem < matlab.System ...
             imgG = imgOut(:,:,2);
             imgB = imgOut(:,:,3);
         end
-        % 入力ポート数
-        function N = getNumInputsImpl(obj)
-            N = 3; 
-        end
-        % 出力ポート数        
-        function N = getNumOutputsImpl(obj)
-            N = 3;
-        end      
         % 入力ポート名
         function [inputName1,inputName2,inputName3] = getInputNamesImpl(obj)
             inputName1 = 'H';

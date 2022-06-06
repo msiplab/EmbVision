@@ -9,8 +9,9 @@
 % 
 
 %%
-% <part6.html Part6> |
+% <part5.html Part5> |
 % <index.html メニュー>
+% <part7.html Part7>
 
 %% 
 % *概要*
@@ -32,10 +33,10 @@
 % が既にインストールされている前提で話を進める。
 
 %%
-% [ <part7.html トップ> ]
+% [ <part6.html トップ> ]
 
 %% シミュレーションモデル
-% まず、本演習 Part6 で作成した Simulink モデル videogradfilt を 
+% まず、本演習 Part5 で作成した Simulink モデル videogradfilt を 
 % Raspberry Pi 用に変更しよう。
 %
 % モデル videogradfilt を読み込み、 videogradfiltraspi として保存する。
@@ -138,7 +139,7 @@
 % 以降、「To Video Display」ブロックは不要なのでモデルから削除しておこう。
 
 %%
-% [ <part7.html トップ> ]
+% [ <part6.html トップ> ]
 
 %% ハードウェア実行の準備
 % Raspberry Pi 用に構築したモデルを実際のボード上で動作させてみよう。
@@ -207,7 +208,7 @@
 % 「OK」をクリックし準備を完了する。
 
 %%
-% [ <part7.html トップ> ]
+% [ <part6.html トップ> ]
 
 %% エクスターナルモード
 % では、Simulink モデル videogradfiltraspi をエクスターナルモードで動作
@@ -228,7 +229,7 @@
 % Raspberry Pi に接続した Web カメラの処理映像が Simulink 上で表示される。
 
 %%
-% [ <part7.html トップ> ]
+% [ <part6.html トップ> ]
 
 %% スタンドアロン実行
 % では、Simulink モデル videogradfiltraspi を Raspberry Pi 上で
@@ -300,18 +301,18 @@
 %   h.run('videogradfiltraspi')
 
 %%
-% [ <part7.html トップ> ]
+% [ <part6.html トップ> ]
 
 %% 演習課題
 %
-% *演習課題7-1. Sobel勾配フィルタ* 
+% *演習課題6-1. Sobel勾配フィルタ* 
 %
 % 演習課題5-1で紹介した Sobel カーネルに変えて Raspberry Pi 上で、
 % スタンドアロン実行しよう。
 
 %%
 % 
-% *演習課題7-2. モデルの自作と実行*（オプション） 
+% *演習課題6-2. モデルの自作と実行*（オプション） 
 %
 % 自ら映像処理モデルを創造設計し、
 % Raspberry Pi 上で、スタンドアロン実行しよう。
@@ -332,6 +333,7 @@
 % <hr>
 % </html>
 %%
-% <part6.html Part6> |
+% <part5.html Part5> |
 % <index.html メニュー> |
-% <part7.html トップ> 
+% <part6.html トップ> 
+% <part7.html Part7>

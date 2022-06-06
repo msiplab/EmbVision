@@ -15,7 +15,7 @@ classdef Hsv2RgbSystemTestCase < matlab.unittest.TestCase
             % ターゲットのインスタンス化
             obj = Hsv2RgbSystem();
             % 実行結果
-            [r,g,b] = step(obj,h,s,v);
+            [r,g,b] = obj.step(h,s,v);
             % サイズの検証
             testCase.verifySize(r,szRExpctd);
             testCase.verifySize(g,szGExpctd);
@@ -32,7 +32,7 @@ classdef Hsv2RgbSystemTestCase < matlab.unittest.TestCase
             % ターゲットのインスタンス化
             obj = Hsv2RgbSystem();
             % 実行結果
-            [rActual,gActual,bActual] = step(obj,h,s,v);
+            [rActual,gActual,bActual] = obj.step(h,s,v);
             % 配列の値の検証
             testCase.verifyEqual(rActual,rgbExpctd(:,:,1));
             testCase.verifyEqual(gActual,rgbExpctd(:,:,2));

@@ -16,12 +16,12 @@ classdef FrameAveSystemTestCase < matlab.unittest.TestCase
             % ターゲットクラスのインスタンス化
             obj = FrameAveSystem();
             % 初期状態の検証
-            state      = getDiscreteState(obj);
+            state      = obj.getDiscreteState();
             cnt0Actual = state.Count;
             testCase.verifyEqual(cnt0Actual,cnt0Expctd)            
             % 処理結果
-            res1Actual = step(obj,frame1);
-            state      = getDiscreteState(obj);
+            res1Actual = obj.step(frame1);
+            state      = obj.getDiscreteState();
             cnt1Actual = state.Count;
             % 処理結果の検証
             testCase.verifyEqual(res1Actual,res1Expctd,'RelTol',1e-6)
@@ -45,16 +45,16 @@ classdef FrameAveSystemTestCase < matlab.unittest.TestCase
             % ターゲットクラスのインスタンス化
             obj = FrameAveSystem();
             % 第１フレーム処理結果
-            res1Actual = step(obj,frame1);
-            state      = getDiscreteState(obj);
+            res1Actual = obj.step(frame1);
+            state      = obj.getDiscreteState();
             cnt1Actual = state.Count;
             % 第２フレーム処理結果
-            res2Actual = step(obj,frame2);
-            state      = getDiscreteState(obj);
+            res2Actual = obj.step(frame2);
+            state      = obj.getDiscreteState();
             cnt2Actual = state.Count;            
             % 第３フレーム処理結果
-            res3Actual = step(obj,frame3);
-            state      = getDiscreteState(obj);
+            res3Actual = obj.step(frame3);
+            state      = obj.getDiscreteState();
             cnt3Actual = state.Count;            
             % 処理結果の検証
             testCase.verifyEqual(cnt1Actual,cnt1Expctd)                        
@@ -77,17 +77,17 @@ classdef FrameAveSystemTestCase < matlab.unittest.TestCase
             % ターゲットクラスのインスタンス化
             obj = FrameAveSystem();
             % 初期状態の検証
-            state      = getDiscreteState(obj);
+            state      = obj.getDiscreteState();
             cnt0Actual = state.Count;
             testCase.verifyEqual(cnt0Actual,cnt0Expctd)            
             % 第一フレーム処理後の状態の検証
-            step(obj,frame1);
-            state      = getDiscreteState(obj);
+            obj.step(frame1);
+            state      = obj.getDiscreteState();
             cnt1Actual = state.Count;
             testCase.verifyEqual(cnt1Actual,cnt1Expctd)                        
             % リセット後の状態の検証
             reset(obj);
-            state      = getDiscreteState(obj);
+            state      = obj.getDiscreteState();
             cntrActual = state.Count;
             testCase.verifyEqual(cntrActual,cntrExpctd)                        
         end        
