@@ -24,8 +24,6 @@
 % シングルボードコンピュータ Raspberry Pi への実装コードを
 % Simulinkモデルを通じて生成することができる。
 %
-% なお、本演習は Windows(R)上のMATLABで実行する必要がある。
-%
 % 以下では、Raspberry Pi 用のサポートパッケージ
 %
 % * <http://jp.mathworks.com/help/simulink/ug/install-target-for-raspberry-pi-hardware.html Raspberry Pi>
