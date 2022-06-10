@@ -10,18 +10,18 @@ classdef CurveDetectionSystem < matlab.System
         end
     end
     methods(Access = protected)
-        function [Line,p] = stepImpl(obj,BW)
-            [y,x] = find(BW); % 検出点を座標に変換
+        function [line,p] = stepImpl(obj,bw)
+            [y,x] = find(bw); % 検出点を座標に変換
             p = polyfit(x,y,obj.Degree); % 多項式近似
 
-            Line = zeros(size(BW));
+            line = zeros(size(bw));
 
-            xline = 1:size(BW,2); % 説明変数を画像の端から端とする
+            xline = 1:size(bw,2); % 説明変数を画像の端から端とする
             yline = uint8(polyval(p,xline));    % 多項式から目的変数を求める画素に収まるように整数型にしておく
-            yline = min(max(yline,1),size(BW,1));   % 目的変数が画像内に収まるように変更する。
-            ind = sub2ind(size(BW),yline,xline);  % 座標から画像位置に変換
+            yline = min(max(yline,1),size(bw,1));   % 目的変数が画像内に収まるように変更する。
+            ind = sub2ind(size(bw),yline,xline);  % 座標から画像位置に変換
             
-            Line(ind) = 1;    % 線を描画
+            line(ind) = 1;    % 線を描画
         end
         % 入力ポート名
         function inputName = getInputNamesImpl(obj)
