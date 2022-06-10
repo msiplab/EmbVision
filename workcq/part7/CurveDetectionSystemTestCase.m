@@ -32,14 +32,18 @@ classdef CurveDetectionSystemTestCase < matlab.unittest.TestCase
             deg = 3;  % 次数
             % 期待値の設定
             coefsExpctd = polyfit(x,y,deg); % 多項式係数の期待値
-            lineExpctd = BW;    % 抽出される曲線の期待値
+            y = round(polyval(coefsExpctd,x));   % 目的変数
+            lineExpctd = zeros(size(BW),'like',BW); % 抽出される曲線の期待値
+            for idx = 1:length(x)
+                lineExpctd(y(idx),x(idx)) = 1;
+            end
             % ターゲットのインスタンス化
             obj = CurveDetectionSystem();
             % 実行結果（実現値の取得）
             [lineActual,coefsActual] = obj.step(BW);
             % 配列の値の検証
             testCase.verifyEqual(coefsActual,coefsExpctd,'AbsTol',1e-9);
-            testCase.verifyEqual(lineActual,lineExpctd);
+            testCase.verifyEqual(lineActual,lineExpctd,'AbsTol',1e-9);
         end
         function testSetDegree(testCase)
             % 期待値
