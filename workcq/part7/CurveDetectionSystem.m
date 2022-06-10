@@ -14,7 +14,7 @@ classdef CurveDetectionSystem < matlab.System
             [y,x] = find(bw); % 検出点を座標に変換
             p = polyfit(x,y,obj.Degree); % 多項式近似
 
-            line = zeros(size(bw));
+            line = zeros(size(bw),'like',bw);
 
             xline = 1:size(bw,2); % 説明変数を画像の端から端とする
             yline = uint8(polyval(p,xline));    % 多項式から目的変数を求める画素に収まるように整数型にしておく
