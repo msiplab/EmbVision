@@ -187,6 +187,7 @@ copyfile('work/part6/videogradfiltraspi_slx_09.png', [targetdir 'videogradfiltra
 copyfile('work/part6/videogradfiltraspi_slx_10.png', [targetdir 'videogradfiltraspi_slx_10.png']);
 copyfile('work/part6/videogradfiltraspi_external.png', [targetdir 'videogradfiltraspi_external.png']);
 copyfile('work/part6/videogradfiltraspi_ipaddress.png', [targetdir 'videogradfiltraspi_ipaddress.png']);
+copyfile('work/part6/videogradfiltraspi_toolchain.png', [targetdir 'videogradfiltraspi_toolchain.png']);
 
 %
 publish([lang '.part6'],type);
