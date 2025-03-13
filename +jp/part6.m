@@ -5,7 +5,7 @@
 % 新潟大学
 % 村松　正吾，高橋　勇希
 %
-% Copyright (c), All rights reserved, 2014-2022, Shogo MURAMATSU and Yuki TAKAHASHI
+% Copyright (c), All rights reserved, 2014-2025, Shogo MURAMATSU and Yuki TAKAHASHI
 % 
 
 %%
@@ -27,7 +27,7 @@
 %
 % 以下では、Raspberry Pi 用のサポートパッケージ
 %
-% * <http://jp.mathworks.com/help/simulink/ug/install-target-for-raspberry-pi-hardware.html Raspberry Pi>
+% * <https://jp.mathworks.com/matlabcentral/fileexchange/45145-matlab-support-package-for-raspberry-pi-hardware Raspberry Pi>
 %
 % が既にインストールされている前提で話を進める。
 
@@ -74,9 +74,15 @@
 % 「V4L2 Video Capture」ブロックの出力Yはグレースケールに対応する。
 % 本モデルでは、残りの出力 Cb,Crを利用しないため、以下の終端ブロックを接続した。
 %
-% * <matlab:doc('simulink/terminator') Simulink/Commonly Used Blocks/Terminator>
+% * <matlab:doc('Terminator') Simulink/Commonly Used Blocks/Terminator>
 %
-% また、「SDL Video Display」ブロックでは RGB 入力ができるよう、
+% また、後のRaspberry Pi への実装のために、ブロックパラメータのAdvancedから、
+% 
+% 「Enable Manual focus」のチェックを外しておく。
+% 
+% カメラ次第だが、これを外すことでピントが合うようになる。
+% 
+% 「SDL Video Display」ブロックでは RGB 入力ができるよう、
 % ブロックパラメータ Pixel format を RGB と編集した。
 
 %%
@@ -93,8 +99,8 @@
 %
 % この問題を回避するために、ゲイン調整とデータ型変換を行うブロック
 %
-% * <matlab:doc('simulink/gain') Simulink/Commonly Used Blocks/Gain>
-% * <matlab:doc('simulink/datatpeconversion') Simulink/Commonly Used Blocks/Convert>
+% * <matlab:doc('Gain') Simulink/Commonly Used Blocks/Gain>
+% * <matlab:doc('DataTypeConversion') Simulink/Commonly Used Blocks/Data Type Conversion>
 %
 % を「SDL Video Display」ブロックの入力部に挿入し実行しよう。
 %
@@ -110,9 +116,9 @@
 % * 「SDL Video Display」ブロックは入力の水平と垂直を転置して表示する。
 %
 % という点に注意してほしい。
-% このことを確かめるために、「Computer Vision System Toolbox/Sinks」内にある
+% このことを確かめるために、「Computer Vision Toolbox/Sinks」内にある
 %
-% * <matlab:doc('vision/tovideodisplay') To Video Display> ブロック（Windows(R)のみ）
+% * <matlab:doc('ToVideoDispla') To Video Display> ブロック（Windows(R)のみ）
 % 
 % を一時的に 「V4L2 Video Capture」の出力Yに接続して、シミュレーションを実行
 % してみよう。
@@ -136,6 +142,8 @@
 % 出力の彩色（勾配方向）が修正されていることが確認できる。
 %
 % 以降、「To Video Display」ブロックは不要なのでモデルから削除しておこう。
+%
+% ※削除しないと次項のエクスターナルモードの実行でエラーが出るため、必ず削除すること。
 
 %%
 % [ <part6.html トップ> ]
@@ -158,7 +166,7 @@
 % 独立に動作する実装コードを生成し、Raspberry Pi 上で動作させる。
 
 %%
-% まず、準備として Raspberry Pi model B/B+ を用意し
+% まず、準備として Raspberry Pi model 5 を用意し
 %
 % # MicroSD カード
 % # LAN ケーブル
@@ -171,23 +179,24 @@
 %
 % <<raspi_cableconnection.png>>
 %
-% なお、MicroSD にはRaspberry Pi Support Package から
-% ファームウェアイメージの書き込みが完了しているものとする。
+% なお、MicroSD にはRaspberry Pi Imager
 %
-% * [ツール] > [ターゲットハードウェアで実行 ] > [ファームウェアの更新... ]
+% * <https://www.raspberrypi.com/software/>
+%
+% からRaspberry Pi OSのイメージの書き込みが完了しているものとする。
 
 %%
 % では、Simulink から Raspberry Pi への接続を行うための準備をしよう。
 %
 % Simulink モデル videogradfiltraspi のメニューバーから
 %
-% * [ツール] > [ターゲットハードウェアで実行 ] > [オプション ]
+% * [ハードウェア] > [ハードウェア設定] 
 %
 % へと進む。
 %
 % <<videogradfiltraspi_slx_05.png>>
 %
-% ターゲットハードウェアとして「Raspberry Pi」を選択する。
+% ターゲットハードウェアとして「Raspberry Pi(64bit)」を選択する。
 %
 % <<videogradfiltraspi_slx_06.png>>
 %
@@ -195,14 +204,22 @@
 %
 % <<videogradfiltraspi_slx_07.png>>
 %
-% 特に、「Board information」の「Host name」は、各ボード毎に設定が異なるので
+% 特に、「Target hardware resources」の「Device Address」は、各ボード毎に設定が異なるので
 % 編集が必要となる。
 %
 % * 演習中に必要な情報を提供する。
 %
-% IPアドレスが分かれば、以下の用に編集すればよい。（192.168.11.2は一例）
+% IPアドレスが分かれば、以下の用に編集すればよい。（192.168.11.5は一例）
 %
 % <<videogradfiltraspi_ipaddress.png>>
+% 
+% 「適用」をクリックし、次にsimulinkモデルからraspberry pi上で実行するCコードを生成するための準備をする。
+% 
+% * [コード生成]
+% 
+% へと進み、ビルドプロセスのツールチェーンとして「GNU GCC Embedded Linux」を選択する。
+% 
+% <<videogradfiltraspi_toolchain.png>>
 % 
 % 「OK」をクリックし準備を完了する。
 
@@ -213,15 +230,15 @@
 % では、Simulink モデル videogradfiltraspi をエクスターナルモードで動作
 % させてみよう。
 % 
-% まず、シミュレーションのモードを「ノーマル」から
+% まず、メニューバーからモードを
 %
-% * エクスターナル
+% * ボード上で実行（エクスターナルモード）
 %
 % へと変更する。
 %
 % <<videogradfiltraspi_external.png>>
 %
-% 早速、実行してみよう。
+% 早速、「監視と調整」を押して実行してみよう。
 %
 % <<videogradfiltraspi_slx_08.png>>
 %
@@ -245,29 +262,21 @@
 % 正しく接続されていれば、Rasbian の起動を Raspberry Pi に接続した
 % ディスプレイ上で確認できる。
 %
-% なお，Raspberry Pi Camera Module を利用するためには以下のサイトを参照してほしい。
+% なお、Raspberry Pi Camera Module を利用するためには以下のサイトを参照してほしい。
 % 
 % http://www.mathworks.com/matlabcentral/answers/122199-simulink-with-raspberry-pi-camera-capture
 
 %%
 % Simulink モデル videogradfiltraspi に戻り、
 %
-% * 「ハードウェアに展開」
+% * 「ビルド、展開、起動」
 %
 % のボタンをクリックしよう。
 %
 % <<videogradfiltraspi_slx_09.png>>
 %
-% Windowsのコマンドウィンドウが立ち上がらり、Simulink モデルの左下に
-%
-% * 「モデルは'Raspberry Pi' に正常に配布されました。」
-%
-% と表示されれば成功である。
-%
-% <<videogradfiltraspi_slx_10.png>>
-%
 % Raspberry Pi に接続されたディスプレイ上にカメラからの映像の
-% 処理結果が表示される。
+% 処理結果が表示されれば成功である。
 % 
 % <<raspi_videogradfilt.png>>
 %
@@ -297,7 +306,7 @@
 % Raspberry Pi 上でモデルを再起動することもできる。
 %
 %   open_system('videogradfiltraspi')
-%   h.run('videogradfiltraspi')
+%   h.runModel('videogradfiltraspi')
 
 %%
 % [ <part6.html トップ> ]

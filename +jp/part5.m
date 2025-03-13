@@ -5,7 +5,7 @@
 % 新潟大学
 % 村松　正吾，高橋　勇希
 %
-% Copyright (c), All rights reserved, 2014-2022, Shogo MURAMATSU and Yuki TAKAHASHI
+% Copyright (c), All rights reserved, 2014-2025, Shogo MURAMATSU and Yuki TAKAHASHI
 % 
 
 %%
@@ -80,11 +80,11 @@
 %
 % まず、左側のリストから
 %
-% * <matlab:doc('vision') Computer Vision System Toolbox(TM)>
+% * <matlab:doc('vision') Computer Vision Toolbox(TM)>
 %
 % を選択しよう。
 %
-% すると、ライブラリブラウザーは Computer Vision System Toolbox の
+% すると、ライブラリブラウザーは Computer Vision Toolbox の
 % ブロック群を表示する。
 % 
 % <<cvs_library.png>>
@@ -100,7 +100,7 @@
 % 
 % <<cvs_sources.png>>
 %
-% をクリックし、「Computer Vision System Toolbox/Sources」 のブロック群を開こう。
+% をクリックし、「Computer Vision Toolbox/Sources」 のブロック群を開こう。
 %
 % <<cvs_sources_blocks.png>>
 %
@@ -112,12 +112,12 @@
 % <<videoio_slx_01.png>>
 
 %%
-% 続けて、Simulink ライブラリブラウザー「Computer Vision System Toolbox」から
+% 続けて、Simulink ライブラリブラウザー「Computer Vision Toolbox」から
 % Sinks のアイコン
 % 
 % <<cvs_sinks.png>>
 %
-% をクリックし、「Computer Vision System Toolbox/Sinks」 のブロック群を開こう。 
+% をクリックし、「Computer Vision Toolbox/Sinks」 のブロック群を開こう。 
 %
 % <<cvs_sinks_blocks.png>>
 %
@@ -177,10 +177,10 @@
 % <<tomultimediafile_blockparameter.png>>
 
 %%
-% 出力先として「Computer Vision System Toolbox/Sinks」内にある
+% 出力先として「Computer Vision Toolbox/Sinks」内にある
 %
 % * <matlab:doc('videoviewer') Video Viewer> ブロック
-% * <matlab:doc('vision/tovideodisplay') To Video Display> ブロック（Windows(R)のみ）
+% * <matlab:doc('ToVideoDisplay') To Video Display> ブロック（Windows(R)のみ）
 % 
 % を利用すれば、Simulink 上でビューワーが現れ、
 % シミュレーションをしながら出力映像を確認することができる。詳細は割愛する。
@@ -255,7 +255,7 @@
 %          N = 1; 
 %      end
 %      % 出力ポート数        
-%      function N = getOutputNamesImpl(obj)
+%      function N = getNumOutputsImpl(obj)
 %          N = 1;
 %      end      
 %      % 入力ポート名
@@ -355,10 +355,10 @@
 %
 % ただし、以下のブロックを利用。
 %
-% * <matlab:doc('simulink/saturation') Simulink/Commonly Used Blocks/Saturation>
-% * <matlab:doc('simulink/constant') Simulink/Commonly Used Blocks/Constant>
-% * <matlab:doc('simulink/add') Simulink/Commonly Used Blocks/Sum>
-% * <matlab:doc('simulink/gain') Simulink/Commonly Used Blocks/Gain>
+% * <matlab:doc('Saturation') Simulink/Commonly Used Blocks/Saturation>
+% * <matlab:doc('Constant') Simulink/Commonly Used Blocks/Constant>
+% * <matlab:doc('Sum') Simulink/Commonly Used Blocks/Sum>
+% * <matlab:doc('Gain') Simulink/Commonly Used Blocks/Gain>
 %
 % （処理例）
 %

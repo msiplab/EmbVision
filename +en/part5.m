@@ -7,7 +7,7 @@
 % Niigata Univ.
 % </html>
 %
-% Copyright (c), All rights reserved, 2014-2022, Shogo MURAMATSU
+% Copyright (c), All rights reserved, 2014-2025, Shogo MURAMATSU
 %
 
 %%
@@ -87,12 +87,12 @@
 %
 % Choose 
 %
-% * <matlab:doc('vision') Computer Vision System Toolbox(TM)>
+% * <matlab:doc('vision') Computer Vision Toolbox(TM)>
 %
 % from the left list of the library browser.
 %
 % Then, the browser displays a set of blocks 
-% in Computer Vision System Toolbox.
+% in Computer Vision Toolbox.
 % 
 % <<cvs_library.png>>
 %
@@ -108,7 +108,7 @@
 % <<cvs_sources.png>>
 %
 % from the right menu and open the block library in 
-% Computer Vision System Toolbox/Sources.
+% Computer Vision Toolbox/Sources.
 %
 % <<cvs_sources_blocks.png>>
 %
@@ -124,8 +124,8 @@
 % 
 % <<cvs_sinks.png>>
 %
-% from the Computer Vision System Toolbox library and open the block 
-% library in Computer Vision System Toolbox/Sinks.
+% from the Computer Vision Toolbox library and open the block 
+% library in Computer Vision Toolbox/Sinks.
 %
 % <<cvs_sinks_blocks.png>>
 %
@@ -190,9 +190,9 @@
 % As the output target, one can use 
 %
 % * <matlab:doc('videoviewer') Video Viewer> block
-% * <matlab:doc('vision/tovideodisplay') To Video Display> block (only Windows(R))
+% * <matlab:doc('ToVideoDisplay') To Video Display> block (only Windows(R))
 % 
-% in the "Computer Vision System Toolbox/Sinks" library.
+% in the "Computer Vision Toolbox/Sinks" library.
 % A video viewer will appear on Simulink and the output video 
 % can be monitored during the simulation.
 % For the detail, refer to the document.
@@ -268,7 +268,7 @@
 %          N = 1; 
 %      end
 %      % # of output ports
-%      function N = getOutputNamesImpl(obj)
+%      function N = getNumOutputsImpl(obj)
 %          N = 1;
 %      end      
 %      % Names of input ports
@@ -372,10 +372,10 @@
 %
 % In the above mode, the following existing blocks were used.
 %
-% * <matlab:doc('simulink/saturation') Simulink/Commonly Used Blocks/Saturation>
-% * <matlab:doc('simulink/constant') Simulink/Commonly Used Blocks/Constant>
-% * <matlab:doc('simulink/add') Simulink/Commonly Used Blocks/Sum>
-% * <matlab:doc('simulink/gain') Simulink/Commonly Used Blocks/Gain>
+% * <matlab:doc('Saturation') Simulink/Commonly Used Blocks/Saturation>
+% * <matlab:doc('Constant') Simulink/Commonly Used Blocks/Constant>
+% * <matlab:doc('Sum') Simulink/Commonly Used Blocks/Sum>
+% * <matlab:doc('Gain') Simulink/Commonly Used Blocks/Gain>
 %
 % (Example Answer)
 %
