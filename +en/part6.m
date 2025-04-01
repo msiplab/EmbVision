@@ -7,7 +7,7 @@
 % Niigata Univ.
 % </html>
 %
-% Copyright (c), All rights reserved, 2014-2022, Shogo MURAMATSU
+% Copyright (c), All rights reserved, 2014-2025, Shogo MURAMATSU
 %
 
 %%
@@ -31,7 +31,7 @@
 % In the followings, it is assumed the support package for Raspberry Pi 
 % has already been installed.
 %
-% * <http://jp.mathworks.com/help/simulink/ug/install-target-for-raspberry-pi-hardware.html Raspberry Pi>
+% * <https://jp.mathworks.com/matlabcentral/fileexchange/45145-matlab-support-package-for-raspberry-pi-hardware Raspberry Pi>
 
 %%
 % [ <part6.html Top> ]
@@ -79,7 +79,13 @@
 % the rest Cb and Cr components are not used, the termination blocks 
 % are connected to the ports.
 %
-% * <matlab:doc('simulink/terminator') Simulink/Commonly Used Blocks/Terminator>
+% * <matlab:doc('Terminator') Simulink/Commonly Used Blocks/Terminator>
+%
+% To prepare for implementation on Raspberry Pi, uncheck
+%
+% "Enable Manual Focus" in the Advanced settigns of the block parameters.
+%
+% Depending on the camera, this may help achieve proper focus.
 %
 % The block parameter "Pixel format" was edited to RGB so that
 % the "SDL Video Display" can accept data in RGB format.
@@ -100,8 +106,8 @@
 % the block that adjusts the gain and the block that converts the data
 % type, i.e.,
 %
-% * <matlab:doc('simulink/gain') Simulink/Commonly Used Blocks/Gain>
-% * <matlab:doc('simulink/datatpeconversion') Simulink/Commonly Used Blocks/Convert>
+% * <matlab:doc('Gain') Simulink/Commonly Used Blocks/Gain>
+% * <matlab:doc('DataTypeConversion') Simulink/Commonly Used Blocks/Data Type Conversion>
 %
 % to before the input port of the "SDL Video Display" block.
 %
@@ -118,9 +124,9 @@
 %
 % In order to verify this fact, connect the
 %
-% * <matlab:doc('vision/tovideodisplay') To Video Display> block (only available for Windows(R))
+% * <matlab:doc('ToVideoDisplay') To Video Display> block (only available for Windows(R))
 % 
-% in "Computer Vision System Toolbox/Sinks" to output port Y of the
+% in "Computer Vision Toolbox/Sinks" to output port Y of the
 % "V4L2 Video Capture" block. 
 %
 % <<videogradfiltraspi_slx_03.png>>
@@ -143,6 +149,9 @@
 %
 % Hereafter, remove the "To Video Display" block because it is 
 % temporarily inserted.
+%
+% If not removed, an error will occur in the execution of the next external
+% mode step, so make sure to remove it.
 
 %%
 % [ <part6.html Top> ]
@@ -164,7 +173,7 @@
 % from the Simulink model on Raspberry Pi independently.
 
 %%
-% Prepare Raspberry Pi model B/B+ or 2 and connect the following items
+% Prepare Raspberry Pi model 5 or 2 and connect the following items
 %
 % # MicroSD card
 % # LAN cable
@@ -178,9 +187,9 @@
 % <<raspi_cableconnection.png>>
 %
 % Here, it is assumed that MicroSD has already been written 
-% a firmware image from the Raspberry Pi Support Package.
+% Raspberry Pi OS image from the Raspberry Pi Imager.
 %
-% * [Tools] > [Run on Target Hardware] > [Update Firmware... ]
+% * <https://www.raspberrypi.com/software/>
 %
 % See the following site for using Raspberry Pi Camera Module
 % 
@@ -192,11 +201,11 @@
 % From the menu bar of the Simulink model "videogradfiltraspi", 
 % proceed to 
 %
-% * [Tools] > [Run on Target Hardware] > [Options]
+% * [Hardware] > [Hardware Settings]
 %
 % <<videogradfiltraspi_slx_05.png>>
 %
-% Choose "Raspberry Pi" as the target hardware.
+% Choose "Raspberry Pi(64bit)" as the target hardware.
 %
 % <<videogradfiltraspi_slx_06.png>>
 %
@@ -204,15 +213,24 @@
 %
 % <<videogradfiltraspi_slx_07.png>>
 %
-% In particular, "Host name" of "Board information" is different 
+% In particular, "Device Address" of "Target hardware resources" is different 
 % for each board, it should be edited.
 %
 % * Ask the necessary information for your network administrator.
 %
 % Once the IP address is known, it can be edited as follows,
-% where 192.168.11.2 is an example.
+% where 192.168.11.5 is an example.
 %
 % <<videogradfiltraspi_ipaddress.png>>
+%
+% Click "Apply", then prepare to generate the C code from the Simulink
+% model to run on the Raspberry Pi.
+%
+% * [Code Generation]
+%
+% Select "GNU GCC Embedded Linux" as the toolchain for the build process.
+%
+% <<videogradfiltraspi_toolchain.png>>
 % 
 % Complete the preparation by clicking the "OK" button.
 
@@ -222,13 +240,13 @@
 %% External Mode
 % Run the Simulink model "videogradfiltraspi" in the external mode.
 % 
-% Change the simulation mode from "Normal" to 
+% Change the mode from the menu bar to 
 %
-% * External
+% * Run on board (External mode)
 %
 % <<videogradfiltraspi_external.png>>
 %
-% Run the model.
+% Press "Monitor & Tune" to run the model.
 %
 % <<videogradfiltraspi_slx_08.png>>
 %
@@ -257,17 +275,9 @@
 %%
 % Return to the Simulink model "videogradfiltraspi" and click the button
 %
-% * "Deploy to hardware"
+% * "Build, deploy  & Start"
 %
 % <<videogradfiltraspi_slx_09.png>>
-%
-% The command window of Windows OS will appear and the message 
-%
-% * "Model is successfully deployed on 'Raspberry Pi'" 
-%
-% will be displayed at the left bottom part of the Simulink model.
-%
-% <<videogradfiltraspi_slx_10.png>>
 %
 % The result will be displayed on the monitor connected to Raspberry Pi.
 % 
@@ -299,7 +309,7 @@
 % and use the RUN method.
 %
 %   open_system('videogradfiltraspi')
-%   h.run('videogradfiltraspi')
+%   h.runModel('videogradfiltraspi')
 
 %%
 % [ <part6.html Top> ]
