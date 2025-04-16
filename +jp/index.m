@@ -1,37 +1,37 @@
-%% *EmbVision ƒ`ƒ…[ƒgƒŠƒAƒ‹*
+%% *EmbVision ãƒãƒ¥ãƒ¼ãƒˆãƒªã‚¢ãƒ«*
 % 
-% *MATLAB(R)/Simulink(R)‚É‚æ‚é‘gž‚ÝƒrƒWƒ‡ƒ““ü–å*
+% *MATLAB(R)/Simulink(R)ã«ã‚ˆã‚‹çµ„è¾¼ã¿ãƒ“ã‚¸ãƒ§ãƒ³å…¥é–€*
 %
-% –{Ž‘—¿‚ÍAVŠƒ‘åŠwHŠw•”“d‹C“dŽqHŠw‰Èê–å‰È–Úu“d‹C“dŽq‘n‘¢ÝŒvv‚Ì‰Û‘è‚Æ‚µ‚Ä
-% ì¬‚µ‚½‚à‚Ì‚Å‚·B
+% æœ¬è³‡æ–™ã¯ã€æ–°æ½Ÿå¤§å­¦å·¥å­¦éƒ¨é›»æ°—é›»å­å·¥å­¦ç§‘å°‚é–€ç§‘ç›®ã€Œé›»æ°—é›»å­å‰µé€ è¨­è¨ˆã€ã®èª²é¡Œã¨ã—ã¦
+% ä½œæˆã—ãŸã‚‚ã®ã§ã™ã€‚
 %
-% *ƒƒjƒ…[*
+% *ãƒ¡ãƒ‹ãƒ¥ãƒ¼*
 %
-% #  <part1.html ‰æ‘œ“ü—Í‚Æ‰æ‘fˆ—>
-% #  <part2.html ƒtƒBƒ‹ƒ^ƒŠƒ“ƒO‚ÆŽü”g”“Á«>
-% #  <part3.html ƒNƒ‰ƒX’è‹`‚Æ’P‘ÌƒeƒXƒg>
-% #  <part4.html ‰f‘œƒXƒgƒŠ[ƒ€ˆ— - MATLAB•Ò ->
-% #  <part5.html ‰f‘œƒXƒgƒŠ[ƒ€ˆ— - Simulink•Ò ->
-% #  <part6.html ‰f‘œƒXƒgƒŠ[ƒ€ˆ— - Raspberry Pi(TM)•Ò ->
+% # <part1.html ç”»åƒå…¥åŠ›ã¨ç”»ç´ å‡¦ç†>
+% # <part2.html ãƒ•ã‚£ãƒ«ã‚¿ãƒªãƒ³ã‚°ã¨å‘¨æ³¢æ•°ç‰¹æ€§>
+% # <part3.html ã‚¯ãƒ©ã‚¹å®šç¾©ã¨å˜ä½“ãƒ†ã‚¹ãƒˆ>
+% # <part4.html æ˜ åƒã‚¹ãƒˆãƒªãƒ¼ãƒ å‡¦ç† - MATLABç·¨ ->
+% # <part5.html æ˜ åƒã‚¹ãƒˆãƒªãƒ¼ãƒ å‡¦ç† - Simulinkç·¨ ->
+% # <part6.html æ˜ åƒã‚¹ãƒˆãƒªãƒ¼ãƒ å‡¦ç† - Raspberry Pi(TM)ç·¨ ->
 %
-% *ZIPƒtƒ@ƒCƒ‹*
+% *ZIPãƒ•ã‚¡ã‚¤ãƒ«*
 % 
 % * <embvision_jp.zip>
 %
-% MATLAB ƒRƒ}ƒ“ƒhƒEƒBƒ“ƒhƒEã‚Å“WŠJ‚·‚éÛA <matlab:doc('unzip') unzip>
-% ŠÖ”‚ð—˜—p‚Å‚«‚éB
+% MATLAB ã‚³ãƒžãƒ³ãƒ‰ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä¸Šã§å±•é–‹ã™ã‚‹éš›ã€ <matlab:doc('unzip') unzip>
+% é–¢æ•°ã‚’åˆ©ç”¨ã§ãã‚‹ã€‚
 %
 %   >> upzip('embvision_jp.zip')
 %
-% *MathWorks ƒAƒJƒfƒ~ƒA*
+% *MathWorks ã‚¢ã‚«ãƒ‡ãƒŸã‚¢*
 %
 % * <http://jp.mathworks.com/academia/>
 %
-% *ì¬ŽÒ*
+% *ä½œæˆè€…*
 %
 % <html>
-% VŠƒ‘åŠw@<br>
-% ‘º¼@³ŒáC‚‹´@—EŠóC’|“¡@–]ŒŽCÂ–Ø@—³¬
+% æ–°æ½Ÿå¤§å­¦ã€€<br>
+% æ‘æ¾ã€€æ­£å¾ï¼Œé«˜æ©‹ã€€å‹‡å¸Œï¼Œç«¹è—¤ã€€æœ›æœˆï¼Œé’æœ¨ã€€ç«œæˆ
 % </html>
 %
 % Copyright (c), All rights reserved, 2014-2025, Shogo MURAMATSU, Yuki

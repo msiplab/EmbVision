@@ -1,339 +1,339 @@
-%% *EmbVision �`���[�g���A���i�U�j*
+%% *EmbVision チュートリアル（６）*
 %
-% *�f���X�g���[������ - Raspberry Pi(TM)�� -*
+% *映像ストリーム処理 - Raspberry Pi(TM)編 -*
 %
-% �V����w
-% �����@����C�����@�E��
+% 新潟大学
+% 村松　正吾，高橋　勇希
 %
 % Copyright (c), All rights reserved, 2014-2025, Shogo MURAMATSU and Yuki TAKAHASHI
 % 
 
 %%
 % <part5.html Part5> |
-% <index.html ���j���[>
+% | <index.html メニュー>
 
 %% 
-% *�T�v*
+% *概要*
 %
-% �{���K�ł́APart5�ō쐬����Simulink ���f�� �� Raspberry Pi �Ɏ������A
-% �G�N�X�^�[�i�����[�h�ł̃V�~�����[�V�����̂ق��A
-% �X�^���h�A�����Ŏ��s������@�ɂ��Ċw�ԁB
+% 本演習では、Part5で作成したSimulink モデル を Raspberry Pi に実装し、
+% エクスターナルモードでのシミュレーションのほか、
+% スタンドアロンで実行する方法について学ぶ。
 
-%% Raspberry Pi �ݒ�
-% �V���O���{�[�h�R���s���[�^ Raspberry Pi �ւ̎����R�[�h��
-% Simulink���f����ʂ��Đ������邱�Ƃ��ł���B
+%% Raspberry Pi 設定
+% シングルボードコンピュータ Raspberry Pi への実装コードを
+% Simulinkモデルを通じて生成することができる。
 %
-% �Ȃ��A�{���K�� Windows(R)���MATLAB�Ŏ��s����K�v������B
+% なお、本演習は Windows(R)上のMATLABで実行する必要がある。
 %
-% �ȉ��ł́ARaspberry Pi �p�̃T�|�[�g�p�b�P�[�W
+% 以下では、Raspberry Pi 用のサポートパッケージ
 %
 % * <https://jp.mathworks.com/matlabcentral/fileexchange/45145-matlab-support-package-for-raspberry-pi-hardware Raspberry Pi>
 %
-% �����ɃC���X�g�[������Ă���O��Řb��i�߂�B
+% が既にインストールされている前提で話を進める。
 
 %%
-% [ <part6.html �g�b�v> ]
+% [ <part6.html トップ> ]
 
-%% �V�~�����[�V�������f��
-% �܂��A�{���K Part5 �ō쐬���� Simulink ���f�� videogradfilt �� 
-% Raspberry Pi �p�ɕύX���悤�B
+%% シミュレーションモデル
+% まず、本演習 Part5 で作成した Simulink モデル videogradfilt を 
+% Raspberry Pi 用に変更しよう。
 %
-% ���f�� videogradfilt ��ǂݍ��݁A videogradfiltraspi �Ƃ��ĕۑ�����B
+% モデル videogradfilt を読み込み、 videogradfiltraspi として保存する。
 %
 %   open_system('videogradfilt')
 %   save_system('videogradfilt','videogradfiltraspi')
 
 %%
-% Raspberry Pi �p�̎����R�[�h�������s�� Simulink ���f���́A
-% �S�Ẵu���b�N���R�[�h�����ɑΉ����Ă���K�v������B
-% ����ɁA�e����o�̓u���b�N�� Raspberry Pi �p�̃u���b�N���C�u��������
-% �I�����Ďg�p����K�v������B
+% Raspberry Pi 用の実装コード生成を行う Simulink モデルは、
+% 全てのブロックがコード生成に対応している必要がある。
+% さらに、各種入出力ブロックは Raspberry Pi 用のブロックライブラリから
+% 選択して使用する必要がある。
 %
-% Raspberry Pi �p�̃u���b�N���C�u�����́ASimulink���C�u�����u���E�U�[����
+% Raspberry Pi 用のブロックライブラリは、Simulinkライブラリブラウザーから
 %
 % * Simulink Support Package for Raspberry Pi hardware
 % 
-% ��I������΂悢�B
+% を選択すればよい。
 %
 % <<raspberrypi_blocks.png>>
 %
-% ���邢�́AMATLAB(R) �R�}���h�E�B���h�E�ォ��
+% あるいは、MATLAB(R) コマンドウィンドウ上から
 %
 %   raspberrypilib
 % 
-% �Ƒł�����ł��ǂ��B
+% と打ち込んでも良い。
 
 %%
-% �f�����o�̓u���b�N�� Raspberry Pi �p�̓��o�̓u���b�N�ɒu�������悤�B
+% 映像入出力ブロックを Raspberry Pi 用の入出力ブロックに置き換えよう。
 %
-% * �uFrom Multimedia File�v�uRGB to Gray�v�� �uV4L2 Video Capture�v
-% * �uTo Multimedia File�v �� �uSDL Video Display�v
+% * 「From Multimedia File」「RGB to Gray」→ 「V4L2 Video Capture」
+% * 「To Multimedia File」 → 「SDL Video Display」
 %
 % <<videogradfiltraspi_slx_00.png>>
 %
-% �uV4L2 Video Capture�v�u���b�N�̏o��Y�̓O���[�X�P�[���ɑΉ�����B
-% �{���f���ł́A�c��̏o�� Cb,Cr�𗘗p���Ȃ����߁A�ȉ��̏I�[�u���b�N��ڑ������B
+% 「V4L2 Video Capture」ブロックの出力Yはグレースケールに対応する。
+% 本モデルでは、残りの出力 Cb,Crを利用しないため、以下の終端ブロックを接続した。
 %
 % * <matlab:doc('Terminator') Simulink/Commonly Used Blocks/Terminator>
 %
-% �܂��A���Raspberry Pi �ւ̎����̂��߂ɁA�u���b�N�p�����[�^��Advanced����A
+% また、後のRaspberry Pi への実装のために、ブロックパラメータのAdvancedから、
 % 
-% �uEnable Manual focus�v�̃`�F�b�N���O���Ă����B
+% 「Enable Manual focus」のチェックを外しておく。
 % 
-% �J�������悾���A������O�����ƂŃs���g�������悤�ɂȂ�B
+% カメラ次第だが、これを外すことでピントが合うようになる。
 % 
-% �uSDL Video Display�v�u���b�N�ł� RGB ���͂��ł���悤�A
-% �u���b�N�p�����[�^ Pixel format �� RGB �ƕҏW�����B
+% 「SDL Video Display」ブロックでは RGB 入力ができるよう、
+% ブロックパラメータ Pixel format を RGB と編集した。
 
 %%
-% �����A���s���Ă݂悤�B
+% 早速、実行してみよう。
 %
 % <<videogradfiltraspi_slx_01.png>>
 %
-% ����ƁA�uSDL Video Display�v�u���b�N�̓��͕��Ńf�[�^�^�̕s��v�ɂ��
-% �G���[��������B
+% すると、「SDL Video Display」ブロックの入力部でデータ型の不一致による
+% エラーが生じる。
 %
-% �����́A�uSDL Video Display�v�u���b�N��8�r�b�g�����Ȃ������^(uint8)��
-% �v������̂ɑ΂��A�uHSV to RGB�v�u���b�N�������^(double)�Ńf�[�^���o��
-% ���邽�߂ł���B
+% 原因は、「SDL Video Display」ブロックが8ビット符号なし整数型(uint8)を
+% 要求するのに対し、「HSV to RGB」ブロックが実数型(double)でデータを出力
+% するためである。
 %
-% ���̖���������邽�߂ɁA�Q�C�������ƃf�[�^�^�ϊ����s���u���b�N
+% この問題を回避するために、ゲイン調整とデータ型変換を行うブロック
 %
 % * <matlab:doc('Gain') Simulink/Commonly Used Blocks/Gain>
 % * <matlab:doc('DataTypeConversion') Simulink/Commonly Used Blocks/Data Type Conversion>
 %
-% ���uSDL Video Display�v�u���b�N�̓��͕��ɑ}�������s���悤�B
+% を「SDL Video Display」ブロックの入力部に挿入し実行しよう。
 %
 % <<videogradfiltraspi_slx_02.png>>
 %
-% �������s����A�_�~�[�̉f�����������s�����B  
+% 無事実行され、ダミーの映像処理が実行される。  
 %
 
 %%
-% ������
+% ここで
 %
-% * �uV4L2 Video Capture�v�u���b�N�͐����Ɛ�����]�u���ďo�͂���B
-% * �uSDL Video Display�v�u���b�N�͓��͂̐����Ɛ�����]�u���ĕ\������B
+% * 「V4L2 Video Capture」ブロックは水平と垂直を転置して出力する。
+% * 「SDL Video Display」ブロックは入力の水平と垂直を転置して表示する。
 %
-% �Ƃ����_�ɒ��ӂ��Ăق����B
-% ���̂��Ƃ��m���߂邽�߂ɁA�uComputer Vision Toolbox/Sinks�v���ɂ���
+% という点に注意してほしい。
+% このことを確かめるために、「Computer Vision Toolbox/Sinks」内にある
 %
-% * <matlab:doc('ToVideoDispla') To Video Display> �u���b�N�iWindows(R)�̂݁j
+% * <matlab:doc('ToVideoDispla') To Video Display> ブロック（Windows(R)のみ）
 % 
-% ���ꎞ�I�� �uV4L2 Video Capture�v�̏o��Y�ɐڑ����āA�V�~�����[�V���������s
-% ���Ă݂悤�B
+% を一時的に 「V4L2 Video Capture」の出力Yに接続して、シミュレーションを実行
+% してみよう。
 %
 % <<videogradfiltraspi_slx_03.png>>
 %
-% �uV4L2 Video Capture�v�̏o�͂ƁuSDL Video Display�v�̕\�����ׂ��
-% �݂��ɓ]�u�̊֌W�ɂ��邱�Ƃ�������B
+% 「V4L2 Video Capture」の出力と「SDL Video Display」の表示を比べると
+% 互いに転置の関係にあることが分かる。
 %
-% ���������āA���z�t�B���^�̕������C�����Ȃ���΂Ȃ�Ȃ��B
-% �uFilt.Grad.�v�u���b�N��Kernel�v���p�e�B��
+% したがって、勾配フィルタの方向を修正しなければならない。
+% 「Filt.Grad.」ブロックのKernelプロパティを
 %
 % <<gradfilt_kernel.png>>
 %
-% �̂悤�ɓ]�u����悤�ҏW���āA���z�t�B���^�̕������C�����悤�B
+% のように転置するよう編集して、勾配フィルタの方向を修正しよう。
 %
-% �ēx�A���f�� videogradfiltraspi �����s���悤�B
+% 再度、モデル videogradfiltraspi を実行しよう。
 %
 % <<videogradfiltraspi_slx_04.png>>
 %
-% �o�͂̍ʐF�i���z�����j���C������Ă��邱�Ƃ��m�F�ł���B
+% 出力の彩色（勾配方向）が修正されていることが確認できる。
 %
-% �ȍ~�A�uTo Video Display�v�u���b�N�͕s�v�Ȃ̂Ń��f������폜���Ă������B
+% 以降、「To Video Display」ブロックは不要なのでモデルから削除しておこう。
 %
-% ���폜���Ȃ��Ǝ����̃G�N�X�^�[�i�����[�h�̎��s�ŃG���[���o�邽�߁A�K���폜���邱�ƁB
+% ※削除しないと次項のエクスターナルモードの実行でエラーが出るため、必ず削除すること。
 
 %%
-% [ <part6.html �g�b�v> ]
+% [ <part6.html トップ> ]
 
-%% �n�[�h�E�F�A���s�̏���
-% Raspberry Pi �p�ɍ\�z�������f�������ۂ̃{�[�h��œ��삳���Ă݂悤�B
+%% ハードウェア実行の準備
+% Raspberry Pi 用に構築したモデルを実際のボード上で動作させてみよう。
 %
-% Simulink ���f���� Raspberry Pi ��œ��삳������@�ɂ́A
+% Simulink モデルを Raspberry Pi 上で動作させる方法には、
 %
-% * �G�N�X�^�[�i�����[�h�V�~�����[�V����
-% * �X�^���h�A�������s
+% * エクスターナルモードシミュレーション
+% * スタンドアロン実行
 %
-% �̓��ނ�����B
+% の二種類がある。
 %
-% �G�N�X�^�[�i�����[�h�ł́ASimulink ���f������ Raspberry Pi ���
-% ���삷������R�[�h�𐶐����ARaspberry Pi ��Ŏ��ۂɓ��삳���A
-% ���̏o�͂��茳�� Simulink ��Ŋm�F����B
+% エクスターナルモードでは、Simulink モデルから Raspberry Pi 上で
+% 動作する実装コードを生成し、Raspberry Pi 上で実際に動作させ、
+% その出力を手元の Simulink 上で確認する。
 %
-% ����A�X�^���h�A�������s�ł́ASimulink ���f������ Raspberry Pi ���
-% �Ɨ��ɓ��삷������R�[�h�𐶐����ARaspberry Pi ��œ��삳����B
+% 一方、スタンドアロン実行では、Simulink モデルから Raspberry Pi 上で
+% 独立に動作する実装コードを生成し、Raspberry Pi 上で動作させる。
 
 %%
-% �܂��A�����Ƃ��� Raspberry Pi model 5 ��p�ӂ�
+% まず、準備として Raspberry Pi model 5 を用意し
 %
-% # MicroSD �J�[�h
-% # LAN �P�[�u��
-% # Web �J����
-% # �d���P�[�u��
+% # MicroSD カード
+% # LAN ケーブル
+% # Web カメラ
+% # 電源ケーブル
 % 
-% �̏��ɐڑ����悤�B
+% の順に接続しよう。
 %
 % <<raspi_microsd.png>>
 %
 % <<raspi_cableconnection.png>>
 %
-% �Ȃ��AMicroSD �ɂ�Raspberry Pi Imager
+% なお、MicroSD にはRaspberry Pi Imager
 %
 % * <https://www.raspberrypi.com/software/>
 %
-% ����Raspberry Pi OS�̃C���[�W�̏������݂��������Ă�����̂Ƃ���B
+% からRaspberry Pi OSのイメージの書き込みが完了しているものとする。
 
 %%
-% �ł́ASimulink ���� Raspberry Pi �ւ̐ڑ����s�����߂̏��������悤�B
+% では、Simulink から Raspberry Pi への接続を行うための準備をしよう。
 %
-% Simulink ���f�� videogradfiltraspi �̃��j���[�o�[����
+% Simulink モデル videogradfiltraspi のメニューバーから
 %
-% * [�n�[�h�E�F�A] > [�n�[�h�E�F�A�ݒ�] 
+% * [ハードウェア] > [ハードウェア設定] 
 %
-% �ւƐi�ށB
+% へと進む。
 %
 % <<videogradfiltraspi_slx_05.png>>
 %
-% �^�[�Q�b�g�n�[�h�E�F�A�Ƃ��āuRaspberry Pi(64bit)�v��I������B
+% ターゲットハードウェアとして「Raspberry Pi(64bit)」を選択する。
 %
 % <<videogradfiltraspi_slx_06.png>>
 %
-% �ڑ�����{�[�h�̏����m�F����B
+% 接続するボードの情報を確認する。
 %
 % <<videogradfiltraspi_slx_07.png>>
 %
-% ���ɁA�uTarget hardware resources�v�́uDevice Address�v�́A�e�{�[�h���ɐݒ肪�قȂ�̂�
-% �ҏW���K�v�ƂȂ�B
+% 特に、「Target hardware resources」の「Device Address」は、各ボード毎に設定が異なるので
+% 編集が必要となる。
 %
-% * ���K���ɕK�v�ȏ���񋟂���B
+% * 演習中に必要な情報を提供する。
 %
-% IP�A�h���X��������΁A�ȉ��̗p�ɕҏW����΂悢�B�i192.168.11.5�͈��j
+% IPアドレスが分かれば、以下の用に編集すればよい。（192.168.11.5は一例）
 %
 % <<videogradfiltraspi_ipaddress.png>>
 % 
-% �u�K�p�v���N���b�N���A����simulink���f������raspberry pi��Ŏ��s����C�R�[�h�𐶐����邽�߂̏���������B
+% 「適用」をクリックし、次にsimulinkモデルからraspberry pi上で実行するCコードを生成するための準備をする。
 % 
-% * [�R�[�h����]
+% * [コード生成]
 % 
-% �ւƐi�݁A�r���h�v���Z�X�̃c�[���`�F�[���Ƃ��āuGNU GCC Embedded Linux�v��I������B
+% へと進み、ビルドプロセスのツールチェーンとして「GNU GCC Embedded Linux」を選択する。
 % 
 % <<videogradfiltraspi_toolchain.png>>
 % 
-% �uOK�v���N���b�N����������������B
+% 「OK」をクリックし準備を完了する。
 
 %%
-% [ <part6.html �g�b�v> ]
+% [ <part6.html トップ> ]
 
-%% �G�N�X�^�[�i�����[�h
-% �ł́ASimulink ���f�� videogradfiltraspi ���G�N�X�^�[�i�����[�h�œ���
-% �����Ă݂悤�B
+%% エクスターナルモード
+% では、Simulink モデル videogradfiltraspi をエクスターナルモードで動作
+% させてみよう。
 % 
-% �܂��A���j���[�o�[���烂�[�h��
+% まず、メニューバーからモードを
 %
-% * �{�[�h��Ŏ��s�i�G�N�X�^�[�i�����[�h�j
+% * ボード上で実行（エクスターナルモード）
 %
-% �ւƕύX����B
+% へと変更する。
 %
 % <<videogradfiltraspi_external.png>>
 %
-% �����A�u�Ď��ƒ����v�������Ď��s���Ă݂悤�B
+% 早速、「監視と調整」を押して実行してみよう。
 %
 % <<videogradfiltraspi_slx_08.png>>
 %
-% Raspberry Pi �ɐڑ����� Web �J�����̏����f���� Simulink ��ŕ\�������B
+% Raspberry Pi に接続した Web カメラの処理映像が Simulink 上で表示される。
 
 %%
-% [ <part6.html �g�b�v> ]
+% [ <part6.html トップ> ]
 
-%% �X�^���h�A�������s
-% �ł́ASimulink ���f�� videogradfiltraspi �� Raspberry Pi ���
-% �X�^���h�A�������s���Ă݂悤�B
+%% スタンドアロン実行
+% では、Simulink モデル videogradfiltraspi を Raspberry Pi 上で
+% スタンドアロン実行してみよう。
 %
-% �X�^���h�A�������s�̂��߂Ɉȉ��̏������s���B
+% スタンドアロン実行のために以下の準備を行う。
 %
-% # �d���P�[�u������U�O��
-% # HDMI�f�B�X�v���C�ڑ�����
-% # �d���P�[�u�����ēx�ڑ�����
+% # 電源ケーブルを一旦外す
+% # HDMIディスプレイ接続する
+% # 電源ケーブルを再度接続する
 %
 % <<raspi_hdmi.png>>
 %
-% �������ڑ�����Ă���΁ARasbian �̋N���� Raspberry Pi �ɐڑ�����
-% �f�B�X�v���C��Ŋm�F�ł���B
+% 正しく接続されていれば、Rasbian の起動を Raspberry Pi に接続した
+% ディスプレイ上で確認できる。
 %
-% �Ȃ��ARaspberry Pi Camera Module �𗘗p���邽�߂ɂ͈ȉ��̃T�C�g���Q�Ƃ��Ăق����B
+% なお、Raspberry Pi Camera Module を利用するためには以下のサイトを参照してほしい。
 % 
 % http://www.mathworks.com/matlabcentral/answers/122199-simulink-with-raspberry-pi-camera-capture
 
 %%
-% Simulink ���f�� videogradfiltraspi �ɖ߂�A
+% Simulink モデル videogradfiltraspi に戻り、
 %
-% * �u�r���h�A�W�J�A�N���v
+% * 「ビルド、展開、起動」
 %
-% �̃{�^�����N���b�N���悤�B
+% のボタンをクリックしよう。
 %
 % <<videogradfiltraspi_slx_09.png>>
 %
-% Raspberry Pi �ɐڑ����ꂽ�f�B�X�v���C��ɃJ��������̉f����
-% �������ʂ��\�������ΐ����ł���B
+% Raspberry Pi に接続されたディスプレイ上にカメラからの映像の
+% 処理結果が表示されれば成功である。
 % 
 % <<raspi_videogradfilt.png>>
 %
 
 %% 
-% �ȍ~�ASimulink ���f�� videogradfiltraspi ����Ă��ARaspberry Pi ���
-% �����͌p�������B
+% 以降、Simulink モデル videogradfiltraspi を閉じても、Raspberry Pi 上の
+% 処理は継続される。
 %
 %   close_system('videogradfiltraspi')
 %
 
 %% 
-% MATLAB �R�}���h�E�B���h�E��� <matlab:help('raspberrypi') raspberrypi>
-% �֐��𗘗p����ƁA�ڑ����� Raspberry Pi �̏����擾�ł���B
+% MATLAB コマンドウィンドウ上で <matlab:help('raspberrypi') raspberrypi>
+% 関数を利用すると、接続中の Raspberry Pi の情報を取得できる。
 %
 %   h = raspberrypi
 
 %%
-% Raspberry Pi ��œ��쒆�̃��f�� videogradfiltraspi ���~����ɂ́A
-% stop ���\�b�h�𗘗p����B
+% Raspberry Pi 上で動作中のモデル videogradfiltraspi を停止するには、
+% stop メソッドを利用する。
 %
 %   h.stop('videogradfiltraspi')
 %
     
 %%
-% �ēx���f�� videogradfiltraspi ���J���Arun ���\�b�h��p����΁A
-% Raspberry Pi ��Ń��f�����ċN�����邱�Ƃ��ł���B
+% 再度モデル videogradfiltraspi を開き、run メソッドを用いれば、
+% Raspberry Pi 上でモデルを再起動することもできる。
 %
 %   open_system('videogradfiltraspi')
 %   h.runModel('videogradfiltraspi')
 
 %%
-% [ <part6.html �g�b�v> ]
+% [ <part6.html トップ> ]
 
-%% ���K�ۑ�
+%% 演習課題
 %
-% *���K�ۑ�6-1. Sobel���z�t�B���^* 
+% *演習課題6-1. Sobel勾配フィルタ* 
 %
-% ���K�ۑ�4-1�ŏЉ�� Sobel �J�[�l���ɕς��� Raspberry Pi ��ŁA
-% �X�^���h�A�������s���悤�B
+% 演習課題4-1で紹介した Sobel カーネルに変えて Raspberry Pi 上で、
+% スタンドアロン実行しよう。
 
 %%
 % 
-% *���K�ۑ�6-2. ���f���̎���Ǝ��s*�i�I�v�V�����j 
+% *演習課題6-2. モデルの自作と実行*（オプション） 
 %
-% ����f���������f����n���݌v���A
-% Raspberry Pi ��ŁA�X�^���h�A�������s���悤�B
+% 自ら映像処理モデルを創造設計し、
+% Raspberry Pi 上で、スタンドアロン実行しよう。
 %
-% �ȉ��Ɋ��҂����g����������B
+% 以下に期待される拡張例を示す。
 % 
-% * Raspberry Pi �J�������W���[������
-% * �Œ菬���_����
-% * ��������iRasPi2��̃N�A�b�h�R�A�p�j
-% * ���̂̌��o����єF��
-% * �����E�����M������
-% * GPIO/I2C ����
-% * �l�b�g���[�N�A�v���P�[�V�����J��
+% * Raspberry Pi カメラモジュール制御
+% * 固定小数点実装
+% * 並列実装（RasPi2上のクアッドコア用）
+% * 物体の検出および認識
+% * 音声・音響信号処理
+% * GPIO/I2C 制御
+% * ネットワークアプリケーション開発
 %
 
 %%
@@ -342,5 +342,5 @@
 % </html>
 %%
 % <part5.html Part5> |
-% <index.html ���j���[> |
-% <part6.html �g�b�v> 
+% | <index.html メニュー> |
+% | <part6.html トップ> 

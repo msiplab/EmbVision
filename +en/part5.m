@@ -3,7 +3,7 @@
 % *Video Stream Processing - Simulink -*
 %
 % <html>
-% Shogo MURAMATSU@and Yuki TAKAHASHI <br>
+% Shogo MURAMATSU and Yuki TAKAHASHI <br>
 % Niigata Univ.
 % </html>
 %
@@ -12,8 +12,8 @@
 
 %%
 % <part4.html Part4> |
-% <index.html Contents> |
-% <part6.html Part6>
+% | <index.html Contents> |
+% | <part6.html Part6>
 
 %%
 % *Summary*
@@ -239,7 +239,7 @@
 %%
 % By clicking the "OK" button and appropriately stretching the center block,
 % one can obtain a model looks like the following picture.
-% ó‘Ô‚Æ‚È‚éB
+% ï¿½ï¿½Ô‚Æ‚È‚ï¿½B
 %
 % <<videorgb2gray_slx_02.png>>
 
@@ -262,7 +262,7 @@
 % Next, add the following method
 %
 %   methods (Access=protected)
-%      ...iÈ—ªj
+%      ...ï¿½iï¿½È—ï¿½ï¿½j
 %      % # of input ports
 %      function N = getNumInputsImpl(obj)
 %          N = 1; 
@@ -279,7 +279,7 @@
 %      function outputName = getOutputNamesImpl(obj)
 %             outputName = 'Gray';
 %      end
-%      ...iÈ—ªj
+%      ...ï¿½iï¿½È—ï¿½ï¿½j
 %   end
 %
 % to the methods(Access=protected) section.
@@ -400,6 +400,6 @@
 % </html>
 %%
 % <part4.html Part4> |
-% <index.html Contents> |
-% <part5.html Top> |
-% <part6.html Part6>
+% | <index.html Contents> |
+% | <part5.html Top> |
+% | <part6.html Part6>

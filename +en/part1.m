@@ -11,8 +11,8 @@
 %
 
 %%
-% <index.html Contents> | 
-% <part2.html Part2>
+% <index.html Contents> |
+% | <part2.html Part2>
 
 %%
 % *Summary*
@@ -374,5 +374,5 @@ dir *.tif
 % </html>
 %%
 % <index.html Contents> |
-% <part1.html Top> |
-% <part2.html Part2>
+% | <part1.html Top> |
+% | <part2.html Part2>

@@ -3,7 +3,7 @@
 % *Video Stream Processing - Raspberry Pi(TM) -*
 %
 % <html>
-% Shogo MURAMATSU　and Yuki TAKAHASHI <br>
+% Shogo MURAMATSU and Yuki TAKAHASHI <br>
 % Niigata Univ.
 % </html>
 %
@@ -12,7 +12,7 @@
 
 %%
 % <part5.html Part5> |
-% <index.html Contents>
+% | <index.html Contents>
 
 %% 
 % *Summary*
@@ -345,5 +345,5 @@
 % </html>
 %%
 % <part5.html Part5> |
-% <index.html Contents> |
-% <part6.html Top> 
+% | <index.html Contents> |
+% | <part6.html Top> 

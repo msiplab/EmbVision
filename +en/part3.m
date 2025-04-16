@@ -12,8 +12,8 @@
 
 %%
 % <part2.html Part2> |
-% <index.html Contents> |
-% <part4.html Part4>
+% | <index.html Contents> |
+% | <part4.html Part4>
 
 %%
 % *Summary*
@@ -632,6 +632,6 @@ imshow(J)                        % Image display
 % </html>
 %%
 % <part2.html Part2> |
-% <index.html Contents> |
-% <part3.html Top> |
-% <part4.html Part4>
+% | <index.html Contents> |
+% | <part3.html Top> |
+% | <part4.html Part4>

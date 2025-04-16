@@ -12,8 +12,8 @@
 
 %%
 % <part1.html Part1> |
-% <index.html Contents> |
-% <part3.html Part3>
+% | <index.html Contents> |
+% | <part3.html Part3>
 
 %%
 % *Summary*
@@ -217,8 +217,8 @@ freqz(h)
 %
 % holds, the following properties can be understood.
 %
-% * $$ \omega = 0 $$ Ç≈ÅA  $$ |H(e^{j\omega})| = 1 $$
-% * $$ \omega = \frac{2\pi}{3} $$ Ç≈ÅA  $$ |H(e^{j\omega})| = 0 $$.
+% * $$ \omega = 0 $$ ÔøΩ≈ÅA  $$ |H(e^{j\omega})| = 1 $$
+% * $$ \omega = \frac{2\pi}{3} $$ ÔøΩ≈ÅA  $$ |H(e^{j\omega})| = 0 $$.
 
 %%
 % [ <part2.html Top> ]
@@ -455,9 +455,9 @@ freqz2(H)
 %
 % holds, the following properties can be understood.
 %
-% * $$ \omega_y = 0 $$ Ç≈ÅA
+% * $$ \omega_y = 0 $$ ÔøΩ≈ÅA
 % $$ |H(e^{j\omega_y},e^{j\omega_x})| = 0 $$
-% * $$ \omega_y = \pi $$ Ç≈ÅA
+% * $$ \omega_y = \pi $$ ÔøΩ≈ÅA
 % $$ |H(e^{j\omega_y},e^{j\omega_x})| = 0 $$
 % * At $$ \omega_x = \frac{2\pi}{3} $$,
 % $$ |H(e^{j\omega_y},e^{j\omega_x})| = 0 $$
@@ -488,7 +488,7 @@ freqz2(H)
 %
 % Verify also the frequency magnitude response of the filter.
 %
-% (Example AnswerÅj
+% (Example AnswerÔøΩj
 %
 %%
 % <<cameramangradx.png>>
@@ -512,7 +512,7 @@ freqz2(H)
 % "cameramangradang.tif," respectively, where
 % the direction should be normalized the range from 0 to 1.
 %
-% (Example AnswerÅj
+% (Example AnswerÔøΩj
 %
 %%
 % <<cameramangradmag.png>>
@@ -525,6 +525,6 @@ freqz2(H)
 % </html>
 %%
 % <part1.html Part1> |
-% <index.html Contents> |
-% <part2.html Top> |
-% <part3.html Part3>
+% | <index.html Contents> |
+% | <part2.html Top> |
+% | <part3.html Part3>

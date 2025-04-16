@@ -1,5 +1,5 @@
 function publishall(lang)
-% PUBLISHALLÅ@Publish HTML Documents of EmbVision Tutorial
+% PUBLISHALL Publish HTML Documents of EmbVision Tutorial
 %
 % publishall(lang) executes publish HTML documents of 
 % EmbVision Tutorial. Variable lang switches the language

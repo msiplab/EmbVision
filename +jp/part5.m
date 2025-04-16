@@ -1,333 +1,333 @@
-%% *EmbVision �`���[�g���A���i�T�j*
+%% *EmbVision チュートリアル（５）*
 %
-% *�f���X�g���[������ - Simulink�� -*
+% *映像ストリーム処理 - Simulink編 -*
 %
-% �V����w
-% �����@����C�����@�E��
+% 新潟大学
+% 村松　正吾，高橋　勇希
 %
 % Copyright (c), All rights reserved, 2014-2025, Shogo MURAMATSU and Yuki TAKAHASHI
 % 
 
 %%
 % <part4.html Part4> |
-% <index.html ���j���[> |
-% <part6.html Part6>
+% | <index.html メニュー> |
+% | <part6.html Part6>
 
 %%
-% *�T�v*
+% *概要*
 %
-% �{���K�ł́ASimulink�ɂĉf���t�@�C���̓��͂ƕ\�����s���ق��A
-% System object(TM) ���� Simulink �u���b�N���쐬������@�ƁA
-% ���u���b�N�𗘗p�����f���X�g���[�������ɂ��Ċw�ԁB
+% 本演習では、Simulinkにて映像ファイルの入力と表示を行うほか、
+% System object(TM) から Simulink ブロックを作成する方法と、
+% 同ブロックを利用した映像ストリーム処理について学ぶ。
 
-%% Simulink ���f���̍쐬
-% �܂��A�V���� Simulink ���f�����쐬���邽�߂ɁA�V�K�Ƀ��f���t�@�C�����쐬���悤�B
+%% Simulink モデルの作成
+% まず、新しい Simulink モデルを作成するために、新規にモデルファイルを作成しよう。
 %
-% �z�[���^�O����A
+% ホームタグから、
 % 
-% # �u�V�K�쐬�v
-% # ���uSimulink ���f���v
+% # 「新規作成」
+% # →「Simulink モデル」
 %
-% ��I�����邩�A MATLAB�R�}���h�E�B���h�E�ォ��
-% <matlab:doc('new_system') new_system> �֐���
-% <matlab:doc('open_system') open_system> �֐�
-% �𗘗p����΂悢�B
+% を選択するか、 MATLABコマンドウィンドウ上から
+% <matlab:doc('new_system') new_system> 関数と
+% <matlab:doc('open_system') open_system> 関数
+% を利用すればよい。
 %
-% ��Ƃ��āA�R�}���h�E�B���h�E�ォ��'videoio' �Ƃ������f�����쐬���Ă݂悤�B 
+% 例として、コマンドウィンドウ上から'videoio' というモデルを作成してみよう。 
 %
 %   new_system('videoio','Model')
 %   open_system('videoio')
 
 %%
-% �ȉ��̂悤�ȃE�B���h�E�������B
+% 以下のようなウィンドウが現れる。
 %
 % <<videoio_slx_00.png>>
 %
 
 %%
-% ���f���̕ۑ��́A���j���[�o�[��̃A�C�R��
+% モデルの保存は、メニューバー上のアイコン
 %
 % <<file_button.png>>
 %
-% ���N���b�N���邩�A
-% MATLAB�R�}���h�E�B���h�E�ォ��
+% をクリックするか、
+% MATLABコマンドウィンドウ上から
 %
 %   save_system('videoio')
 %
-% �̂悤�� <matlab:doc('save_system') save_system> �֐��𗘗p����΂悢�B
+% のように <matlab:doc('save_system') save_system> 関数を利用すればよい。
 
 %%
-% [ <part5.html �g�b�v> ]
+% [ <part5.html トップ> ]
 
-%% Simulink ���C�u�����u���E�U�[
-% Simulink �ł́A�����̍\���v�f�ƂȂ�u���b�N����ׂĐڑ����A
-% �e�u���b�N�̃v���p�e�B�⓮�������ݒ肵�A
-% �V�X�e���̃V�~�����[�V�������s�����Ƃ��ł���B
+%% Simulink ライブラリブラウザー
+% Simulink では、処理の構成要素となるブロックを並べて接続し、
+% 各ブロックのプロパティや動作条件を設定し、
+% システムのシミュレーションを行うことができる。
 %
-% �܂��A�����̍\���u���b�N�𗘗p���邽�߂ɁA���j���[�o�[��̃A�C�R��
+% まず、既存の構成ブロックを利用するために、メニューバー上のアイコン
 %
 % <<library_button.png>>
 %
-% ���N���b�N���悤�B����ƁA�ȉ��̂悤�� Simulink���C�u�����u���E�U�[�������B
+% をクリックしよう。すると、以下のような Simulinkライブラリブラウザーが現れる。
 %
 % <<library_browser.png>>
 
 %%
-% [ <part5.html �g�b�v> ]
+% [ <part5.html トップ> ]
 
-%% �f���t�@�C�����o�̓��f��
-% �ł́A��Ƃ��ĉf���t�@�C���̓��͂Əo�͂��s���V�X�e�����f�����\�z���悤�B
+%% 映像ファイル入出力モデル
+% では、例として映像ファイルの入力と出力を行うシステムモデルを構築しよう。
 %
-% �܂��A�����̃��X�g����
+% まず、左側のリストから
 %
 % * <matlab:doc('vision') Computer Vision Toolbox(TM)>
 %
-% ��I�����悤�B
+% を選択しよう。
 %
-% ����ƁA���C�u�����u���E�U�[�� Computer Vision Toolbox ��
-% �u���b�N�Q��\������B
+% すると、ライブラリブラウザーは Computer Vision Toolbox の
+% ブロック群を表示する。
 % 
 % <<cvs_library.png>>
 %
-% MATLAB �R�}���h�E�B���h�E�ォ��
+% MATLAB コマンドウィンドウ上から
 %
 %   visionlib
 % 
-% �Ƒł�����ł��ǂ��B
+% と打ち込んでも良い。
 
 %%
-% �E���̃A�C�R���Q����A�uSources�v�A�C�R��
+% 右側のアイコン群から、「Sources」アイコン
 % 
 % <<cvs_sources.png>>
 %
-% ���N���b�N���A�uComputer Vision Toolbox/Sources�v �̃u���b�N�Q���J�����B
+% をクリックし、「Computer Vision Toolbox/Sources」 のブロック群を開こう。
 %
 % <<cvs_sources_blocks.png>>
 %
 
 %%
-% �u���b�N�Q���� �uFrom Multimedia File�v���E�N���b�N���āA
-% ���f�� videoio �Ƀu���b�N��ǉ����悤�B
+% ブロック群から 「From Multimedia File」を右クリックして、
+% モデル videoio にブロックを追加しよう。
 %
 % <<videoio_slx_01.png>>
 
 %%
-% �����āASimulink ���C�u�����u���E�U�[�uComputer Vision Toolbox�v����
-% Sinks �̃A�C�R��
+% 続けて、Simulink ライブラリブラウザー「Computer Vision Toolbox」から
+% Sinks のアイコン
 % 
 % <<cvs_sinks.png>>
 %
-% ���N���b�N���A�uComputer Vision Toolbox/Sinks�v �̃u���b�N�Q���J�����B 
+% をクリックし、「Computer Vision Toolbox/Sinks」 のブロック群を開こう。 
 %
 % <<cvs_sinks_blocks.png>>
 %
 
 %%
-% �u���b�N�Q���� �uTo Multimedia File�v���E�N���b�N���āA
-% ���f�� videoio �Ƀu���b�N��ǉ����悤�B
+% ブロック群から 「To Multimedia File」を右クリックして、
+% モデル videoio にブロックを追加しよう。
 %
 % <<videoio_slx_02.png>>
 
 %%
-% �uFrom Multimedia File�v�̏o�͒[�q���h���b�N���āA�uFrom Multimedia File�v��
-% ���͒[�q�ɐڑ����悤�B
+% 「From Multimedia File」の出力端子をドラックして、「From Multimedia File」の
+% 入力端子に接続しよう。
 %
 % <<videoio_slx_03.png>>
 
 %%
-% ���f���G�f�B�^��̎��s�{�^���A�C�R��
+% モデルエディタ上の実行ボタンアイコン
 %
 % <<play_button.png>>
 %
-% �����N���b�N����ƁA�쐬�������f���̃V�~�����[�V���������s�����B
+% を左クリックすると、作成したモデルのシミュレーションが実行される。
 %
 % <<videoio_slx_04.png>>
 
 %%
-% AVI�t�@�C�� output.avi ���o�͂����B
-% MATLAB�̊O���̃c�[���ōĐ����Ċm�F���Ăق����B
+% AVIファイル output.avi が出力される。
+% MATLABの外部のツールで再生して確認してほしい。
 %
-% ����AVI�t�@�C����ς������ꍇ�ɂ́A�uFrom Multimedia File�v�u���b�N��
-% �_�u���N���b�N���āA�p�����[�^�_�C�A���O���J���A�uFile name�v��ύX����B
+% 入力AVIファイルを変えたい場合には、「From Multimedia File」ブロックを
+% ダブルクリックして、パラメータダイアログを開き、「File name」を変更する。
 %
 % <<frommultimediafile_blockparameter.png>>
 %
 
 %%
-% ���C�u�����u���E�U�[����
+% ライブラリブラウザーから
 %
 % * <matlab:doc('imaq') Image Acquisition Toolbox(TM)>
 %
-% ��I�����āA�uFrom Video Device�v�u���b�N�𗘗p����΁A
-% �ڑ����ꂽ�J��������̉f������͂Ƃ��ė��p�ł���B
+% を選択して、「From Video Device」ブロックを利用すれば、
+% 接続されたカメラからの映像を入力として利用できる。
 %
 % <<imaq_blocks.png>>
 %
-% MATLAB �R�}���h�E�B���h�E�ォ��
+% MATLAB コマンドウィンドウ上から
 %
 %   imaqlib
 % 
-% �Ƒł�����ł��ǂ��B�ڍׂ͊�������B
+% と打ち込んでも良い。詳細は割愛する。
 %
 
 %%
-% �o��AVI�t�@�C����ς������ꍇ�ɂ́A�uTo Multimedia File�v�u���b�N��
-% �_�u���N���b�N���āA�p�����[�^�_�C�A���O���J���A�uFile name�v��ύX����B
+% 出力AVIファイルを変えたい場合には、「To Multimedia File」ブロックを
+% ダブルクリックして、パラメータダイアログを開き、「File name」を変更する。
 % 
 % <<tomultimediafile_blockparameter.png>>
 
 %%
-% �o�͐�Ƃ��āuComputer Vision Toolbox/Sinks�v���ɂ���
+% 出力先として「Computer Vision Toolbox/Sinks」内にある
 %
-% * <matlab:doc('videoviewer') Video Viewer> �u���b�N
-% * <matlab:doc('ToVideoDisplay') To Video Display> �u���b�N�iWindows(R)�̂݁j
+% * <matlab:doc('videoviewer') Video Viewer> ブロック
+% * <matlab:doc('ToVideoDisplay') To Video Display> ブロック（Windows(R)のみ）
 % 
-% �𗘗p����΁ASimulink ��Ńr���[���[������A
-% �V�~�����[�V���������Ȃ���o�͉f�����m�F���邱�Ƃ��ł���B�ڍׂ͊�������B
+% を利用すれば、Simulink 上でビューワーが現れ、
+% シミュレーションをしながら出力映像を確認することができる。詳細は割愛する。
 
 %%
-% [ <part5.html �g�b�v> ]
+% [ <part5.html トップ> ]
 
-%% MATLAB System �u���b�N
-% MATLAB System �u���b�N�𗘗p����ƁASystem object �� Simulink �u���b�N
-% �Ƃ��ė��p���邱�Ƃ��ł���B
+%% MATLAB System ブロック
+% MATLAB System ブロックを利用すると、System object を Simulink ブロック
+% として利用することができる。
 % 
-% ��Ƃ��āA�{���K Part3 �ō쐬���� Rgb2GraySystem ���u���b�N�Ƃ���
-% ���p���Ă݂悤�B
+% 例として、本演習 Part3 で作成した Rgb2GraySystem をブロックとして
+% 利用してみよう。
 
 %%
-% ���f�� videoio �� videorgb2gray �Ƃ��ĕۑ�����B
+% モデル videoio を videorgb2gray として保存する。
 %
 %   open_system('videoio')
 %   save_system('videoio','videorgb2gray')
 
 %%
-% Simulink ���C�u�����u���E�U�[����uSimulink/User-Defined Functions�v��
-% �u���b�N�Q��\�����A���̒�����
+% Simulink ライブラリブラウザーから「Simulink/User-Defined Functions」の
+% ブロック群を表示し、その中から
 %
-% * MATLAB System �u���b�N
+% * MATLAB System ブロック
 %
-% ��I�����āA���f�� videorgb2gray �ɒǉ����悤
+% を選択して、モデル videorgb2gray に追加しよう
 %
 % <<udf_blocks.png>>
 
 %%
-% ���f�� videorgb2gray �͈ȉ��̗l�ȏ�ԂƂȂ�B
+% モデル videorgb2gray は以下の様な状態となる。
 %
 % <<videorgb2gray_slx_00.png>>
 
 %%
-% MATLAB System �u���b�N���f�����o�͂̊Ԃɋ��݁A�v���p�e�B�_�C�A���O���J����
+% MATLAB System ブロックを映像入出力の間に挟み、プロパティダイアログを開いて
 % 
-% * System object��: Rgb2GraySystem
+% * System object名: Rgb2GraySystem
 %
-% ��ݒ肵�悤�B
+% を設定しよう。
 %
 % <<videorgb2gray_slx_01.png>>
 
 %%
-% �uOK�v�{�^�����N���b�N���āA�����̃u���b�N��K���ɑ傫���L����ƈȉ��̗l��
-% ��ԂƂȂ�B
+% 「OK」ボタンをクリックして、中央のブロックを適当に大きく広げると以下の様な
+% 状態となる。
 %
 % <<videorgb2gray_slx_02.png>>
 
 %%
-% ���s���āAAVI�t�@�C�� output.avi ���m�F���Ă݂悤�B
+% 実行して、AVIファイル output.avi を確認してみよう。
 
 %%
-% [ <part5.html �g�b�v> ] 
+% [ <part5.html トップ> ] 
 
-%% �A�C�R���̃J�X�^�}�C�Y
-% MATLAB System �u���b�N�̓��o�͖��́A�Ăяo����� System object ���
-% �J�X�^�}�C�Y�ł���B
+%% アイコンのカスタマイズ
+% MATLAB System ブロックの入出力名は、呼び出される System object 上で
+% カスタマイズできる。
 %
-% ���o�̓|�[�g���Ȃǂ��w�肵�Ă݂悤�B
-% �u���b�N�p�����[�^�_�C�A���O���� Rgb2GraySystem �̃\�[�X�R�[�h���J�����B
+% 入出力ポート名などを指定してみよう。
+% ブロックパラメータダイアログから Rgb2GraySystem のソースコードを開こう。
 %
 % <<matlabsystem_blockparameter.png>>
 %
-% ���ɁAmethods(Access=protected) �u���b�N�ɁA�ȉ��̃��\�b�h��ǋL����B
+% 次に、methods(Access=protected) ブロックに、以下のメソッドを追記する。
 %
 %   methods (Access=protected)
-%      ...�i�ȗ��j
-%      % ���̓|�[�g��
+%      ...（省略）
+%      % 入力ポート数
 %      function N = getNumInputsImpl(obj)
 %          N = 1; 
 %      end
-%      % �o�̓|�[�g��        
+%      % 出力ポート数        
 %      function N = getNumOutputsImpl(obj)
 %          N = 1;
 %      end      
-%      % ���̓|�[�g��
+%      % 入力ポート名
 %      function inputName = getInputNamesImpl(obj)
 %             inputName = 'RGB';
 %      end
-%      % �o�̓|�[�g��
+%      % 出力ポート名
 %      function outputName = getOutputNamesImpl(obj)
 %             outputName = 'Gray';
 %      end
-%      ...�i�ȗ��j
+%      ...（省略）
 %   end
 
 %% 
-% ����ɁA
+% さらに、
 %
 % * <matlab:doc('matlab.system.mixin.CustomIcon') matlab.system.mixin.CustomIcon>
 %
-% ���p�����邱�ƂŁA�A�C�R�����J�X�^�}�C�Y�ł���B
+% を継承することで、アイコンをカスタマイズできる。
 % 
-% �܂��A�\�[�X�R�[�h�� classdef �̍s���ȉ��̂悤�ɏC������B
+% まず、ソースコードの classdef の行を以下のように修正する。
 %
 %   classdef Rgb2GraySystem < matlab.System ...
 %         & matlab.system.mixin.CustomIcon
 %
-% ���ɁAmethods(Access=protected) �u���b�N�ɁA�ȉ��̃��\�b�h��ǋL����B
+% 次に、methods(Access=protected) ブロックに、以下のメソッドを追記する。
 %
 %   methods (Access=protected)
-%      ...�i�ȗ��j
-%      % �A�C�R��
+%      ...（省略）
+%      % アイコン
 %      function icon = getIconImpl(obj)
 %         icon = sprintf('RGB to Gray');
 %      end
-%      ...�i�ȗ��j
+%      ...（省略）
 %   end
 
 %%
-% �uOK�v�{�^�����N���b�N���āA�_�C�A���O�����ƈȉ��̗l�ɁA
-% �����u���b�N�̓��o�͖��ƃA�C�R�������w��ʂ�̏�ԂƂȂ�B
+% 「OK」ボタンをクリックして、ダイアログを閉じると以下の様に、
+% 中央ブロックの入出力名とアイコン名が指定通りの状態となる。
 %
 % <<videorgb2gray_slx_03.png>>
 
 
 %%
-% [ <part5.html �g�b�v> ]
+% [ <part5.html トップ> ]
 
-%% ���Z���x�ƐM�������`���i�I�v�V�����j
+%% 演算精度と信号特性伝搬（オプション）
 %
 % * <matlab:doc('matlab.system.mixin.Propagates') matlab.system.mixin.Propagates>
 %
-% �i�������j
+% （準備中）
 
-%% �t�B�[�h�X���[�i�I�v�V�����j
+%% フィードスルー（オプション）
 %
 % * <matlab:doc('matlab.system.mixin.Nondirect') matlab.system.mixin.Nondirect>
 %
-% �i�������j
+% （準備中）
 
 %%
-% [ <part5.html �g�b�v> ]
+% [ <part5.html トップ> ]
 
-%% ���K�ۑ�
-% *���K�ۑ�5-1. Prewitt���z�t�B���^*
+%% 演習課題
+% *演習課題5-1. Prewitt勾配フィルタ*
 %
-% �{���KPart4�ō쐬���� System object �N���X
+% 本演習Part4で作成した System object クラス
 %
 %   * Rgb2GraySystem
 %   * GradFiltSystem
 %   * Hsv2RgbSystem
 %
-% �� MATLAB System �u���b�N�Ƃ��ė��p���A�ȉ��� MATLAB �R�[�h�� Simulink ���
-% ���f�������悤�B
+% を MATLAB System ブロックとして利用し、以下の MATLAB コードを Simulink 上で
+% モデル化しよう。
 % 
 %   vrObj = VideoReader('vipmen.avi');
 %   frameRate = get(vrObj,'FrameRate');
@@ -338,42 +338,42 @@
 %   gfsObj = GradFiltSystem();
 %   open(vwObj)
 %   while (hasFrame(vrObj))
-%      frame     = readFrame(vrObj);         % �t���[������
-%      graysc    = step(rgsObj,frame);       % �O���[�X�P�[����
-%      [mag,ang] = step(gfsObj,graysc);      % ���z�t�B���^�����O
-%      ang       = (ang+pi)/(2*pi);          % �Ίp�̐��K��
-%      mag       = min(mag,1);               % �傫���̖O�a����
-%      [r,g,b]   = step(hrsObj,ang,mag,mag); % �^���J���[��
-%      frame     = cat(3,r,g,b);             % RGB�z�񌋍�
-%      writeVideo(vwObj,frame);              % �t���[���o�� 
+%      frame     = readFrame(vrObj);         % フレーム入力
+%      graysc    = step(rgsObj,frame);       % グレースケール化
+%      [mag,ang] = step(gfsObj,graysc);      % 勾配フィルタリング
+%      ang       = (ang+pi)/(2*pi);          % 偏角の正規化
+%      mag       = min(mag,1);               % 大きさの飽和処理
+%      [r,g,b]   = step(hrsObj,ang,mag,mag); % 疑似カラー化
+%      frame     = cat(3,r,g,b);             % RGB配列結合
+%      writeVideo(vwObj,frame);              % フレーム出力 
 %   end
 %   close(vwObj)
 %
-% �i���f����j
+% （モデル例）
 %
 % <<videogradfilt_slx_00.png>>
 %
-% �������A�ȉ��̃u���b�N�𗘗p�B
+% ただし、以下のブロックを利用。
 %
 % * <matlab:doc('Saturation') Simulink/Commonly Used Blocks/Saturation>
 % * <matlab:doc('Constant') Simulink/Commonly Used Blocks/Constant>
 % * <matlab:doc('Sum') Simulink/Commonly Used Blocks/Sum>
 % * <matlab:doc('Gain') Simulink/Commonly Used Blocks/Gain>
 %
-% �i������j
+% （処理例）
 %
 % <<vipmengradfilt_avi.png>>
 
 %%
-% *���K�ۑ�5-2. Sobel���z�t�B���^*
+% *演習課題5-2. Sobel勾配フィルタ*
 %
-% ���K�ۑ�5-1�ō쐬���� Prewitt ���z�t�B���^���f���̃t�B���^�J�[�l��
-% �����K�ۑ�4-1�ŏЉ�� Sobel �J�[�l���ɕς��ăV�~�����[�V���������s
-% ���Ă݂悤�B
+% 演習課題5-1で作成した Prewitt 勾配フィルタモデルのフィルタカーネル
+% を演習課題4-1で紹介した Sobel カーネルに変えてシミュレーションを実行
+% してみよう。
 % 
-% * �q���g�FGradFilterSystem �u���b�N�̃p�����[�^ Kernel ���C������΂悢�B
+% * ヒント：GradFilterSystem ブロックのパラメータ Kernel を修正すればよい。
 %
-% �i������j
+% （処理例）
 %
 % <<vipmengradfilt_sobel_avi.png>>
 
@@ -383,6 +383,6 @@
 % </html>
 %%
 % <part4.html Part4> |
-% <index.html ���j���[> |
-% <part5.html �g�b�v> |
-% <part6.html Part6>
+% | <index.html メニュー> |
+% | <part5.html トップ> |
+% | <part6.html Part6>

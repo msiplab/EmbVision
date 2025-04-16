@@ -3,7 +3,7 @@
 % *Video Stream Processing - MATLAB -*
 %
 % <html>
-% Shogo MURAMATSU　and Yuki TAKAHASHI <br>
+% Shogo MURAMATSU and Yuki TAKAHASHI <br>
 % Niigata Univ.
 % </html>
 %
@@ -12,8 +12,8 @@
 
 %%
 % <part3.html Part3> |
-% <index.html Contents> |
-% <part5.html Part5>
+% | <index.html Contents> |
+% | <part5.html Part5>
 
 %%
 % *Summary*
@@ -541,6 +541,6 @@ close(vwObj)
 % </html>
 %%
 % <part3.html Part3> |
-% <index.html Contents> |
-% <part4.html Top> |
-% <part5.html Part5>
+% | <index.html Contents> |
+% | <part4.html Top> |
+% | <part5.html Part5>

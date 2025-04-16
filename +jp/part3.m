@@ -1,63 +1,63 @@
-%% *EmbVision �`���[�g���A���i�R�j*
+%% *EmbVision チュートリアル（３）*
 %
-% *�N���X��`�ƒP�̃e�X�g*
+% *クラス定義と単体テスト*
 %
-% �V����w
-% �����@����C�����@�E��
+% 新潟大学
+% 村松　正吾，高橋　勇希
 %
 % Copyright (c), All rights reserved, 2014-2025, Shogo MURAMATSU and Yuki TAKAHASHI
 % 
 
 %%
 % <part2.html Part2> |
-% <index.html ���j���[> |
-% <part4.html Part4>
+% | <index.html メニュー> |
+% | <part4.html Part4>
 
 %%
-% *�T�v*
+% *概要*
 %
-% �{���K�ł́AMATLAB�ł̃I�u�W�F�N�g�w���v���O���~���O��
-% �P�̃e�X�g�@�\�ɂ��ĊȒP�Ɋw�ԁB
+% 本演習では、MATLABでのオブジェクト指向プログラミングと
+% 単体テスト機能について簡単に学ぶ。
 
-%% �I�u�W�F�N�g�w���v���O���~���O(OOP)
-% �v���O�����̃��W���[�����͍����M�����ƍL���g�����������炷�B
-% �I�u�W�F�N�g�w���v���O���~���O
-% �i <matlab:doc('object-oriented-programming') OOP> �j�ł́A
+%% オブジェクト指向プログラミング(OOP)
+% プログラムのモジュール化は高い信頼性と広い拡張性をもたらす。
+% オブジェクト指向プログラミング
+% （ <matlab:doc('object-oriented-programming') OOP> ）では、
 %
-% *��ԁi�v���p�e�B�j* �� *�U�����i���\�b�h�j*
+% *状態（プロパティ）* と *振舞い（メソッド）*
 %
-% �����v���O�������W���[�����N���X�Ƃ��Ē�`���A
+% をもつプログラムモジュールをクラスとして定義し、
 %
-% *�N���X�̎��́i�C���X�^���X�I�u�W�F�N�g�j*
+% *クラスの実体（インスタンスオブジェクト）*
 %
-% �𐶐����Ȃ���g�����A���݂ɍ�p�����đ�K�͂ȃv���O�������\�z����B
+% を生成しながら組合せ、相互に作用させて大規模なプログラムを構築する。
 %
-% MATLAB�ł�OOP�𗘗p���邱�Ƃ��ł���B
+% MATLABでもOOPを利用することができる。
 % 
-% �o�[�W�����A�b�v���d�˂閈��
-% OOP�@�\����������Ă��Ă���A���ł�
-% <matlab:doc('matlab.System') System object(TM)>  ���N���X�̌p���ɂ��A
+% バージョンアップを重ねる毎に
+% OOP機能が強化されてきており、今では
+% <matlab:doc('matlab.System') System object(TM)>  基底クラスの継承により、
 %
-% * �X�g���[������
-% * �R�[�h����
-% * Simulink �u���b�N��`
+% * ストリーム処理
+% * コード生成
+% * Simulink ブロック定義
 %
-% ���e�ՂƂȂ��Ă���B
+% が容易となっている。
 
 %%
-% [ <part3.html �g�b�v> ]
+% [ <part3.html トップ> ]
 
-%% System object�N���X�̒�`
-% �ł́A��Ƃ���RGB�摜 ���� �O���[�X�P�[���摜�ɕϊ�����
-% System object �N���X�̌^�g���`���Ă݂悤�B
+%% System objectクラスの定義
+% では、例としてRGB画像 から グレースケール画像に変換する
+% System object クラスの型枠を定義してみよう。
 %
-% �z�[���^�O����A
+% ホームタグから、
 % 
-% # �u�V�K�쐬�v
-% # ���uSystem object >�v
-% # ���u�W���v
+% # 「新規作成」
+% # →「System object >」
+% # →「標準」
 %
-% ��I������ƃG�f�B�^���J���ȉ��̂悤�ȃR�[�h�̕ҏW�����������B
+% を選択するとエディタが開き以下のようなコードの編集準備が整う。
 
 %%
 %   classdef Untitled < matlab.System
@@ -90,11 +90,11 @@
 %   end
 
 %%
-% <matlab:doc('classdef') classdef> �����  Untitled  ��
+% <matlab:doc('classdef') classdef> 直後の  Untitled  を
 % 
 % Rgb2GraySystem  
 %
-% �Ə��������A�擪�s���ȉ��̂悤�ɂȂ�悤�ҏW���悤�B
+% と書き換え、先頭行が以下のようになるよう編集しよう。
 
 %%
 %   classdef Rgb2GraySystem < matlab.System
@@ -103,86 +103,86 @@
 %   
 
 %%
-% �ҏW�����t�@�C���� Rgb2GraySystem.m �Ƃ��ĕۑ����悤�B
+% 編集したファイルを Rgb2GraySystem.m として保存しよう。
 %
-% �Ȃ��A classdef  �ɑ���������̓N���X���ƂȂ�B
-% �N���X���̓t�@�C�����ƈ�v������K�v������B
+% なお、 classdef  に続く文字列はクラス名となる。
+% クラス名はファイル名と一致させる必要がある。
 
 %%
-% ���p�菇���ȉ��ɂ܂Ƃ߂�B
+% 利用手順を以下にまとめる。
 %
-% # �C���X�^���X�I�u�W�F�N�g�𐶐��i�R���X�g���N�^�̌ďo���j
-% #  step ���\�b�h�����s�istepImpl�̌ďo���j
+% # インスタンスオブジェクトを生成（コンストラクタの呼出し）
+% #  step メソッドを実行（stepImplの呼出し）
 
 %%
 %   >> u = 1;
-%   >> obj = Rgb2GraySystem(); % �R���X�g���N�^�̌ďo��
-%   >> y = step(obj,u)         % stepImpl �̌ďo��
+%   >> obj = Rgb2GraySystem(); % コンストラクタの呼出し
+%   >> y = step(obj,u)         % stepImpl の呼出し
 %   
 %   y =
 %
 %        1
 
 %%
-% �����_��  Rgb2GraySystem �̃N���X��`�͎����������ꂽ�܂܂ł���B
+% 現時点で  Rgb2GraySystem のクラス定義は自動生成されたままである。
 %
-% stepImpl ���\�b�h�́A���� u �����̂܂܏o�͂���B
+% stepImpl メソッドは、入力 u をそのまま出力する。
 %
 %   function y = stepImpl(obj,u)
 %      y = u;
 %   end
 %
-% �N���X Rgb2GraySystem �����]�̋@�\�𖞂������߂ɂ͏�ԁi�v���p�e�B�j��
-% �U�����i���\�b�h�j��K�؂Ɏ������Ȃ���΂Ȃ�Ȃ��B
+% クラス Rgb2GraySystem が所望の機能を満たすためには状態（プロパティ）と
+% 振舞い（メソッド）を適切に実装しなければならない。
 %
-% �ȉ��ł́A *�e�X�g�쓮�J��* �ɂ�� Rgb2GraySystem �N���X�̎�����i�߂�B
+% 以下では、 *テスト駆動開発* により Rgb2GraySystem クラスの実装を進める。
 
 %%
-% [ <part3.html �g�b�v> ]
+% [ <part3.html トップ> ]
 
-%% �e�X�g�쓮�J��
-% �v���O�����̐M���������コ���邽�߂ɂ́A�e�X�g�p�̃R�[�h���[��������Ɨǂ��B
+%% テスト駆動開発
+% プログラムの信頼性を向上させるためには、テスト用のコードを充実させると良い。
 % 
-% MATLAB�ł́A���W���[������ <matlab:doc('matlab.unittest') �P�̃e�X�g> 
-% ������������t���[�����[�N���񋟂���Ă���B
+% MATLABでは、モジュール毎の <matlab:doc('matlab.unittest') 単体テスト> 
+% を自動化するフレームワークが提供されている。
 %
-% �P�̃e�X�g�̓N���X�P�ʂōs���e�X�g�ŁA�����R�[�h�����e�X�g�̋L�q��
-% �D�悷��e�X�g�쓮�J���Ɍ������Ȃ��B
+% 単体テストはクラス単位で行うテストで、実装コードよりもテストの記述を
+% 優先するテスト駆動開発に欠かせない。
 %
-% �e�X�g��D�悵�ď[�������邱�Ƃ�
-% �o�O�����Ȃ����ς�g���ɋ����v���O�������J���ł���B
+% テストを優先して充実させることで
+% バグが少なく改変や拡張に強いプログラムを開発できる。
 % 
-% ��ʂɁA�e�X�g�쓮�J���ł́A
+% 一般に、テスト駆動開発では、
 % 
-% * �e�X�g���\�b�h�̎��� 
-% * �� �_�~�[���\�b�h�ł̎��s�̊m�F
-% * �� �^�[�Q�b�g���\�b�h�̎���
-% * �� �^�[�Q�b�g���\�b�h�ł̐����̊m�F
+% * テストメソッドの実装 
+% * → ダミーメソッドでの失敗の確認
+% * → ターゲットメソッドの実装
+% * → ターゲットメソッドでの成功の確認
 % 
-% ���J�Ԃ��A�e�X�g�N���X�ƃ^�[�Q�b�g�N���X���[��������B
+% を繰返し、テストクラスとターゲットクラスを充実させる。
 
 %%
-% �ȉ��̎菇�ŁA Rgb2GraySystem �̃N���X������i�߂悤�B
+% 以下の手順で、 Rgb2GraySystem のクラス実装を進めよう。
 % 
-% # �e�X�g�N���X Rgb2GraySystemTestCase �̒�`
-% # �e�X�g�N���X Rgb2GraySystemTestCase �ւ̃��\�b�h testSize �̎���
-% # �^�[�Q�b�g�N���X Rgb2GraySystem �̃��\�b�h testSize �̎��s�̊m�F
-% # �^�[�Q�b�g�N���X Rgb2GraySystem �̃��\�b�h stepImpl �̎���
-% # �^�[�Q�b�g�N���X Rgb2GraySystem �̃��\�b�h testSize �̐����̊m�F
+% # テストクラス Rgb2GraySystemTestCase の定義
+% # テストクラス Rgb2GraySystemTestCase へのメソッド testSize の実装
+% # ターゲットクラス Rgb2GraySystem のメソッド testSize の失敗の確認
+% # ターゲットクラス Rgb2GraySystem のメソッド stepImpl の実装
+% # ターゲットクラス Rgb2GraySystem のメソッド testSize の成功の確認
 
-%% �e�X�g�N���X�̒�`
-% �ł́A�e�X�g�N���X Rgb2GraySystemTestCase ���`���Ă݂悤�B
+%% テストクラスの定義
+% では、テストクラス Rgb2GraySystemTestCase を定義してみよう。
 %
-% �z�[���^�O����A
+% ホームタグから、
 % 
-% # �u�V�K�쐬�v
-% # ���u�N���X�v
+% # 「新規作成」
+% # →「クラス」
 %
-% ��I������ƃG�f�B�^���J���ȉ��̂悤�ȃR�[�h�̕ҏW�����������B
+% を選択するとエディタが開き以下のようなコードの編集準備が整う。
 % 
 %   classdef Untitled
-%   %UNTITLED ���̃N���X�̊T�v�������ɋL�q
-%      %   �ڍא����������ɋL�q
+%   %UNTITLED このクラスの概要をここに記述
+%      %   詳細説明をここに記述
 %      properties
 %      end
 %      methods
@@ -191,271 +191,271 @@
 
 %%
 % <matlab:doc('matlab.unittest.TestCase') matlab.unittest.TestCase> 
-% �N���X���p�����āA�e�X�g�N���X Rgb2GraySystemTestCase ���`����΂悢�B
+% クラスを継承して、テストクラス Rgb2GraySystemTestCase を定義すればよい。
 %
-% ���Ȃ킿�A�擪�� classdef �̍s��
+% すなわち、先頭部 classdef の行を
 %
 %   classdef Rgb2GraySystemTestCase < matlab.unittest.TestCase
-%   %RGB2GRAYSYSTEMTESTCASER Rgb2GraySystem �̃e�X�g�P�[�X
+%   %RGB2GRAYSYSTEMTESTCASER Rgb2GraySystem のテストケース
 %
-% �Ə���������΂悢�B
+% と書き換えればよい。
 %
-% �܂��A Test �����̕t���� <matlab:doc('methods') methods> �u���b�N
+% また、 Test 属性の付いた <matlab:doc('methods') methods> ブロック
 %
 %   methods (Test)
 %   end
 % 
-% ��p�ӂ���B
+% を用意する。
 
 %%
-% �ҏW��̃R�[�h�S�͈̂ȉ��̂悤�ɂȂ�B
+% 編集後のコード全体は以下のようになる。
 %
 %   classdef Rgb2GraySystemTestCase < matlab.unittest.TestCase
-%       %RGB2GRAYSYSTEMTESTCASE Rgb2GraySystem �̃e�X�g�P�[�X
+%       %RGB2GRAYSYSTEMTESTCASE Rgb2GraySystem のテストケース
 %       properties
 %       end
 %       methods (Test)
 %       end
 %   end
 %
-% �ҏW�����t�@�C���� Rgb2GraySystemTestCase.m �Ƃ��ĕۑ����悤�B
+% 編集したファイルを Rgb2GraySystemTestCase.m として保存しよう。
 
 %%
-% [ <part3.html �g�b�v> ]
+% [ <part3.html トップ> ]
 
-%% �e�X�g���\�b�h�̒ǉ�
-% �ł́A�e�X�g�N���X Rgb2GraySystemTestCase ��
-% �e�X�g���\�b�h��ǉ����悤�B
+%% テストメソッドの追加
+% では、テストクラス Rgb2GraySystemTestCase に
+% テストメソッドを追加しよう。
 % 
-% Test �����̂��� methods �u���b�N����
-% �e�X�g�̓��e���L�q�������\�b�h��ǉ�����΂悢�B
-% ���u���b�N���̑S�Ẵ��\�b�h�������I�Ƀe�X�g�̑ΏۂƂȂ�B
+% Test 属性のついた methods ブロック内に
+% テストの内容を記述したメソッドを追加すればよい。
+% 同ブロック内の全てのメソッドが自動的にテストの対象となる。
 %
-% �e�X�g���\�b�h
+% テストメソッド
 %   
 %   function testSize(testCase)
-%      % ����
-%      u = zeros(1,2,3);   % 1�s2��3�����̎O������z��
-%      % ���Ғl
-%      szExpctd = [ 1 2 ]; % 1�s2��̓񎟌��z��
-%      % �^�[�Q�b�g�̃C���X�^���X��
+%      % 準備
+%      u = zeros(1,2,3);   % 1行2列3成分の三次元零配列
+%      % 期待値
+%      szExpctd = [ 1 2 ]; % 1行2列の二次元配列
+%      % ターゲットのインスタンス化
 %      obj = Rgb2GraySystem();
-%      % ���s����
+%      % 実行結果
 %      y = step(obj,u);
-%      % �T�C�Y�̌���
+%      % サイズの検証
 %      testCase.verifySize(y,szExpctd);
 %   end
 %
-% �� Rgb2GraySystemTestCase �� methos (Test) �u���b�N�ɒǉ����悤�B
+% を Rgb2GraySystemTestCase の methos (Test) ブロックに追加しよう。
 %
-% �Ȃ��A <matlab:doc('matlab.unittest.qualifications.Verifiable.verifySize')
-% verifySize> �́A�l���w�肳�ꂽ�T�C�Y�ł��邱�Ƃ����؂���B
+% なお、 <matlab:doc('matlab.unittest.qualifications.Verifiable.verifySize')
+% verifySize> は、値が指定されたサイズであることを検証する。
 %
-% <matlab:doc('zeros') zeros> �֐��́A�w�肳�ꂽ�T�C�Y�̗�z���
-% ��������B
+% <matlab:doc('zeros') zeros> 関数は、指定されたサイズの零配列を
+% 生成する。
 
 %%
-% �R�}���h�E�B���h�E��� <matlab:doc('matlab.unittest.TestCase.run') run> 
-% ���\�b�h���Ăяo���ăe�X�g�����s���悤�B
+% コマンドウィンドウ上で <matlab:doc('matlab.unittest.TestCase.run') run> 
+% メソッドを呼び出してテストを実行しよう。
 %
 %   >> result = run(Rgb2GraySystemTestCase);
 %
-% Rgb2GraySystem �̎������s�\���Ȃ̂ŁA���؂͎��s�ɏI���B
+% Rgb2GraySystem の実装が不十分なので、検証は失敗に終わる。
 
-%% �^�[�Q�b�g�N���X�̎���
-% ���؂̎��s��������邽�߂ɃN���X Rgb2GraySystem �� stepImpl ���\�b�h
-% ��
+%% ターゲットクラスの実装
+% 検証の失敗を回避するためにクラス Rgb2GraySystem の stepImpl メソッド
+% を
 % 
 %   function y = stepImpl(obj,u)
 %      y = zeros(size(u,1),size(u,2));
 %   end
 %
-% �ƒ�`���Ȃ����āA�ēx�e�X�g�����s���悤�B
+% と定義しなおして、再度テストを実行しよう。
 %
 %   >> result = run(Rgb2GraySystemTestCase);
 %  
-%   Rgb2GraySystemTestCase �����s���Ă��܂�
+%   Rgb2GraySystemTestCase を実行しています
 %   .
-%   Rgb2GraySystemTestCase ���������܂���
+%   Rgb2GraySystemTestCase が完了しました
 %   __________
 
 %%
-% ���ʂ͎��s���琬���ɕς��B
+% 結果は失敗から成功に変わる。
 
-%% �e�X�g�N���X�ƃ^�[�Q�b�g�N���X�̏[����
-% �ȍ~�A�ȉ��̎菇���J��Ԃ��ăe�X�g�N���X�ƃ^�[�Q�b�g�N���X���[��������B
+%% テストクラスとターゲットクラスの充実化
+% 以降、以下の手順を繰り返してテストクラスとターゲットクラスを充実させる。
 %
-% # �e�X�g�N���X�ւ̃e�X�g���\�b�h�̎���
-% # �^�[�Q�b�g�N���X�̃e�X�g���s�̊m�F
-% # �^�[�Q�b�g�N���X�ւ̃��\�b�h�̎���
-% # �^�[�Q�b�g�N���X�̃e�X�g�����̊m�F
+% # テストクラスへのテストメソッドの実装
+% # ターゲットクラスのテスト失敗の確認
+% # ターゲットクラスへのメソッドの実装
+% # ターゲットクラスのテスト成功の確認
 
 %%
-% ���̃e�X�g�N���X
+% 次のテストクラス
 %
 %   classdef Rgb2GraySystemTestCase < matlab.unittest.TestCase
-%       %RGB2GRAYSYSTEMTESTCASE Rgb2GraySystem �̃e�X�g�P�[�X
+%       %RGB2GRAYSYSTEMTESTCASE Rgb2GraySystem のテストケース
 %       properties
 %       end
 %       methods (Test)
 %           function testSize(testCase)
-%               % ����
-%               u = zeros(1,2,3);   % 1�s2��3�����̎O�����z��
-%               % ���Ғl
-%               szExpctd = [ 1 2 ]; % 1�s2��̓񎟌��z��
-%               % �^�[�Q�b�g�̃C���X�^���X��
+%               % 準備
+%               u = zeros(1,2,3);   % 1行2列3成分の三次元配列
+%               % 期待値
+%               szExpctd = [ 1 2 ]; % 1行2列の二次元配列
+%               % ターゲットのインスタンス化
 %               obj = Rgb2GraySystem();
-%               % ���s����
+%               % 実行結果
 %               y = step(obj,u);
-%               % �T�C�Y�̌���
+%               % サイズの検証
 %               testCase.verifySize(y,szExpctd);
 %           end
 %           function testValues(testCase)
-%               % ����
-%               u = rand(4,6,3);        % �O���������_���z��
-%               % ���Ғl
-%               arrayExpctd = rgb2gray(u); % �O���[�X�P�[���̊��Ғl
-%               % �^�[�Q�b�g�̃C���X�^���X��
+%               % 準備
+%               u = rand(4,6,3);        % 三次元ランダム配列
+%               % 期待値
+%               arrayExpctd = rgb2gray(u); % グレースケールの期待値
+%               % ターゲットのインスタンス化
 %               obj = Rgb2GraySystem();
-%               % ���s����
+%               % 実行結果
 %               arrayActual = step(obj,u);
-%               % �z��̒l�̌���
+%               % 配列の値の検証
 %               testCase.verifyEqual(arrayActual,arrayExpctd);
 %           end
 %       end
 %   end
 %
-% �𖞑�����悤�ɁA Rgb2GraySystem �N���X���������悤�B
+% を満足するように、 Rgb2GraySystem クラスを実装しよう。
 %
-% �Ȃ��A <matlab:doc('matlab.unittest.qualifications.Verifiable.verifyEqual')
-% verifyEqual> �́A�l���w��l�Ɠ��������Ƃ����؂���B
+% なお、 <matlab:doc('matlab.unittest.qualifications.Verifiable.verifyEqual')
+% verifyEqual> は、値が指定値と等しいことを検証する。
 % 
-% <matlab:doc('rand') rand> �֐��́A0����1�̎����^�̈�l�����𐶐�
-% ����B
+% <matlab:doc('rand') rand> 関数は、0から1の実数型の一様乱数を生成
+% する。
 
 result = run(Rgb2GraySystemTestCase);
 
 %%
-% Rgb2GraySystem �𐳂��������ł���΁A�e�X�g�͐�������B
+% Rgb2GraySystem を正しく実装できれば、テストは成功する。
 
 %%
-% [ <part3.html �g�b�v> ]
+% [ <part3.html トップ> ]
 
-%% �v���p�e�B�̗��p
-% �N���X�͐U�����i���\�b�h�j�̑��ɏ�ԁi�v���p�e�B�j�������Ƃ��ł���B
+%% プロパティの利用
+% クラスは振舞い（メソッド）の他に状態（プロパティ）を持つことができる。
 %
-% �N���X�̏�Ԃ� <matlab:doc('properties') properties> �u���b�N����
-% �v���p�e�B����񋓂���B
+% クラスの状態は <matlab:doc('properties') properties> ブロック内で
+% プロパティ名を列挙する。
 %
-% �Ⴆ�΁A Kernel �Ƃ������O�̃v���p�e�B������ GradFiltSystem �Ƃ�������
-% System object �N���X�̒�`��
+% 例えば、 Kernel という名前のプロパティをもつ GradFiltSystem という名の
+% System object クラスの定義は
 %
 %   classdef GradFiltSystem < matlab.System
 %       properties
-%          Kernel % �ǉ������v���p�e�B
+%          Kernel % 追加したプロパティ
 %       end
 %       properties (DiscreteState)
 %       end
 %       properties (Access = private)
 %       end
 %       methods (Access = protected)
-%           % �Z�b�g�A�b�v�i�ŏ��̃X�e�b�v���O�Ɏ��s�j
+%           % セットアップ（最初のステップ直前に実行）
 %           function setupImpl(obj,srcImg)
 %           end
-%           % �X�e�b�v
+%           % ステップ
 %           function resImg = stepImpl(obj,srcImg)
 %              resImg = srcImg;
 %           end
-%           % ���Z�b�g
+%           % リセット
 %           function resetImpl(obj)
 %           end
 %        end
 %    end
 %
-% �̂悤�ɋL�q�����B
+% のように記述される。
 
 %% 
-% �v���p�e�B�ɂ͏����l��^���邱�Ƃ��ł���B
-% �v���p�e�B Kernel �̏����l��
+% プロパティには初期値を与えることもできる。
+% プロパティ Kernel の初期値が
 %
 %   Kernel = [  1  1  1 ; 
 %               0  0  0 ;
 %              -1 -1 -1 ];
 %
-% �ƂȂ邱�Ƃ����҂���e�X�g�N���X���������悤�B
+% となることを期待するテストクラスを実装しよう。
 %
 %   classdef GradFiltSystemTestCase < matlab.unittest.TestCase
-%       %GRADFILTSYSTEMTESTCASE GradFiltSystem �̃e�X�g�P�[�X
+%       %GRADFILTSYSTEMTESTCASE GradFiltSystem のテストケース
 %       properties
 %       end
 %       methods (Test)
 %           function testDefaultKernel(testCase)
-%               % ���Ғl�@
+%               % 期待値　
 %               kernelExpctd = [  1  1  1 ;
 %                                 0  0  0 ;
 %                               -1 -1 -1 ];
-%               % �^�[�Q�b�g�N���X�̃C���X�^���X��
+%               % ターゲットクラスのインスタンス化
 %               obj = GradFiltSystem();
-%               % �v���p�e�B�[ Kernel �̎擾
+%               % プロパティー Kernel の取得
 %               kernelActual = get(obj,'Kernel');
-%               % �v���p�e�B�[ Kernel �̌���
+%               % プロパティー Kernel の検証
 %               testCase.verifyEqual(kernelActual,kernelExpctd)
 %           end
 %       end
 %   end
 
 %%
-% GradFiltSystem �N���X����̃e�X�g���ʂ�悤�� Kernel �v���p�e�B��
-% �ҏW����B
+% GradFiltSystem クラスを上のテストが通るように Kernel プロパティを
+% 編集する。
 %
 %   properties
-%       Kernel = [  1  1  1 ; % �����������v���p�e�B
+%       Kernel = [  1  1  1 ; % 初期化したプロパティ
 %                   0  0  0 ;
 %                  -1 -1 -1 ];
 %   end
 
 %%
-% �Ȃ��A���\�b�h���Ńv���p�e�B�ɃA�N�Z�X�́A
+% なお、メソッド内でプロパティにアクセスは、
 %
 %   function y = stepImpl(obj,u)
 %      y = conv2(obj.Kernel,u); 
 %   end
 %
-% �̂悤�ɁA�������i��̗�ł͕ϐ� obj �j����ăh�b�g(.)�ɂ��s���B
+% のように、第一引数（上の例では変数 obj ）を介してドット(.)により行う。
 
 %%
-% [ <part3.html �g�b�v> ]
+% [ <part3.html トップ> ]
 
-%% �R���X�g���N�^
-% �v���p�e�B Kernel �́A GradFiltSystem �N���X��
-% �C���X�^���X�I�u�W�F�N�g�𐶐�����ۂɕύX���邱�Ƃ��ł���B
-% �܂��A�ȉ��̃e�X�g���\�b�h�� GradFiltSystemTestCase �ɒǉ����悤�B
+%% コンストラクタ
+% プロパティ Kernel は、 GradFiltSystem クラスの
+% インスタンスオブジェクトを生成する際に変更することもできる。
+% まず、以下のテストメソッドを GradFiltSystemTestCase に追加しよう。
 %
 %   methods (Test)
-%      ...�i�ȗ��j
+%      ...（省略）
 %      function testSobelKernel(testCase)
-%         % ���Ғl
+%         % 期待値
 %         kernelExpctd = [  1  2  1 ;
 %                           0  0  0 ;
 %                          -1 -2 -1 ];
-%         % �^�[�Q�b�g�N���X�̃C���X�^���X��
+%         % ターゲットクラスのインスタンス化
 %         obj = GradFiltSystem('Kernel',kernelExpctd);
-%         % �v���p�e�B�[ Kernel �̎擾
+%         % プロパティー Kernel の取得
 %         kernelActual = get(obj,'Kernel');
-%         % �v���p�e�B�[ Kernel �̌���
+%         % プロパティー Kernel の検証
 %         testCase.verifyEqual(kernelActual,kernelExpctd)
 %      end     
-%      ...�i�ȗ��j
+%      ...（省略）
 %   end
 
 %%
-% ��̃e�X�g��ʉ߂���悤�ɃR���X�g���N�^���`���悤�B
+% 上のテストを通過するようにコンストラクタを定義しよう。
 %
-% �R���X�g���N�^�́A �������w�肵�Ȃ�methods�u���b�N�i�p�u���b�N�j����
-% �N���X���Ɠ������O�̃��\�b�h�Ƃ��Ē�`����B
+% コンストラクタは、 属性を指定しないmethodsブロック（パブリック）内で
+% クラス名と同じ名前のメソッドとして定義する。
 %
 %   methods
-%      % �R���X�g���N�^
+%      % コンストラクタ
 %      function obj = GradFiltSystem(varargin)
 %         setProperties(obj,nargin,varargin{:})
 %      end
@@ -465,58 +465,58 @@ result = run(Rgb2GraySystemTestCase);
 %   end
 
 %%
-% <matlab:doc('varargin') varargin> �͉ϒ��̈������͂��󂯎��B
-% <matlab:doc('matlab.System.setProperties') setProperties> �́A
+% <matlab:doc('varargin') varargin> は可変長の引数入力を受け取る。
+% <matlab:doc('matlab.System.setProperties') setProperties> は、
 %
-% _'�v���p�e�B��1'_, _�v���p�e�B�l1_,_'�v���p�e�B��2'_, _�v���p�e�B�l2_,...
+% _'プロパティ名1'_, _プロパティ値1_,_'プロパティ名2'_, _プロパティ値2_,...
 %
-% �̑g�����ł̐ݒ���\�Ƃ���B
+% の組合せでの設定を可能とする。
 
 %%
-% [ <part3.html �g�b�v> ]
+% [ <part3.html トップ> ]
 
-%% ���K�ۑ�
+%% 演習課題
 %
-% *�ۑ�3-1. HSV2RGB�N���X*
+% *課題3-1. HSV2RGBクラス*
 % 
-% ���̃e�X�g�N���X
+% 次のテストクラス
 %
 %   classdef Hsv2RgbSystemTestCase < matlab.unittest.TestCase
-%       %HSV2RGBSYSTEMTESTCASE Hsv2RgbSystem �̃e�X�g�P�[�X
+%       %HSV2RGBSYSTEMTESTCASE Hsv2RgbSystem のテストケース
 %       properties
 %       end
 %       methods (Test)
 %           function testSize(testCase)
-%               % ����
+%               % 準備
 %               h = zeros(1,2);
 %               s = zeros(1,2);
 %               v = zeros(1,2);
-%               % ���Ғl
+%               % 期待値
 %               szRExpctd = [ 1 2 ];
 %               szGExpctd = [ 1 2 ];
 %               szBExpctd = [ 1 2 ];
-%               % �^�[�Q�b�g�̃C���X�^���X��
+%               % ターゲットのインスタンス化
 %               obj = Hsv2RgbSystem();
-%               % ���s����
+%               % 実行結果
 %               [r,g,b] = step(obj,h,s,v);
-%               % �T�C�Y�̌���
+%               % サイズの検証
 %               testCase.verifySize(r,szRExpctd);
 %               testCase.verifySize(g,szGExpctd);
 %               testCase.verifySize(b,szBExpctd);
 %           end
 %           function testValues(testCase)
-%               % ����
+%               % 準備
 %               h = rand(4,6);
 %               s = rand(4,6);
 %               v = rand(4,6);
-%               hsv = cat(3,h,s,v); % �O�����z��
-%               % ���Ғl
+%               hsv = cat(3,h,s,v); % 三次元配列化
+%               % 期待値
 %               rgbExpctd = hsv2rgb(hsv); 
-%               % �^�[�Q�b�g�̃C���X�^���X��
+%               % ターゲットのインスタンス化
 %               obj = Hsv2RgbSystem();
-%               % ���s����
+%               % 実行結果
 %               [rActual,gActual,bActual] = step(obj,h,s,v);
-%               % �z��̒l�̌���
+%               % 配列の値の検証
 %               testCase.verifyEqual(rActual,rgbExpctd(:,:,1));
 %               testCase.verifyEqual(gActual,rgbExpctd(:,:,2));
 %               testCase.verifyEqual(bActual,rgbExpctd(:,:,3));
@@ -524,95 +524,95 @@ result = run(Rgb2GraySystemTestCase);
 %       end
 %   end
 %
-% �𖞑�����悤�ɁA Hsv2RgbSystem �N���X���������悤�B
+% を満足するように、 Hsv2RgbSystem クラスを実装しよう。
 %
-% �Ȃ��A <matlab:doc('cat') cat> �֐��͎w�肵�������̕����ɔz��̌�����
-% �s���B
+% なお、 <matlab:doc('cat') cat> 関数は指定した次元の方向に配列の結合を
+% 行う。
 
 result = run(Hsv2RgbSystemTestCase);
 
 %%
-% Hsv2RgbSystem �𐳂��������ł���΁A�e�X�g�͐�������B
+% Hsv2RgbSystem を正しく実装できれば、テストは成功する。
 
 %%
-% *�ۑ�3-2. ���z�t�B���^�N���X*
+% *課題3-2. 勾配フィルタクラス*
 %
-% ���̃e�X�g�N���X
+% 次のテストクラス
 %
 %   classdef GradFiltSystemTestCase < matlab.unittest.TestCase
-%       %GRADFILTSYSTEMTESTCASE GradFiltSystem �̃e�X�g�P�[�X
+%       %GRADFILTSYSTEMTESTCASE GradFiltSystem のテストケース
 %       properties
 %       end
 %       methods (Test)
 %           function testDefaultKernel(testCase)
-%               % ���Ғl
+%               % 期待値
 %               kernelExpctd = [  1  1  1 ;
 %                                 0  0  0 ;
 %                                -1 -1 -1 ];
-%               % �^�[�Q�b�g�N���X�̃C���X�^���X��
+%               % ターゲットクラスのインスタンス化
 %               obj = GradFiltSystem();
-%               % �v���p�e�B�[ Kernel �̎擾
+%               % プロパティー Kernel の取得
 %               kernelActual = get(obj,'Kernel');
-%               % �v���p�e�B�[ Kernel �̌���
+%               % プロパティー Kernel の検証
 %               testCase.verifyEqual(kernelActual,kernelExpctd)
 %           end
 %           function testSobelKernel(testCase)
-%               % ���Ғl
+%               % 期待値
 %               kernelExpctd = [  1  2  1 ;
 %                                 0  0  0 ;
 %                                -1 -2 -1 ];
-%               % �^�[�Q�b�g�N���X�̃C���X�^���X��
+%               % ターゲットクラスのインスタンス化
 %               obj = GradFiltSystem('Kernel',kernelExpctd);
-%               % �v���p�e�B�[ Kernel �̎擾
+%               % プロパティー Kernel の取得
 %               kernelActual = get(obj,'Kernel');
-%               % �v���p�e�B�[ Kernel �̌���
+%               % プロパティー Kernel の検証
 %               testCase.verifyEqual(kernelActual,kernelExpctd)
 %           end        
 %           function testStepWithPrewittKernel(testCase)
-%               % ����
+%               % 準備
 %               H = [  1  1  1 ;
 %                      0  0  0 ;
 %                     -1 -1 -1 ];
-%               % ���Ғl�̏���
+%               % 期待値の準備
 %               I  = imread('cameraman.tif');
 %               X  = im2double(I);
-%               Yv = conv2(H  ,X);        % �������z�̌v�Z
-%               Yv = Yv(2:end-1,2:end-1); % �����摜�̃N���b�s���O
-%               Yh = conv2(H.',X);        % �������z�̌v�Z�@
-%               Yh = Yh(2:end-1,2:end-1); % �����摜�̃N���b�s���O
-%               magExpctd = sqrt(Yv.^2+Yh.^2); % ���z�̑傫���̊��Ғl
-%               angExpctd = atan2(Yv,Yh);     % ���z�̕Ίp�̂̊��Ғl
-%               % �^�[�Q�b�g�N���X�̃C���X�^���X��
+%               Yv = conv2(H  ,X);        % 垂直勾配の計算
+%               Yv = Yv(2:end-1,2:end-1); % 処理画像のクリッピング
+%               Yh = conv2(H.',X);        % 水平勾配の計算　
+%               Yh = Yh(2:end-1,2:end-1); % 処理画像のクリッピング
+%               magExpctd = sqrt(Yv.^2+Yh.^2); % 勾配の大きさの期待値
+%               angExpctd = atan2(Yv,Yh);     % 勾配の偏角のの期待値
+%               % ターゲットクラスのインスタンス化
 %               obj = GradFiltSystem();
-%               % ��������
+%               % 処理結果
 %               [magActual,angActual] = step(obj,X);
-%               % �������ʂ̌���
+%               % 処理結果の検証
 %               testCase.verifyEqual(magActual,magExpctd,'AbsTol',1e-6)
 %               testCase.verifyEqual(angActual,angExpctd,'AbsTol',1e-6)
 %           end        
 %       end
 %   end
 %
-% �𖞑�����悤�ɁA GradFiltSystem �N���X���������悤�B
+% を満足するように、 GradFiltSystem クラスを実装しよう。
 
 result = run(GradFiltSystemTestCase);
 
 %%
-% GradFiltSystem �𐳂��������ł���΁A�e�X�g�͐�������B
+% GradFiltSystem を正しく実装できれば、テストは成功する。
 
 %%
-% �i������j
+% （処理例）
 
 hrs = Hsv2RgbSystem();        
 gfs = GradFiltSystem();
 
-I = imread('cameraman.tif');     % �摜����
-[mag,ang] = step(gfs,I);         % ���z�t�B���^�����O
-ang = (ang+pi)/(2*pi);           % �Ίp�̐��K��
-mag = min(mag,1);                % �傫���̖O�a����
-[R,G,B] = step(hrs,ang,mag,mag); % �^���J���[��
-J = cat(3,R,G,B);                % RGB�z�񌋍�
-imshow(J)                        % �摜�\��
+I = imread('cameraman.tif');     % 画像入力
+[mag,ang] = step(gfs,I);         % 勾配フィルタリング
+ang = (ang+pi)/(2*pi);           % 偏角の正規化
+mag = min(mag,1);                % 大きさの飽和処理
+[R,G,B] = step(hrs,ang,mag,mag); % 疑似カラー化
+J = cat(3,R,G,B);                % RGB配列結合
+imshow(J)                        % 画像表示
 
 %%
 % <html>
@@ -620,6 +620,6 @@ imshow(J)                        % �摜�\��
 % </html>
 %%
 % <part2.html Part2> |
-% <index.html ���j���[> |
-% <part3.html �g�b�v> |
-% <part4.html Part4>
+% | <index.html メニュー> |
+% | <part3.html トップ> |
+% | <part4.html Part4>
