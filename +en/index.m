@@ -33,10 +33,10 @@
 % *Author*
 %
 % <html>
-% Shogo MURAMATSU and Yuki TAKAHASHI<br>
+% Shogo MURAMATSU, Yuki TAKAHASHI, Mitsuki TAKEFUJI and Ryusei AOKI<br>
 % Niigata Univ.
 % </html>
 %
-% Copyright (c), All rights reserved, 2014-2022, Shogo MURAMATSU and Yuki
-% TAKAHASHI
+% Copyright (c), All rights reserved, 2014-2025, Shogo MURAMATSU, Yuki
+% TAKAHASHI, Mitsuki TAKEFUJI and Ryusei AOKI
 %

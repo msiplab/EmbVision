@@ -31,9 +31,9 @@
 %
 % <html>
 % 新潟大学　<br>
-% 村松　正吾，高橋　勇希
+% 村松　正吾，高橋　勇希，竹藤　望月，青木　竜成
 % </html>
 %
-% Copyright (c), All rights reserved, 2014-2022, Shogo MURAMATSU and Yuki
-% TAKAHASHI
+% Copyright (c), All rights reserved, 2014-2025, Shogo MURAMATSU, Yuki
+% TAKAHASHI, Mitsuki TAKEFUJI and Ryusei AOKI
 %
