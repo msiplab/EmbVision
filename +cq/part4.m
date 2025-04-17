@@ -1,98 +1,98 @@
-%% *EmbVision(CQ”Å) ƒ`ƒ…[ƒgƒŠƒAƒ‹i‚Sj*
+%% *EmbVision(CQç‰ˆ) ãƒãƒ¥ãƒ¼ãƒˆãƒªã‚¢ãƒ«ï¼ˆï¼”ï¼‰*
 %
-% *‰f‘œƒXƒgƒŠ[ƒ€ˆ— - MATLAB•Ò -*
+% *æ˜ åƒã‚¹ãƒˆãƒªãƒ¼ãƒ å‡¦ç† - MATLABç·¨ -*
 %
-% VŠƒ‘åŠw
-% ‘º¼@³ŒáC‚‹´@—EŠó
+% æ–°æ½Ÿå¤§å­¦
+% æ‘æ¾ã€€æ­£å¾ï¼Œé«˜æ©‹ã€€å‹‡å¸Œ
 %
-% Copyright (c), All rights reserved, 2014-2022, Shogo MURAMATSU and Yuki TAKAHASHI
+% Copyright (c), All rights reserved, 2014-2025, Shogo MURAMATSU and Yuki TAKAHASHI
 % 
 
 %%
 % <part3.html Part3> |
-% <index.html ƒƒjƒ…[> |
-% <part5.html Part5>
+% | <index.html ãƒ¡ãƒ‹ãƒ¥ãƒ¼> |
+% | <part5.html Part5>
 
 %%
-% *ŠT—v*
+% *æ¦‚è¦*
 %
-% –{‰‰K‚Å‚ÍAMATLAB‚É‚Ä‰f‘œƒtƒ@ƒCƒ‹‚Ìî•ñ‚ð“Ç‚Ýž‚Þ•û–@‚Ì‚Ù‚©A
-% ‰f‘œ•\Ž¦A‰f‘œƒtƒ@ƒCƒ‹o—ÍAŠÈ’P‚È‰f‘œƒXƒgƒŠ[ƒ€ˆ—‚É‚Â‚¢‚ÄŠw‚ÔB
+% æœ¬æ¼”ç¿’ã§ã¯ã€MATLABã«ã¦æ˜ åƒãƒ•ã‚¡ã‚¤ãƒ«ã®æƒ…å ±ã‚’èª­ã¿è¾¼ã‚€æ–¹æ³•ã®ã»ã‹ã€
+% æ˜ åƒè¡¨ç¤ºã€æ˜ åƒãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›ã€ç°¡å˜ãªæ˜ åƒã‚¹ãƒˆãƒªãƒ¼ãƒ å‡¦ç†ã«ã¤ã„ã¦å­¦ã¶ã€‚
 %
-% €”õ‚Æ‚µ‚ÄAŠJ‚¢‚Ä‚¢‚é‘S‚Ä‚Ì Figure ‚ð <matlab:doc('close') close> ŠÖ”‚Å
-% •Â‚¶‚Ä‚¨‚­B
+% æº–å‚™ã¨ã—ã¦ã€é–‹ã„ã¦ã„ã‚‹å…¨ã¦ã® Figure ã‚’ <matlab:doc('close') close> é–¢æ•°ã§
+% é–‰ã˜ã¦ãŠãã€‚
 
 close all
 
-%% ‰f‘œ“ü—Í
+%% æ˜ åƒå…¥åŠ›
 % 
-% MATLAB‚É‚¨‚¯‚é‰f‘œ“ü—Í‚ÍA
-% <matlab:doc('VideoReader') VideoReader> ƒNƒ‰ƒX‚Ì
-% <matlab:doc('VideoReader.readFrame') readFrame> ƒƒ\ƒbƒh‚ð
-% —˜—p‚·‚é‚±‚Æ‚ÅŽÀŒ»‚Å‚«‚éB
+% MATLABã«ãŠã‘ã‚‹æ˜ åƒå…¥åŠ›ã¯ã€
+% <matlab:doc('VideoReader') VideoReader> ã‚¯ãƒ©ã‚¹ã®
+% <matlab:doc('VideoReader.readFrame') readFrame> ãƒ¡ã‚½ãƒƒãƒ‰ã‚’
+% åˆ©ç”¨ã™ã‚‹ã“ã¨ã§å®Ÿç¾ã§ãã‚‹ã€‚
  
 vrObj = VideoReader('shuttle.avi');
 frame = vrObj.readFrame();
 
 %%
-% •Ï” frame ‚Í‰f‘œƒf[ƒ^‚ÌÅ‰‚ÌƒtƒŒ[ƒ€‚ð•ÛŽ‚·‚éB
+% å¤‰æ•° frame ã¯æ˜ åƒãƒ‡ãƒ¼ã‚¿ã®æœ€åˆã®ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’ä¿æŒã™ã‚‹ã€‚
 % 
-% shuttle.avi ‚ÍRGBƒJƒ‰[‰f‘œ‚È‚Ì‚ÅA•Ï” frame ‚ÍŽOŽŸŒ³”z—ñ‚Æ‚È‚éB
+% shuttle.avi ã¯RGBã‚«ãƒ©ãƒ¼æ˜ åƒãªã®ã§ã€å¤‰æ•° frame ã¯ä¸‰æ¬¡å…ƒé…åˆ—ã¨ãªã‚‹ã€‚
 %
-% “Á‚ÉŽw’è‚ð‚µ‚È‚¯‚ê‚ÎAƒf[ƒ^Œ^‚Í•„†‚È‚µ®”‚WƒrƒbƒgŒ^ uint8‚Æ‚È‚éB
+% ç‰¹ã«æŒ‡å®šã‚’ã—ãªã‘ã‚Œã°ã€ãƒ‡ãƒ¼ã‚¿åž‹ã¯ç¬¦å·ãªã—æ•´æ•°ï¼˜ãƒ“ãƒƒãƒˆåž‹ uint8ã¨ãªã‚‹ã€‚
 
 whos vrObj frame
 
 %%
-% frame ‚ð•\Ž¦‚µ‚Ä‚Ý‚æ‚¤B
+% frame ã‚’è¡¨ç¤ºã—ã¦ã¿ã‚ˆã†ã€‚
 %
-% Œã‚Ù‚Ç—˜—p‚·‚é‚½‚ßAimshow ‚Ìƒnƒ“ƒhƒ‹ƒIƒuƒWƒFƒNƒg‚à—pˆÓ‚µ‚Ä‚¨‚­B
+% å¾Œã»ã©åˆ©ç”¨ã™ã‚‹ãŸã‚ã€imshow ã®ãƒãƒ³ãƒ‰ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚‚ç”¨æ„ã—ã¦ãŠãã€‚
 
 figure(1)
 hi1 = imshow(frame);
 
 %%
-% ‚È‚¨A•Ï” vrObj ‚ÍAVideoReader ‚ÌƒCƒ“ƒXƒ^ƒ“ƒXƒIƒuƒWƒFƒNƒg‚Æ‚È‚Á‚Ä‚¨‚èA
-% ‰f‘œ‚ÉŠÖ‚·‚éî•ñ‚ðƒvƒƒpƒeƒB‚Æ‚µ‚Ä•ÛŽ‚µ‚Ä‚¢‚éB
+% ãªãŠã€å¤‰æ•° vrObj ã¯ã€VideoReader ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨ãªã£ã¦ãŠã‚Šã€
+% æ˜ åƒã«é–¢ã™ã‚‹æƒ…å ±ã‚’ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã¨ã—ã¦ä¿æŒã—ã¦ã„ã‚‹ã€‚
 %
-% Žå‚ÈƒvƒƒpƒeƒB‚ðˆÈ‰º‚É‚Ü‚Æ‚ß‚éB
+% ä¸»ãªãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’ä»¥ä¸‹ã«ã¾ã¨ã‚ã‚‹ã€‚
 %
-% * BitsPerPixel: ˆê‰æ‘f“–‚½‚è‚Ìƒrƒbƒg” [bpp]
-% * FrameRate: ƒtƒŒ[ƒ€ƒŒ[ƒg [bps]
-% * Height: ‰æ–Ê‚Ì‚‚³ [pixels]
-% * Width: ‰æ–Ê‚Ì• [pixels]
+% * BitsPerPixel: ä¸€ç”»ç´ å½“ãŸã‚Šã®ãƒ“ãƒƒãƒˆæ•° [bpp]
+% * FrameRate: ãƒ•ãƒ¬ãƒ¼ãƒ ãƒ¬ãƒ¼ãƒˆ [bps]
+% * Height: ç”»é¢ã®é«˜ã• [pixels]
+% * Width: ç”»é¢ã®å¹… [pixels]
 
 properties(vrObj)
 
 %%
-% ‚µ‚½‚ª‚Á‚ÄA‰æ–Ê‚Ì‚‚³‚â•AƒtƒŒ[ƒ€ƒŒ[ƒg‚È‚Ç‚Ìî•ñ‚Í
-% ˆÈ‰º‚Ì‚æ‚¤‚É‚µ‚ÄŽæ“¾‚Å‚«‚éB
+% ã—ãŸãŒã£ã¦ã€ç”»é¢ã®é«˜ã•ã‚„å¹…ã€ãƒ•ãƒ¬ãƒ¼ãƒ ãƒ¬ãƒ¼ãƒˆãªã©ã®æƒ…å ±ã¯
+% ä»¥ä¸‹ã®ã‚ˆã†ã«ã—ã¦å–å¾—ã§ãã‚‹ã€‚
 
 height    = vrObj.Height;
 width     = vrObj.Width;
 frameRate = vrObj.FrameRate;
 
 %%
-% ‚³‚ç‚ÉA readFrame ƒƒ\ƒbƒh‚ðŒÄ‚Ño‚·‚ÆŽŸ‚ÌƒtƒŒ[ƒ€‚ð“Ç‚Ýž‚ÞB
+% ã•ã‚‰ã«ã€ readFrame ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã™ã¨æ¬¡ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’èª­ã¿è¾¼ã‚€ã€‚
 %
-% ‚È‚¨Aimshow ‚Ìƒnƒ“ƒhƒ‹ƒIƒuƒWƒFƒNƒg hi1 ‚Ì CData ƒvƒƒpƒeƒB‚É frame ‚Ì
-% ƒf[ƒ^‚ðã‘‚«‚·‚é‚±‚Æ‚Å•\Ž¦‚ðXV‚µ‚Ä‚¢‚éB
+% ãªãŠã€imshow ã®ãƒãƒ³ãƒ‰ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ hi1 ã® CData ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã« frame ã®
+% ãƒ‡ãƒ¼ã‚¿ã‚’ä¸Šæ›¸ãã™ã‚‹ã“ã¨ã§è¡¨ç¤ºã‚’æ›´æ–°ã—ã¦ã„ã‚‹ã€‚
 
 frame = vrObj.readFrame();
 hi1.CData = frame;
 
 %%
-% [ <part4.html ƒgƒbƒv> ]
+% [ <part4.html ãƒˆãƒƒãƒ—> ]
 
-%% ‰f‘œ•\Ž¦
-% ‰f‘œ“ü—ÍƒIƒuƒWƒFƒNƒg vrObj ‚ÌŽž‚ð 0 ‚É–ß‚µ‚ÄA‘S‚Ä‚ÌƒtƒŒ[ƒ€‚ð•\Ž¦‚µ‚æ‚¤B
+%% æ˜ åƒè¡¨ç¤º
+% æ˜ åƒå…¥åŠ›ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ vrObj ã®æ™‚åˆ»ã‚’ 0 ã«æˆ»ã—ã¦ã€å…¨ã¦ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’è¡¨ç¤ºã—ã‚ˆã†ã€‚
 %
-% ‚È‚¨A <matlab:doc('while') while> ƒ‹[ƒv“à‚Å‘S‚Ä‚ÌƒtƒŒ[ƒ€‚ª
-% •\Ž¦‚³‚ê‚é‚æ‚¤ <matlab:doc('drawnow') drawnow> ŠÖ”‚Å
-% ŠeƒtƒŒ[ƒ€‚Ì•`‰æ‚ð‹­§‚·‚éB
+% ãªãŠã€ <matlab:doc('while') while> ãƒ«ãƒ¼ãƒ—å†…ã§å…¨ã¦ã®ãƒ•ãƒ¬ãƒ¼ãƒ ãŒ
+% è¡¨ç¤ºã•ã‚Œã‚‹ã‚ˆã† <matlab:doc('drawnow') drawnow> é–¢æ•°ã§
+% å„ãƒ•ãƒ¬ãƒ¼ãƒ ã®æç”»ã‚’å¼·åˆ¶ã™ã‚‹ã€‚
 %
-% ‚Ü‚½A <matlab:doc('VideoReader.hasFrame') hasFrame> ƒƒ\ƒbƒh‚Å
-% ÅIƒtƒŒ[ƒ€‚©”Û‚©‚Ìî•ñ‚ðŽæ“¾‚µ‚Ä‚¢‚éB
+% ã¾ãŸã€ <matlab:doc('VideoReader.hasFrame') hasFrame> ãƒ¡ã‚½ãƒƒãƒ‰ã§
+% æœ€çµ‚ãƒ•ãƒ¬ãƒ¼ãƒ ã‹å¦ã‹ã®æƒ…å ±ã‚’å–å¾—ã—ã¦ã„ã‚‹ã€‚
 
 vrObj.CurrentTime = 0;
 while (vrObj.hasFrame())
@@ -102,19 +102,19 @@ while (vrObj.hasFrame())
 end
 
 %%
-% ‘¼‚ÉA <matlab:doc('movie') movie> ŠÖ”‚Å‚Ì‰f‘œ•\Ž¦‚à‰Â”\‚Å‚ ‚éB
-% ‚±‚±‚Å‚Íà–¾‚ðŠ„ˆ¤‚·‚éB
+% ä»–ã«ã€ <matlab:doc('movie') movie> é–¢æ•°ã§ã®æ˜ åƒè¡¨ç¤ºã‚‚å¯èƒ½ã§ã‚ã‚‹ã€‚
+% ã“ã“ã§ã¯èª¬æ˜Žã‚’å‰²æ„›ã™ã‚‹ã€‚
 
 %%
-% [ <part4.html ƒgƒbƒv> ]
+% [ <part4.html ãƒˆãƒƒãƒ—> ]
 
-%% ‰f‘œo—Í
-% MATLAB‚É‚¨‚¯‚é‰f‘œo—Í‚Í <matlab:doc('VideoWriter') VideoWriter> ƒNƒ‰ƒX‚Ì
-% <matlab:doc('VideoWriter.writeVideo') writeVideo> ƒƒ\ƒbƒh‚ð—˜—p‚·‚é‚±‚Æ‚Å
-% ŽÀŒ»‚Å‚«‚éB
+%% æ˜ åƒå‡ºåŠ›
+% MATLABã«ãŠã‘ã‚‹æ˜ åƒå‡ºåŠ›ã¯ <matlab:doc('VideoWriter') VideoWriter> ã‚¯ãƒ©ã‚¹ã®
+% <matlab:doc('VideoWriter.writeVideo') writeVideo> ãƒ¡ã‚½ãƒƒãƒ‰ã‚’åˆ©ç”¨ã™ã‚‹ã“ã¨ã§
+% å®Ÿç¾ã§ãã‚‹ã€‚
 %
-% ‰f‘œ“ü—ÍƒIƒuƒWƒFƒNƒg vrObj ‚ÌŽž‚ð 0@‚É–ß‚µ‚ÄA‰f‘œ‚ÌƒRƒs[‚ð
-% AVIƒtƒ@ƒCƒ‹ shuttleclone.avi ‚Éo—Í‚µ‚Ä‚Ý‚æ‚¤B
+% æ˜ åƒå…¥åŠ›ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ vrObj ã®æ™‚åˆ»ã‚’ 0ã€€ã«æˆ»ã—ã¦ã€æ˜ åƒã®ã‚³ãƒ”ãƒ¼ã‚’
+% AVIãƒ•ã‚¡ã‚¤ãƒ« shuttleclone.avi ã«å‡ºåŠ›ã—ã¦ã¿ã‚ˆã†ã€‚
 
 vrObj.CurrentTime = 0;
 vwObj = VideoWriter('shuttleclone.avi');
@@ -131,37 +131,37 @@ end
 vwObj.close()
 
 %%
-% AVIƒtƒ@ƒCƒ‹ shuttleclone.avi ‚ªo—Í‚³‚ê‚éB
+% AVIãƒ•ã‚¡ã‚¤ãƒ« shuttleclone.avi ãŒå‡ºåŠ›ã•ã‚Œã‚‹ã€‚
 %
-% •Û‘¶‚³‚ê‚½AVIƒtƒ@ƒCƒ‹‚ÍMATLAB‚ÌŠO•”‚Ìƒc[ƒ‹‚ÅÄ¶‚·‚é‚±‚Æ‚ª‚Å‚«‚éB
+% ä¿å­˜ã•ã‚ŒãŸAVIãƒ•ã‚¡ã‚¤ãƒ«ã¯MATLABã®å¤–éƒ¨ã®ãƒ„ãƒ¼ãƒ«ã§å†ç”Ÿã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚
 %
 % <<shuttleclone.png>>
 % 
 
 %%
-% [ <part4.html ƒgƒbƒv> ]
+% [ <part4.html ãƒˆãƒƒãƒ—> ]
 
-%% ‰f‘œˆ—
-% ‰f‘œƒtƒŒ[ƒ€‚Ì“ü—Í‚Æo—Í‚ÌŠÔ‚ÉŠeƒtƒŒ[ƒ€‚É‘Î‚·‚éˆ—‚ð‘}“ü‚·‚é‚±‚Æ‚ÅA
-% ‰f‘œƒXƒgƒŠ[ƒ€ˆ—‚ðŽÀŒ»‚Å‚«‚éB
+%% æ˜ åƒå‡¦ç†
+% æ˜ åƒãƒ•ãƒ¬ãƒ¼ãƒ ã®å…¥åŠ›ã¨å‡ºåŠ›ã®é–“ã«å„ãƒ•ãƒ¬ãƒ¼ãƒ ã«å¯¾ã™ã‚‹å‡¦ç†ã‚’æŒ¿å…¥ã™ã‚‹ã“ã¨ã§ã€
+% æ˜ åƒã‚¹ãƒˆãƒªãƒ¼ãƒ å‡¦ç†ã‚’å®Ÿç¾ã§ãã‚‹ã€‚
 %
-% ˆÈ‰º‚Å‚ÍA‰‰Ki‚Rj‚Åì¬‚µ‚½
+% ä»¥ä¸‹ã§ã¯ã€æ¼”ç¿’ï¼ˆï¼“ï¼‰ã§ä½œæˆã—ãŸ
 %
 % * Rgb2GraySystem
 % * Hsv2RgbSystem
 % * GradFiltSystem
 %
-% ‚ð—˜—p‚µ‚ÄAƒtƒŒ[ƒ€–ˆ‚ÌŒù”zƒtƒBƒ‹ƒ^o—Í‚ð‰f‘œ‰»‚µ‚æ‚¤B
+% ã‚’åˆ©ç”¨ã—ã¦ã€ãƒ•ãƒ¬ãƒ¼ãƒ æ¯Žã®å‹¾é…ãƒ•ã‚£ãƒ«ã‚¿å‡ºåŠ›ã‚’æ˜ åƒåŒ–ã—ã‚ˆã†ã€‚
 % 
-% ‚Ü‚¸AƒtƒŒ[ƒ€ˆ—ƒIƒuƒWƒFƒNƒg‚ð¶¬‚·‚éB
+% ã¾ãšã€ãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã™ã‚‹ã€‚
 
 rgsObj = Rgb2GraySystem();
 hrsObj = Hsv2RgbSystem();
 gfsObj = GradFiltSystem();
 
 %%
-% ŽŸ‚ÉA‰f‘œ“ü—ÍƒIƒuƒWƒFƒNƒg vrObj ‚ÌŽž‚ð 0@‚É–ß‚µA
-% o—Í‰f‘œ‚ð•Û‘¶‚·‚éAVIƒtƒ@ƒCƒ‹ shuttlegrad.avi ‚Ì€”õ‚ð‚·‚éB
+% æ¬¡ã«ã€æ˜ åƒå…¥åŠ›ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ vrObj ã®æ™‚åˆ»ã‚’ 0ã€€ã«æˆ»ã—ã€
+% å‡ºåŠ›æ˜ åƒã‚’ä¿å­˜ã™ã‚‹AVIãƒ•ã‚¡ã‚¤ãƒ« shuttlegrad.avi ã®æº–å‚™ã‚’ã™ã‚‹ã€‚
 
 vrObj.CurrentTime = 0;
 vwObj = VideoWriter('shuttlegrad.avi');
@@ -169,94 +169,94 @@ vwObj.FrameRate = frameRate;
 vwObj.open()
 
 %%
-% ‰f‘œˆ—‚ðŠJŽn‚·‚éB
+% æ˜ åƒå‡¦ç†ã‚’é–‹å§‹ã™ã‚‹ã€‚
 
 while (vrObj.hasFrame())
-    frame     = vrObj.readFrame();        % ƒtƒŒ[ƒ€“ü—Í
-    graysc    = rgsObj.step(frame);       % ƒOƒŒ[ƒXƒP[ƒ‹‰»
-    [mag,ang] = gfsObj.step(graysc);      % Œù”zƒtƒBƒ‹ƒ^ƒŠƒ“ƒO
-    ang       = (ang+pi)/(2*pi);          % •ÎŠp‚Ì³‹K‰»
-    mag       = min(mag,1);               % ‘å‚«‚³‚Ì–O˜aˆ—
-    [r,g,b]   = hrsObj.step(ang,mag,mag); % ‹^Ž—ƒJƒ‰[‰»
-    frame     = cat(3,r,g,b);             % RGB”z—ñŒ‹‡
-    vwObj.writeVideo(frame);              % ƒtƒŒ[ƒ€o—Í 
+    frame     = vrObj.readFrame();        % ãƒ•ãƒ¬ãƒ¼ãƒ å…¥åŠ›
+    graysc    = rgsObj.step(frame);       % ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«åŒ–
+    [mag,ang] = gfsObj.step(graysc);      % å‹¾é…ãƒ•ã‚£ãƒ«ã‚¿ãƒªãƒ³ã‚°
+    ang       = (ang+pi)/(2*pi);          % åè§’ã®æ­£è¦åŒ–
+    mag       = min(mag,1);               % å¤§ãã•ã®é£½å’Œå‡¦ç†
+    [r,g,b]   = hrsObj.step(ang,mag,mag); % ç–‘ä¼¼ã‚«ãƒ©ãƒ¼åŒ–
+    frame     = cat(3,r,g,b);             % RGBé…åˆ—çµåˆ
+    vwObj.writeVideo(frame);              % ãƒ•ãƒ¬ãƒ¼ãƒ å‡ºåŠ› 
 end
 vwObj.close()
 
 %%
-% ˆ—‚ªI—¹‚·‚é‚ÆAAVIƒtƒ@ƒCƒ‹ shuttlegrad.avi ‚Éˆ—Œ‹‰Ê‚ª•Û‘¶‚³‚ê‚éB
+% å‡¦ç†ãŒçµ‚äº†ã™ã‚‹ã¨ã€AVIãƒ•ã‚¡ã‚¤ãƒ« shuttlegrad.avi ã«å‡¦ç†çµæžœãŒä¿å­˜ã•ã‚Œã‚‹ã€‚
 %
 % <<shuttlegrad.png>>
 % 
 
 %%
-% [ <part4.html ƒgƒbƒv> ]
+% [ <part4.html ãƒˆãƒƒãƒ—> ]
 
-%% ƒtƒŒ[ƒ€ŠÔˆ—iƒIƒvƒVƒ‡ƒ“j
-% ‰ß‹Ž‚ÌƒtƒŒ[ƒ€‚ð‹L‰¯‚·‚é System object ƒNƒ‰ƒX‚ð’è‹`‚·‚é‚±‚Æ‚à‚Å‚«‚éB
+%% ãƒ•ãƒ¬ãƒ¼ãƒ é–“å‡¦ç†ï¼ˆã‚ªãƒ—ã‚·ãƒ§ãƒ³ï¼‰
+% éŽåŽ»ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’è¨˜æ†¶ã™ã‚‹ System object ã‚¯ãƒ©ã‚¹ã‚’å®šç¾©ã™ã‚‹ã“ã¨ã‚‚ã§ãã‚‹ã€‚
 %
-% ˜A‘±‚·‚é2–‡‚ÌƒtƒŒ[ƒ€‚Ì•½‹Ï‚ðo—Í‚·‚é FrameAveSystem ƒNƒ‰ƒX‚ðì¬‚·‚é‚½‚ßA
-% ˆÈ‰º‚ÌƒeƒXƒgƒP[ƒX FrameAveSystemTestCase ‚ð—pˆÓ‚·‚éB
+% é€£ç¶šã™ã‚‹2æžšã®ãƒ•ãƒ¬ãƒ¼ãƒ ã®å¹³å‡ã‚’å‡ºåŠ›ã™ã‚‹ FrameAveSystem ã‚¯ãƒ©ã‚¹ã‚’ä½œæˆã™ã‚‹ãŸã‚ã€
+% ä»¥ä¸‹ã®ãƒ†ã‚¹ãƒˆã‚±ãƒ¼ã‚¹ FrameAveSystemTestCase ã‚’ç”¨æ„ã™ã‚‹ã€‚
 %
 %   classdef FrameAveSystemTestCase < matlab.unittest.TestCase
-%       %FRAMEAVESYSTEMTESTCASE FrameAveSystem ‚ÌƒeƒXƒgƒP[ƒX
+%       %FRAMEAVESYSTEMTESTCASE FrameAveSystem ã®ãƒ†ã‚¹ãƒˆã‚±ãƒ¼ã‚¹
 %       properties
 %       end
 %       methods (Test)
 %           function testFirstFrame(testCase)
-%               % €”õ
+%               % æº–å‚™
 %               width  = 12;
 %               height = 16;
-%               % “ü—ÍƒtƒŒ[ƒ€
+%               % å…¥åŠ›ãƒ•ãƒ¬ãƒ¼ãƒ 
 %               frame1 = rand(height,width,3);
-%               % Šú‘Ò’l
+%               % æœŸå¾…å€¤
 %               cnt0Expctd = [];
 %               cnt1Expctd = 1;
 %               res1Expctd = frame1;
-%               % ƒ^[ƒQƒbƒgƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+%               % ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
 %               obj = FrameAveSystem();
-%               % ‰Šúó‘Ô‚ÌŒŸØ
+%               % åˆæœŸçŠ¶æ…‹ã®æ¤œè¨¼
 %               state      = obj.getDiscreteState();
 %               cnt0Actual = state.Count;
 %               testCase.verifyEqual(cnt0Actual,cnt0Expctd)            
-%               % ˆ—Œ‹‰Ê
+%               % å‡¦ç†çµæžœ
 %               res1Actual = obj.step(frame1);
 %               state      = obj.getDiscreteState();
 %               cnt1Actual = state.Count;
-%               % ˆ—Œ‹‰Ê‚ÌŒŸØ
+%               % å‡¦ç†çµæžœã®æ¤œè¨¼
 %               testCase.verifyEqual(res1Actual,res1Expctd,'RelTol',1e-6)
 %               testCase.verifyEqual(cnt1Actual,cnt1Expctd)            
 %           end
 %           function testThreeFrames(testCase)
-%               % €”õ
+%               % æº–å‚™
 %               width  = 12;
 %               height = 16;
-%               % “ü—ÍƒtƒŒ[ƒ€
+%               % å…¥åŠ›ãƒ•ãƒ¬ãƒ¼ãƒ 
 %               frame1 = rand(height,width,3);
 %               frame2 = rand(height,width,3);
 %               frame3 = rand(height,width,3);            
-%               % Šú‘Ò’l
+%               % æœŸå¾…å€¤
 %               cnt1Expctd = 1;
 %               cnt2Expctd = 2;            
 %               cnt3Expctd = 3;                        
 %               res1Expctd = frame1;
 %               res2Expctd = (frame1+frame2)/2;
 %               res3Expctd = (frame2+frame3)/2;
-%               % ƒ^[ƒQƒbƒgƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+%               % ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
 %               obj = FrameAveSystem();
-%               % ‘æ‚PƒtƒŒ[ƒ€ˆ—Œ‹‰Ê
+%               % ç¬¬ï¼‘ãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†çµæžœ
 %               res1Actual = obj.step(frame1);
 %               state      = obj.getDiscreteState();
 %               cnt1Actual = state.Count;
-%               % ‘æ‚QƒtƒŒ[ƒ€ˆ—Œ‹‰Ê
+%               % ç¬¬ï¼’ãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†çµæžœ
 %               res2Actual = obj.step(frame2);
 %               state      = obj.getDiscreteState();
 %               cnt2Actual = state.Count;            
-%               % ‘æ‚RƒtƒŒ[ƒ€ˆ—Œ‹‰Ê
+%               % ç¬¬ï¼“ãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†çµæžœ
 %               res3Actual = obj.step(frame3);
 %               state      = obj.getDiscreteState();
 %               cnt3Actual = state.Count;            
-%               % ˆ—Œ‹‰Ê‚ÌŒŸØ
+%               % å‡¦ç†çµæžœã®æ¤œè¨¼
 %               testCase.verifyEqual(cnt1Actual,cnt1Expctd)                        
 %               testCase.verifyEqual(cnt2Actual,cnt2Expctd)                                    
 %               testCase.verifyEqual(cnt3Actual,cnt3Expctd)                                                
@@ -265,27 +265,27 @@ vwObj.close()
 %               testCase.verifyEqual(res3Actual,res3Expctd,'RelTol',1e-6)                        
 %           end        
 %           function testReset(testCase)
-%               % €”õ
+%               % æº–å‚™
 %               width  = 12;
 %               height = 16;
-%               % “ü—ÍƒtƒŒ[ƒ€
+%               % å…¥åŠ›ãƒ•ãƒ¬ãƒ¼ãƒ 
 %               frame1 = rand(height,width,3);
-%               % Šú‘Ò’l
+%               % æœŸå¾…å€¤
 %               cnt0Expctd = [];
 %               cnt1Expctd = 1;
 %               cntrExpctd = 0;
-%               % ƒ^[ƒQƒbƒgƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+%               % ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
 %               obj = FrameAveSystem();
-%               % ‰Šúó‘Ô‚ÌŒŸØ
+%               % åˆæœŸçŠ¶æ…‹ã®æ¤œè¨¼
 %               state      = obj.getDiscreteState();
 %               cnt0Actual = state.Count;
 %               testCase.verifyEqual(cnt0Actual,cnt0Expctd)            
-%               % ‘æˆêƒtƒŒ[ƒ€ˆ—Œã‚Ìó‘Ô‚ÌŒŸØ
+%               % ç¬¬ä¸€ãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†å¾Œã®çŠ¶æ…‹ã®æ¤œè¨¼
 %               obj.step(frame1);
 %               state      = obju.getDiscreteState();
 %               cnt1Actual = state.Count;
 %               testCase.verifyEqual(cnt1Actual,cnt1Expctd)                        
-%               % ƒŠƒZƒbƒgŒã‚Ìó‘Ô‚ÌŒŸØ
+%               % ãƒªã‚»ãƒƒãƒˆå¾Œã®çŠ¶æ…‹ã®æ¤œè¨¼
 %               obj.reset();
 %               state      = obj.getDiscreteState();
 %               cntrActual = state.Count;
@@ -295,38 +295,38 @@ vwObj.close()
 %   end
 
 %%
-% ƒeƒXƒgƒP[ƒX FrameAveSystemTestCase ‚ÌŒŸØ‚ð–ž‚½‚·‚æ‚¤‚ÉŽÀ‘•‚µ‚½
-% FrameAveSystem ƒNƒ‰ƒX‚Ì—á‚ðˆÈ‰º‚ÉŽ¦‚·B
+% ãƒ†ã‚¹ãƒˆã‚±ãƒ¼ã‚¹ FrameAveSystemTestCase ã®æ¤œè¨¼ã‚’æº€ãŸã™ã‚ˆã†ã«å®Ÿè£…ã—ãŸ
+% FrameAveSystem ã‚¯ãƒ©ã‚¹ã®ä¾‹ã‚’ä»¥ä¸‹ã«ç¤ºã™ã€‚
 %
 %   classdef FrameAveSystem < matlab.System
 %       properties
-%           preFrame % ‘OƒtƒŒ[ƒ€
+%           preFrame % å‰ãƒ•ãƒ¬ãƒ¼ãƒ 
 %       end
 %       properties (DiscreteState)
-%           Count    % ƒtƒŒ[ƒ€ƒJƒEƒ“ƒg
+%           Count    % ãƒ•ãƒ¬ãƒ¼ãƒ ã‚«ã‚¦ãƒ³ãƒˆ
 %       end
 %       properties (Access = private)
 %       end
 %       methods (Access = protected)
-%           % ƒZƒbƒgƒAƒbƒviÅ‰‚ÌƒXƒeƒbƒv’¼‘O‚ÉŽÀsj
+%           % ã‚»ãƒƒãƒˆã‚¢ãƒƒãƒ—ï¼ˆæœ€åˆã®ã‚¹ãƒ†ãƒƒãƒ—ç›´å‰ã«å®Ÿè¡Œï¼‰
 %           function setupImpl(obj,srcFrame)
-%               % ‘OƒtƒŒ[ƒ€‚Ì‰Šú‰»
+%               % å‰ãƒ•ãƒ¬ãƒ¼ãƒ ã®åˆæœŸåŒ–
 %               obj.preFrame = srcFrame;
-%               % ƒtƒŒ[ƒ€ƒJƒEƒ“ƒg‚Ì‰Šú‰»
+%               % ãƒ•ãƒ¬ãƒ¼ãƒ ã‚«ã‚¦ãƒ³ãƒˆã®åˆæœŸåŒ–
 %               obj.Count = 0;
 %           end
-%           % ƒXƒeƒbƒv
+%           % ã‚¹ãƒ†ãƒƒãƒ—
 %           function resFrame = stepImpl(obj,srcFrame)
-%               % ƒtƒŒ[ƒ€•½‹Ïˆ— 
+%               % ãƒ•ãƒ¬ãƒ¼ãƒ å¹³å‡å‡¦ç† 
 %               resFrame = (obj.preFrame + srcFrame)/2;
-%               % ‘OƒtƒŒ[ƒ€‚ÌXV©Œ»ƒtƒŒ[ƒ€
+%               % å‰ãƒ•ãƒ¬ãƒ¼ãƒ ã®æ›´æ–°â†ç¾ãƒ•ãƒ¬ãƒ¼ãƒ 
 %               obj.preFrame = srcFrame;
-%               % ƒtƒŒ[ƒ€ƒJƒEƒ“ƒg‚ÌƒCƒ“ƒNƒŠƒƒ“ƒg
+%               % ãƒ•ãƒ¬ãƒ¼ãƒ ã‚«ã‚¦ãƒ³ãƒˆã®ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ãƒˆ
 %               obj.Count = obj.Count+1;
 %           end
-%           % ƒŠƒZƒbƒg
+%           % ãƒªã‚»ãƒƒãƒˆ
 %           function resetImpl(obj)
-%               % ƒtƒŒ[ƒ€ƒJƒEƒ“ƒg‚ÌƒŠƒZƒbƒg
+%               % ãƒ•ãƒ¬ãƒ¼ãƒ ã‚«ã‚¦ãƒ³ãƒˆã®ãƒªã‚»ãƒƒãƒˆ
 %               obj.Count = 0;
 %           end
 %       end
@@ -337,7 +337,7 @@ vwObj.close()
 result = run(FrameAveSystemTestCase);
 
 %%
-% FrameAveSystem ‚ÌŽÀs—á‚ðˆÈ‰º‚ÉŽ¦‚·B
+% FrameAveSystem ã®å®Ÿè¡Œä¾‹ã‚’ä»¥ä¸‹ã«ç¤ºã™ã€‚
 %
 fasObj = FrameAveSystem();
 
@@ -346,25 +346,25 @@ vwObj = VideoWriter('shuttleave.avi');
 vwObj.FrameRate = frameRate;
 vwObj.open()
 while (vrObj.hasFrame())
-    frame = vrObj.readFrame();  % ƒtƒŒ[ƒ€“ü—Í
-    frame = im2double(frame);   % ŽÀ”Œ^‚Ö•ÏŠ·
-    frame = fasObj.step(frame); % ƒtƒŒ[ƒ€•½‹Ïˆ—
-    vwObj.writeVideo(frame);    % ƒtƒŒ[ƒ€o—Í 
+    frame = vrObj.readFrame();  % ãƒ•ãƒ¬ãƒ¼ãƒ å…¥åŠ›
+    frame = im2double(frame);   % å®Ÿæ•°åž‹ã¸å¤‰æ›
+    frame = fasObj.step(frame); % ãƒ•ãƒ¬ãƒ¼ãƒ å¹³å‡å‡¦ç†
+    vwObj.writeVideo(frame);    % ãƒ•ãƒ¬ãƒ¼ãƒ å‡ºåŠ› 
 end
 vwObj.close()
 
 %%
-% ˆ—‚ªI—¹‚·‚é‚ÆAAVIƒtƒ@ƒCƒ‹ shuttleave.avi ‚Éˆ—Œ‹‰Ê‚ª•Û‘¶‚³‚ê‚éB
+% å‡¦ç†ãŒçµ‚äº†ã™ã‚‹ã¨ã€AVIãƒ•ã‚¡ã‚¤ãƒ« shuttleave.avi ã«å‡¦ç†çµæžœãŒä¿å­˜ã•ã‚Œã‚‹ã€‚
 %
 % <<shuttleave.png>>
 
 %%
-% [ <part4.html ƒgƒbƒv> ]
+% [ <part4.html ãƒˆãƒƒãƒ—> ]
 
-%% ‰‰K‰Û‘è
-% *‰‰K‰Û‘è4-1. Sobel”÷•ªƒtƒBƒ‹ƒ^*
+%% æ¼”ç¿’èª²é¡Œ
+% *æ¼”ç¿’èª²é¡Œ4-1. Sobelå¾®åˆ†ãƒ•ã‚£ãƒ«ã‚¿*
 %
-% ‚’¼”÷•ªƒtƒBƒ‹ƒ^ŒW”‚Æ‚µ‚Ä”z—ñ
+% åž‚ç›´å¾®åˆ†ãƒ•ã‚£ãƒ«ã‚¿ä¿‚æ•°ã¨ã—ã¦é…åˆ—
 %
 % $$ \left(\begin{array}{ccc}
 %    1 &  2 &  1 \\
@@ -372,7 +372,7 @@ vwObj.close()
 %   -1 & -2 & -1 \\
 %    \end{array}\right) $$
 %
-% ‚ðA…•½”÷•ªƒtƒBƒ‹ƒ^ŒW”‚Æ‚µ‚Ä”z—ñ
+% ã‚’ã€æ°´å¹³å¾®åˆ†ãƒ•ã‚£ãƒ«ã‚¿ä¿‚æ•°ã¨ã—ã¦é…åˆ—
 %
 % $$ \left(\begin{array}{ccc}
 %    1 &  0 & -1 \\
@@ -380,90 +380,90 @@ vwObj.close()
 %    1 &  0 & -1 \\
 %    \end{array}\right) $$
 % 
-% ‚ð—˜—p‚µ‚½Œù”zƒtƒBƒ‹ƒ^ƒIƒuƒWƒFƒNƒg
+% ã‚’åˆ©ç”¨ã—ãŸå‹¾é…ãƒ•ã‚£ãƒ«ã‚¿ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 %
 %    gfs = GradFiltSystem('Kernel',[ 1 2 1 ; 0 0 0 ; -1 -2 -1 ]); 
 %
-% ‚ð¶¬‚µA‰f‘œƒf[ƒ^ shuttle.avi ‚É‘Î‚·‚éˆÈ‰º‚Ìˆ—‚ðŠeƒtƒŒ[ƒ€‚É‘Î‚µ‚Ä
-% Ž{‚µ‚Ä‚Ý‚æ‚¤B
-% ‚Ü‚½A‚»‚Ìˆ—Œ‹‰Ê‚ðAVIƒtƒ@ƒCƒ‹ shuttlesobel.avi ‚É•Û‘¶‚µ‚æ‚¤B
+% ã‚’ç”Ÿæˆã—ã€æ˜ åƒãƒ‡ãƒ¼ã‚¿ shuttle.avi ã«å¯¾ã™ã‚‹ä»¥ä¸‹ã®å‡¦ç†ã‚’å„ãƒ•ãƒ¬ãƒ¼ãƒ ã«å¯¾ã—ã¦
+% æ–½ã—ã¦ã¿ã‚ˆã†ã€‚
+% ã¾ãŸã€ãã®å‡¦ç†çµæžœã‚’AVIãƒ•ã‚¡ã‚¤ãƒ« shuttlesobel.avi ã«ä¿å­˜ã—ã‚ˆã†ã€‚
 %
-%    graysc    = rgsObj.step(frame);       % ƒOƒŒ[ƒXƒP[ƒ‹‰»
-%    [mag,ang] = gfsObj.step(graysc);      % Œù”zƒtƒBƒ‹ƒ^ƒŠƒ“ƒO
-%    ang       = (ang+pi)/(2*pi);          % •ÎŠp‚Ì³‹K‰»
-%    mag       = min(mag,1);               % ‘å‚«‚³‚Ì–O˜aˆ—
-%    [r,g,b]   = hrsObj.step(ang,mag,mag); % ‹^Ž—ƒJƒ‰[‰»
-%    frame     = cat(3,r,g,b);             % RGB”z—ñŒ‹‡
+%    graysc    = rgsObj.step(frame);       % ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«åŒ–
+%    [mag,ang] = gfsObj.step(graysc);      % å‹¾é…ãƒ•ã‚£ãƒ«ã‚¿ãƒªãƒ³ã‚°
+%    ang       = (ang+pi)/(2*pi);          % åè§’ã®æ­£è¦åŒ–
+%    mag       = min(mag,1);               % å¤§ãã•ã®é£½å’Œå‡¦ç†
+%    [r,g,b]   = hrsObj.step(ang,mag,mag); % ç–‘ä¼¼ã‚«ãƒ©ãƒ¼åŒ–
+%    frame     = cat(3,r,g,b);             % RGBé…åˆ—çµåˆ
 %
-% (ˆ——áj
+% (å‡¦ç†ä¾‹ï¼‰
 %
 % <<shuttlesobel.png>>
 
 %%
-% *‰‰K‰Û‘è5-2. ƒtƒŒ[ƒ€·•ª*iƒIƒvƒVƒ‡ƒ“j
+% *æ¼”ç¿’èª²é¡Œ5-2. ãƒ•ãƒ¬ãƒ¼ãƒ å·®åˆ†*ï¼ˆã‚ªãƒ—ã‚·ãƒ§ãƒ³ï¼‰
 %
-% ˆÈ‰º‚ÌƒeƒXƒgƒP[ƒX FrameDiffSystemTestCase ‚ÌŒŸØ‚ð–ž‚½‚·‚æ‚¤‚É
-% ˜A‘±‚·‚é2–‡‚ÌƒtƒŒ[ƒ€‚Ì·•ª‚ðo—Í‚·‚é FrameDiffSystem ƒNƒ‰ƒX‚ðì¬‚µ‚æ‚¤B
+% ä»¥ä¸‹ã®ãƒ†ã‚¹ãƒˆã‚±ãƒ¼ã‚¹ FrameDiffSystemTestCase ã®æ¤œè¨¼ã‚’æº€ãŸã™ã‚ˆã†ã«
+% é€£ç¶šã™ã‚‹2æžšã®ãƒ•ãƒ¬ãƒ¼ãƒ ã®å·®åˆ†ã‚’å‡ºåŠ›ã™ã‚‹ FrameDiffSystem ã‚¯ãƒ©ã‚¹ã‚’ä½œæˆã—ã‚ˆã†ã€‚
 %
 %   classdef FrameDiffSystemTestCase < matlab.unittest.TestCase
-%       %FRAMEDIFFSYSTEMTESTCASE FrameDiffSystem ‚ÌƒeƒXƒgƒP[ƒX
+%       %FRAMEDIFFSYSTEMTESTCASE FrameDiffSystem ã®ãƒ†ã‚¹ãƒˆã‚±ãƒ¼ã‚¹
 %       properties
 %       end
 %       methods (Test)
 %           function testFirstFrame(testCase)
-%               % €”õ
+%               % æº–å‚™
 %               width  = 12;
 %               height = 16;
-%               % “ü—ÍƒtƒŒ[ƒ€
+%               % å…¥åŠ›ãƒ•ãƒ¬ãƒ¼ãƒ 
 %               frame1 = rand(height,width);
-%               % Šú‘Ò’l
+%               % æœŸå¾…å€¤
 %               cnt0Expctd = [];
 %               cnt1Expctd = 1;
 %               res1Expctd = zeros(height,width);
-%               % ƒ^[ƒQƒbƒgƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+%               % ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
 %               obj = FrameDiffSystem();
-%               % ‰Šúó‘Ô‚ÌŒŸØ
+%               % åˆæœŸçŠ¶æ…‹ã®æ¤œè¨¼
 %               state      = obj.getDiscreteState();
 %               cnt0Actual = state.Count;
 %               testCase.verifyEqual(cnt0Actual,cnt0Expctd)            
-%               % ˆ—Œ‹‰Ê
+%               % å‡¦ç†çµæžœ
 %               res1Actual = obj.step(frame1);
 %               state      = obj.getDiscreteState();
 %               cnt1Actual = state.Count;
-%               % ˆ—Œ‹‰Ê‚ÌŒŸØ
+%               % å‡¦ç†çµæžœã®æ¤œè¨¼
 %               testCase.verifyEqual(res1Actual,res1Expctd,'RelTol',1e-6)
 %               testCase.verifyEqual(cnt1Actual,cnt1Expctd)            
 %           end
 %           function testThreeFrames(testCase)
-%               % €”õ
+%               % æº–å‚™
 %               width  = 12;
 %               height = 16;
-%               % “ü—ÍƒtƒŒ[ƒ€
+%               % å…¥åŠ›ãƒ•ãƒ¬ãƒ¼ãƒ 
 %               frame1 = rand(height,width);
 %               frame2 = rand(height,width);
 %               frame3 = rand(height,width);            
-%               % Šú‘Ò’l
+%               % æœŸå¾…å€¤
 %               cnt1Expctd = 1;
 %               cnt2Expctd = 2;            
 %               cnt3Expctd = 3;                        
 %               res1Expctd = zeros(height,width);
 %               res2Expctd = (frame2-frame1);
 %               res3Expctd = (frame3-frame2);
-%               % ƒ^[ƒQƒbƒgƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+%               % ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
 %               obj = FrameDiffSystem();
-%               % ‘æ‚PƒtƒŒ[ƒ€ˆ—Œ‹‰Ê
+%               % ç¬¬ï¼‘ãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†çµæžœ
 %               res1Actual = obj.step(frame1);
 %               state      = obj.getDiscreteState();
 %               cnt1Actual = state.Count;
-%               % ‘æ‚QƒtƒŒ[ƒ€ˆ—Œ‹‰Ê
+%               % ç¬¬ï¼’ãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†çµæžœ
 %               res2Actual = obj.step(frame2);
 %               state      = obj.getDiscreteState();
 %               cnt2Actual = state.Count;            
-%               % ‘æ‚RƒtƒŒ[ƒ€ˆ—Œ‹‰Ê
+%               % ç¬¬ï¼“ãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†çµæžœ
 %               res3Actual = obj.step(frame3);
 %               state      = obj.getDiscreteState();
 %               cnt3Actual = state.Count;            
-%               % ˆ—Œ‹‰Ê‚ÌŒŸØ
+%               % å‡¦ç†çµæžœã®æ¤œè¨¼
 %               testCase.verifyEqual(cnt1Actual,cnt1Expctd)                        
 %               testCase.verifyEqual(cnt2Actual,cnt2Expctd)                                    
 %               testCase.verifyEqual(cnt3Actual,cnt3Expctd)                                                
@@ -472,27 +472,27 @@ vwObj.close()
 %               testCase.verifyEqual(res3Actual,res3Expctd,'RelTol',1e-6)                        
 %           end        
 %           function testReset(testCase)
-%               % €”õ
+%               % æº–å‚™
 %               width  = 12;
 %               height = 16;
-%               % “ü—ÍƒtƒŒ[ƒ€
+%               % å…¥åŠ›ãƒ•ãƒ¬ãƒ¼ãƒ 
 %               frame1 = rand(height,width);
-%               % Šú‘Ò’l
+%               % æœŸå¾…å€¤
 %               cnt0Expctd = [];
 %               cnt1Expctd = 1;
 %               cntrExpctd = 0;
-%               % ƒ^[ƒQƒbƒgƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+%               % ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
 %               obj = FrameDiffSystem();
-%               % ‰Šúó‘Ô‚ÌŒŸØ
+%               % åˆæœŸçŠ¶æ…‹ã®æ¤œè¨¼
 %               state      = obj.getDiscreteState();
 %               cnt0Actual = state.Count;
 %               testCase.verifyEqual(cnt0Actual,cnt0Expctd)            
-%               % ‘æˆêƒtƒŒ[ƒ€ˆ—Œã‚Ìó‘Ô‚ÌŒŸØ
+%               % ç¬¬ä¸€ãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†å¾Œã®çŠ¶æ…‹ã®æ¤œè¨¼
 %               obj.step(frame1);
 %               state      = obj.getDiscreteState();
 %               cnt1Actual = state.Count;
 %               testCase.verifyEqual(cnt1Actual,cnt1Expctd)                        
-%               % ƒŠƒZƒbƒgŒã‚Ìó‘Ô‚ÌŒŸØ
+%               % ãƒªã‚»ãƒƒãƒˆå¾Œã®çŠ¶æ…‹ã®æ¤œè¨¼
 %               obj.reset();
 %               state      = obj.getDiscreteState();
 %               cntrActual = state.Count;
@@ -502,7 +502,7 @@ vwObj.close()
 %   end
 
 %%
-% iˆ——áj
+% ï¼ˆå‡¦ç†ä¾‹ï¼‰
 
 result = run(FrameDiffSystemTestCase);
 
@@ -515,11 +515,11 @@ vwObj.FrameRate = frameRate;
 fdfObj = FrameDiffSystem();
 vwObj.open()
 while (vrObj.hasFrame())
-    frame = vrObj.readFrame();  % ƒtƒŒ[ƒ€“ü—Í
-    frame = im2double(frame);   % ŽÀ”Œ^‚Ö‚Ì•ÏŠ·
-    frame = fdfObj.step(frame); % ƒtƒŒ[ƒ€·•ªˆ—
+    frame = vrObj.readFrame();  % ãƒ•ãƒ¬ãƒ¼ãƒ å…¥åŠ›
+    frame = im2double(frame);   % å®Ÿæ•°åž‹ã¸ã®å¤‰æ›
+    frame = fdfObj.step(frame); % ãƒ•ãƒ¬ãƒ¼ãƒ å·®åˆ†å‡¦ç†
     frame = frame/2+0.5;
-    vwObj.writeVideo(frame);    % ƒtƒŒ[ƒ€o—Í
+    vwObj.writeVideo(frame);    % ãƒ•ãƒ¬ãƒ¼ãƒ å‡ºåŠ›
 end
 vwObj.close()
 
@@ -532,6 +532,6 @@ vwObj.close()
 % </html>
 %%
 % <part3.html Part3> |
-% <index.html ƒƒjƒ…[> |
-% <part4.html ƒgƒbƒv> |
-% <part5.html Part5>
+% | <index.html ãƒ¡ãƒ‹ãƒ¥ãƒ¼> |
+% | <part4.html ãƒˆãƒƒãƒ—> |
+% | <part5.html Part5>

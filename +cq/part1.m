@@ -1,262 +1,262 @@
-%% *EmbVision(CQ��) �`���[�g���A���i�P�j*
+%% *EmbVision(CQ版) チュートリアル（１）*
 % 
-% *�摜���o�͂Ɖ�f����*
+% *画像入出力と画素処理*
 %
-% �V����w
-% �����@����C�����@�E��
+% 新潟大学
+% 村松　正吾，高橋　勇希
 %
-% Copyright (c), All rights reserved, 2014-2022, Shogo MURAMATSU and Yuki TAKAHASHI
+% Copyright (c), All rights reserved, 2014-2025, Shogo MURAMATSU and Yuki TAKAHASHI
 % 
 
 %%
-% <index.html ���j���[> | 
-% <part2.html Part2>
+% <index.html メニュー> | 
+% | <part2.html Part2>
 
 %%
-% *�T�v*
+% *概要*
 %
-% �{���K�ł́AMATLAB�ɂĉ摜�t�@�C���̏���ǂݍ��ޕ��@�̂ق��A
-% �摜�\���A�摜�t�@�C���o�́A�ȒP�ȉ�f�����ɂ��Ċw�ԁB
+% 本演習では、MATLABにて画像ファイルの情報を読み込む方法のほか、
+% 画像表示、画像ファイル出力、簡単な画素処理について学ぶ。
 %
-% �����Ƃ��āA�J���Ă���S�Ă� Figure �� <matlab:doc('close') close> �֐���
-% ���Ă����B
+% 準備として、開いている全ての Figure を <matlab:doc('close') close> 関数で
+% 閉じておく。
 
 close all
 
-%% �摜����
+%% 画像入力
 % 
-% MATLAB�ɂ�����摜���͂́A�R�}���h�v�����v�g��ɂāA
-% <matlab:doc('imread') imread> �֐��Ƀt�@�C�������w�肵�Ď��s�����B
+% MATLABにおける画像入力は、コマンドプロンプト上にて、
+% <matlab:doc('imread') imread> 関数にファイル名を指定して実行される。
  
 I = imread('cameraman.tif');
 
 %%
-% cameraman.tif �̓O���[�X�P�[���摜�Ȃ̂ŁA
-% �ϐ� I �͓񎟌��z��Ƃ��ĉ摜�f�[�^��ێ�����B
+% cameraman.tif はグレースケール画像なので、
+% 変数 I は二次元配列として画像データを保持する。
 %
-% ���Ɏw������Ȃ���΁A�f�[�^�^�͕����Ȃ������W�r�b�g�^
-% ( <matlab:doc('uint8') uint8> ) �ƂȂ�B
+% 特に指定をしなければ、データ型は符号なし整数８ビット型
+% ( <matlab:doc('uint8') uint8> ) となる。
 %
-% �R�}���h�v�����v�g��ŁA <matlab:doc('whos') whos> �֐��ɂ��m�F�ł���B
+% コマンドプロンプト上で、 <matlab:doc('whos') whos> 関数により確認できる。
 
 whos I
 
 %%
-% �Ȃ��ASize �́@'���� $$\times $$ ��'�@�ŕ\�������B
+% なお、Size は　'高さ $$\times $$ 幅'　で表示される。
 %
-% �摜�̃T�C�Y��m�邽�߂ɁA
-% <matlab:doc('size') size> �֐��𗘗p���邱�Ƃ��ł���B
+% 画像のサイズを知るために、
+% <matlab:doc('size') size> 関数を利用することもできる。
 
 size(I)
 
 %%
-% �����݂̂́A��Ԗڂ̈����� '1' ���w�肷��B
+% 高さのみは、二番目の引数に '1' を指定する。
 
 size(I,1)
 
 %% 
-% ���݂̂́A��Ԗڂ̈����� '2' ���w�肷��B
+% 幅のみは、二番目の引数に '2' を指定する。
 
 size(I,2)
 
 %%
-% �J���[�摜�̓Ǎ����\�ł���B
+% カラー画像の読込も可能である。
 
 RGB = imread('peppers.png');
 
 %%
-% �ϐ� RGB �� �O�����z��Ƃ��ĉ摜�f�[�^��ێ�����B
+% 変数 RGB は 三次元配列として画像データを保持する。
 
 whos RGB
 
 %%
-% [ <part1.html �g�b�v> ]
+% [ <part1.html トップ> ]
 
-%% �摜�\��
+%% 画像表示
 %
-% MATLAB�ɂ�����摜�\���́A�R�}���h�v�����v�g��ɂāA
-% <matlab:doc('imshow') imshow> �֐��Ƀt�@�C�������w�肵�Ď��s�����B
+% MATLABにおける画像表示は、コマンドプロンプト上にて、
+% <matlab:doc('imshow') imshow> 関数にファイル名を指定して実行される。
 % 
-% �ϐ� I �̕\���͈ȉ��̒ʂ�B
+% 変数 I の表示は以下の通り。
 
 imshow(I)
 
 %%
-% �ϐ�RGB�̕\���͈ȉ��̒ʂ�B
+% 変数RGBの表示は以下の通り。
 
 imshow(RGB)
 
 %%
-% �J���[�摜�Ƃ��ĕ\�������B
+% カラー画像として表示される。
 
 %%
-% [ <part1.html �g�b�v> ]
+% [ <part1.html トップ> ]
 
-%% �z�񏈗�
-% �z��ɑ΂��鉉�Z���{�����Ƃŉ摜�����������ł���B
+%% 配列処理
+% 配列に対する演算を施すことで画像処理を実現できる。
 %
-% �܂��͊ȒP�Ȕz�񉉎Z���Љ�悤�B��Ƃ��āA�ȉ��̔z���p����B
+% まずは簡単な配列演算を紹介しよう。例として、以下の配列を用いる。
 %
 % $$\mathbf{X} =\left(\begin{array}{lll}
 %   1 & 2 & 3 \\ 4 & 5 & 6
 %   \end{array}\right)$$
 %
-% MATLAB�R�}���h�v�����v�g��ŁA
+% MATLABコマンドプロンプト上で、
 
 X = [ 1 2 3 ; 4 5 6 ];
 
 %%
-% �̂悤�ɑł����߂΂悢�B
+% のように打ち込めばよい。
 %
-% �z�� X �̏����m�F���悤�B
+% 配列 X の情報を確認しよう。
 
 whos X
 
 %%
-% �{���x�����^ $$ 2 \times 3 $$ �z��ł��邱�Ƃ��킩��B
+% 倍精度実数型 $$ 2 \times 3 $$ 配列であることがわかる。
 %
-% <matlab:doc('disp') disp> �֐��𗘗p���� X �̓��e���m�F���悤�B
+% <matlab:doc('disp') disp> 関数を利用して X の内容を確認しよう。
 
 disp(X)
 
 %%
-% MATLAB��ł͔z��ɑ΂��A�����̉��Z�����p�ł���B�Ⴆ�΁A
-% �z��̓]�u�́A' <matlab:doc('transpose') .'> ' �Ŏ��s�ł���B
-% $$ \mathbf{X}^T $$ �́A�R�}���h�v�����v�g��ŁA
+% MATLAB上では配列に対し、多くの演算が利用できる。例えば、
+% 配列の転置は、' <matlab:doc('transpose') .'> ' で実行できる。
+% $$ \mathbf{X}^T $$ は、コマンドプロンプト上で、
 
 X.' 
 
 %%
-% �̂悤�Ɏ��s�ł���B
+% のように実行できる。
 %
-% �z��S�̂�萔�{����Ƃ��́A ' <matlab:doc('mtimes') *> ' ���Z�q���A
-% �z��S�̂�萔�Ŋ���Ƃ��́A' <matlab:doc('mdivide') /> ' ���Z�q��
-% ���p����΂悢�B
+% 配列全体を定数倍するときは、 ' <matlab:doc('mtimes') *> ' 演算子を、
+% 配列全体を定数で割るときは、' <matlab:doc('mdivide') /> ' 演算子を
+% 利用すればよい。
 %
-% �Ⴆ�΁A $$ 255\mathbf{X} $$ �́A
+% 例えば、 $$ 255\mathbf{X} $$ は、
 
 255*X
 
 %%
-% �̂悤�ɁA $$ \mathbf{X}/255 $$ �́A
+% のように、 $$ \mathbf{X}/255 $$ は、
 
 X/255
 
 %%
-% �̂悤�Ɏ��s�ł���B
+% のように実行できる。
 %
-% ����ȍ~�A�v�f���ׂ̂���𗘗p����̂ŁA�����ł��̉��Z���@���Љ�悤�B
-% �z��̗v�f���ׂ̂���́A' <matlab:doc('power') .^> ' ���Z�q�ɂ��
+% 次回以降、要素毎のべき乗を利用するので、ここでその演算方法を紹介しよう。
+% 配列の要素毎のべき乗は、' <matlab:doc('power') .^> ' 演算子により
 
 X.^2
 
 %%
-% �̂悤�Ɏ��s�ł���B�v�f���̕�������
+% のように実行できる。要素毎の平方根も
 
 X.^(1/2)
 
 %%
-% �̂悤�Ɍv�Z�ł���B 
-% ���̏ꍇ�́A�ȉ��̂悤�� <matlab:doc('sqrt') sqrt> �֐��𗘗p���Ă��ǂ��B
+% のように計算できる。 
+% この場合は、以下のように <matlab:doc('sqrt') sqrt> 関数を利用しても良い。
 
 sqrt(X)
 
 %%
-% �T�C�Y�������z�񓯎m�ł���΁A' <matlab:doc('plus') +> ' ���Z�q�𗘗p����
-% �a���Ƃ邱�Ƃ��\�ł���B
+% サイズが同じ配列同士であれば、' <matlab:doc('plus') +> ' 演算子を利用して
+% 和をとることも可能である。
 %
 % $$ \mathbf{Y} =\left(\begin{array}{lll}
 %   7 & 8 & 9 \\ 10 & 11 & 12
 %   \end{array}\right)$$
 %
-% ���`���Ĕz�� X �ɑ����Ă݂悤�B
+% を定義して配列 X に足してみよう。
 
 Y = [ 7 8 9 ; 10 11 12 ];
 
 X+Y
 
 %% 
-% ����ɁA����牉�Z��g�ݍ��킹��΁A�v�f���̎���a�̕�����
+% さらに、これら演算を組み合わせれば、要素毎の自乗和の平方根
 %
 % $$ [\mathbf{M}]_{i,j} = \sqrt{[\mathbf{X}]_{i,j}^2+[\mathbf{Y}]_{i,j}^2} $$
 %
-% ��
+% も
 
 M = sqrt(X.^2+Y.^2)
 
 %%
-% �̂悤�Ɏ����ł���B�O�p�֐������p�ł���̂ŁA
+% のように実現できる。三角関数も利用できるので、
 %
 % $$ [\mathbf{A}]_{i,j} = \tan^{-1}\frac{[\mathbf{Y}]_{i,j}}{[\mathbf{X}]_{i,j}}$$
 %
-% �̂悤�ȕ��G�ȉ��Z�� <matlab:doc('atan2') atan2> �֐���p���āA
+% のような複雑な演算も <matlab:doc('atan2') atan2> 関数を用いて、
 
 A = atan2(Y,X)
 
 %%
-% �̂悤�Ɏ����ł���B
+% のように実現できる。
 
 %%
-% �Ȃ��A�ϐ����̒���Ɋۊ��� ' () ' ���Ŋe�����̃C���f�b�N�X���w�肷�邱�Ƃ�
-% �z��̗v�f�ɃA�N�Z�X���邱�Ƃ��\�ł���B
+% なお、変数名の直後に丸括弧 ' () ' 内で各次元のインデックスを指定することで
+% 配列の要素にアクセスすることが可能である。
 %
-% �C���f�b�N�X�� '1' ����n�܂邱�Ƃɒ��ӂ���ƁA
-% �z�� X �̍���̗v�f�ւ́A
+% インデックスは '1' から始まることに注意すると、
+% 配列 X の左上の要素へは、
 
 X(1,1)
 
 %%
-% �̂悤�ɃA�N�Z�X�ł���B���̗v�f�ւ����l�ɃA�N�Z�X�ł���B
+% のようにアクセスできる。他の要素へも同様にアクセスできる。
 %
-% �R����( <matlab:doc(':') :> )�ɂ��C���f�b�N�X�w����s���ƁA
-% ���_��ȃA�N�Z�X���\�ƂȂ�B�Ⴆ�΁A�z�� Y �� 1 �s�ڂ́A
+% コロン( <matlab:doc(':') :> )によるインデックス指定を行うと、
+% より柔軟なアクセスが可能となる。例えば、配列 Y の 1 行目は、
 
 Y(1,:) 
 
 %%
-% �̂悤�ɁA�z�� M �� 2 ��ڂ́A
+% のように、配列 M の 2 列目は、
 
 M(:,2)
 
 %%
-% �̂悤�ɁA�z�� A �� 2�s�ڂ�2��ڂ���3��ڂ�
+% のように、配列 A の 2行目の2列目から3列目は
 
 A(2,2:3)
 
 %%
-% �̂悤�ɃA�N�Z�X�ł���B
+% のようにアクセスできる。
 
 %%
-% [ <part1.html �g�b�v> ]
+% [ <part1.html トップ> ]
 
-%% ��f����
-% �J���[�摜RGB�̊eR,G,B�����ɃA�N�Z�X���邽�߂ɂ��A
-% �R�����ɂ��C���f�b�N�X�w�肪���p�ł���B
+%% 画素処理
+% カラー画像RGBの各R,G,B成分にアクセスするためにも、
+% コロンによるインデックス指定が利用できる。
 
 R = RGB(:,:,1);
 G = RGB(:,:,2);
 B = RGB(:,:,3);
 
 %%
-% �eR,G,B�����́A�񎟌��z��ƂȂ�B
+% 各R,G,B成分は、二次元配列となる。
 
 whos R G B
 
 %%
-% ' <matlab:doc('imsplit') imsplit> ' �֐��������@�\��^����B
+% ' <matlab:doc('imsplit') imsplit> ' 関数も同じ機能を与える。
 
 [R,G,B] = imsplit(RGB);
 
 %%
-% �܂��A <matlab:doc('images/rgb2gray') rgb2gray> �֐��𗘗p���邱�ƂŁA
+% また、 <matlab:doc('images/rgb2gray') rgb2gray> 関数を利用することで、
 
 I = rgb2gray(RGB);
 
 %%
-% �̂悤�ɃJ���[�摜RGB���O���[�X�P�[���摜 I �ɕϊ��ł���B
+% のようにカラー画像RGBをグレースケール画像 I に変換できる。
 %
-% �Ȃ��A�ϐ� I ���ێ����Ă������e�͏�L�̑���ɂ�� 
-% �ϐ� RGB �̃O���[�X�P�[���摜�ɂ���ď㏑�������B
+% なお、変数 I が保持していた内容は上記の操作により 
+% 変数 RGB のグレースケール画像によって上書きされる。
 
 whos I
 
@@ -265,22 +265,22 @@ whos I
 imshow(I)
 
 %%
-% �摜�z��ɑ΂��A��ɏЉ�����Z���{�����߂ɂ́A
-% ���΂��Ύ����^�ւ̕ϊ����K�v�ƂȂ�B
+% 画像配列に対し、先に紹介した演算を施すためには、
+% しばしば実数型への変換が必要となる。
 %
-% �����^��������^�ւ̕ϊ��ɂ́A <matlab:doc('images/im2single') im2single>
-% �֐��A�������� <matlab:doc('images/im2double') im2double>�@�֐���
-% ���p�ł���B���ꂼ��A�摜��P���x�����^�A�{���x�����^�ɕϊ�����B
+% 整数型から実数型への変換には、 <matlab:doc('images/im2single') im2single>
+% 関数、もしくは <matlab:doc('images/im2double') im2double>　関数を
+% 利用できる。それぞれ、画像を単精度実数型、倍精度実数型に変換する。
 
 I = im2double(I);
 whos I
 
 %%
-% �����^�ւ̕ϊ� im2single �֐��Aim2double �֐��͉�f�l�� 0 ���� 1 
-% �͈̔͂ɐ��K�����鏈���������ɍs����B
+% 実数型への変換 im2single 関数、im2double 関数は画素値を 0 から 1 
+% の範囲に正規化する処理も同時に行われる。
 %
-% <matlab:doc('min') min>�֐��ōŏ��l�� <matlab:doc('max') max> �֐���
-% �ő�l���m�F���悤�B
+% <matlab:doc('min') min>関数で最小値を <matlab:doc('max') max> 関数で
+% 最大値を確認しよう。
 
 min(I(:)) 
 
@@ -289,75 +289,75 @@ min(I(:))
 max(I(:))
 
 %%
-% �Ȃ��A'I(:)' �̂悤�ɃR�����𗘗p����Ɣz��̗�x�N�g�������s����B
-% min �֐��Amax �֐��ɔz���^����Ɗe�񖈂̕]���ƂȂ邽�߁A�S��f�ɓn��
-% �ŏ��l�A�ő�l�����߂邽�߂ɂ����ł͗�x�N�g�������s�����B
+% なお、'I(:)' のようにコロンを利用すると配列の列ベクトル化が行われる。
+% min 関数、max 関数に配列を与えると各列毎の評価となるため、全画素に渡る
+% 最小値、最大値を求めるためにここでは列ベクトル化を行った。
 % 
-% 0 ���� 1 �͈̔͂ɐ��K�����ꂽ�摜�́A�ݏ摥�ϊ��ɂ��A
-% 0 ���� 1 �͈͓̔��Ŗ��邳�𒲐��ł���B
+% 0 から 1 の範囲に正規化された画像は、累乗則変換により、
+% 0 から 1 の範囲内で明るさを調整できる。
 
 J = I.^2;
 imshow(J)
 
 %%
-% ' <matlab:doc('imadjust') imadjust> ' �֐��������@�\��^����B
+% ' <matlab:doc('imadjust') imadjust> ' 関数も同じ機能を与える。
 
 J = imadjust(I,[],[],2);
 
 %%
-% <matalb:doc('fplot') fplot> �֐��ɂ���L�̗ݏ摥�ϊ��̓������m�F���悤�B
+% <matalb:doc('fplot') fplot> 関数により上記の累乗則変換の特性を確認しよう。
 
 fplot(@(x) x.^2, [0 1])  
-xlabel('x') % �����̃��x��
-ylabel('y') % �c���̃��x��
-axis square % �c����̒���
+xlabel('x') % 横軸のラベル
+ylabel('y') % 縦軸のラベル
+axis square % 縦横比の調整
 
 %%
-% �����ō̗p�����ݏ摥�ϊ��͕�������`���A�摜���Â�������ʂ�����B 
+% ここで採用した累乗則変換は放物線を描き、画像を暗くする効果がある。 
 
 %%
-% [ <part1.html �g�b�v> ]
+% [ <part1.html トップ> ]
 
-%% �摜�o��
+%% 画像出力
 %
-% <matlab:doc('imwrite') imwrite> �֐��𗘗p���邱�ƂŁA�����������ʉ摜��
-% �t�@�C���ɕۑ����邱�Ƃ��\�ł���B
+% <matlab:doc('imwrite') imwrite> 関数を利用することで、処理した結果画像を
+% ファイルに保存することも可能である。
 %
-% �摜 J ���t�@�C�� darkpeppers.tif �ɕۑ����悤�B
+% 画像 J をファイル darkpeppers.tif に保存しよう。
 
 imwrite(J,'darkpeppers.tif')
 
 %%
-% �摜�t�@�C�� darkpeppers.tif ���o�͂����B
+% 画像ファイル darkpeppers.tif が出力される。
 
 dir *.tif
 
 %%
-% [ <part1.html �g�b�v> ]
+% [ <part1.html トップ> ]
 
-%% ���K�ۑ�
+%% 演習課題
 %
-% *�ۑ�1-1. ���邳����*
+% *課題1-1. 明るさ調整*
 % 
-% �摜�t�@�C�� peppers.png �̃O���[�X�P�[���摜�ɑ΂��Asqrt�֐��ɂ�閾�邳
-% �������{���A�������ʂ��摜�t�@�C�� brightpeppers.tif �ɕۑ�����B
-% �܂��A�ϊ��̓������O���t�Ŋm�F����B
+% 画像ファイル peppers.png のグレースケール画像に対し、sqrt関数による明るさ
+% 調整を施し、処理結果を画像ファイル brightpeppers.tif に保存せよ。
+% また、変換の特性をグラフで確認せよ。
 %
-% (������j
+% (処理例）
 %
 %%
 % <<brightpeppers.png>>
 %%
 % <<fplotsqrt.png>>
 %%
-% *�ۑ�1-2. �F��ԕϊ�*
+% *課題1-2. 色空間変換*
 %
-% �摜�t�@�C�� peppers.png �� RGB�J���[�z��� <matlab:doc('rgb2hsv') rgb2hsv>
-% �֐��� HSV�J���[�z��֕ϊ����AS ������2�{���� 
-% <matlab:doc('hsv2rgb') hsv2rgb> �ɂ�RGB�J���[�z��ɖ߂��A�������ʂ�
-% �摜�t�@�C�� highsatpeppers.jpg �ɕۑ�����B
+% 画像ファイル peppers.png の RGBカラー配列を <matlab:doc('rgb2hsv') rgb2hsv>
+% 関数で HSVカラー配列へ変換し、S 成分を2倍して 
+% <matlab:doc('hsv2rgb') hsv2rgb> にてRGBカラー配列に戻し、処理結果を
+% 画像ファイル highsatpeppers.jpg に保存せよ。
 %
-% (������j
+% (処理例）
 %
 %%
 % <<highsatpeppers.png>>
@@ -368,6 +368,6 @@ dir *.tif
 % <hr>
 % </html>
 %%
-% <index.html ���j���[> |
-% <part1.html �g�b�v> |
-% <part2.html Part2>
+% <index.html メニュー> |
+% | <part1.html トップ> |
+% | <part2.html Part2>

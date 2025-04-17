@@ -1,10 +1,10 @@
-% EMBVISION(CQ”Å)
+% EMBVISION(CQç‰ˆ)
 %
-%   index      - *MATLAB(R)/Simulink(R) & Raspberry Pi ‚ÅŠw‚Ô‘g‚İƒrƒWƒ‡ƒ“I*
-%   part1      - *EmbVision(CQ”Å) ƒ`ƒ…[ƒgƒŠƒAƒ‹i‚Pj*
-%   part2      - *EmbVision(CQ”Å) ƒ`ƒ…[ƒgƒŠƒAƒ‹i‚Qj*
-%   part3      - *EmbVision(CQ”Å) ƒ`ƒ…[ƒgƒŠƒAƒ‹i‚Rj*
-%   part4      - *EmbVision(CQ”Å) ƒ`ƒ…[ƒgƒŠƒAƒ‹i‚Sj*
-%   part5      - *EmbVision(CQ”Å) ƒ`ƒ…[ƒgƒŠƒAƒ‹i‚Tj*
-%   part6      - *EmbVision(CQ”Å) ƒ`ƒ…[ƒgƒŠƒAƒ‹i‚Uj*
-%   part7      - *EmbVision(CQ”Å) ƒ`ƒ…[ƒgƒŠƒAƒ‹i‚Vj*
+%   index      - *MATLAB(R)/Simulink(R) & Raspberry Pi ã§å­¦ã¶çµ„è¾¼ã¿ãƒ“ã‚¸ãƒ§ãƒ³ï¼*
+%   part1      - *EmbVision(CQç‰ˆ) ãƒãƒ¥ãƒ¼ãƒˆãƒªã‚¢ãƒ«ï¼ˆï¼‘ï¼‰*
+%   part2      - *EmbVision(CQç‰ˆ) ãƒãƒ¥ãƒ¼ãƒˆãƒªã‚¢ãƒ«ï¼ˆï¼’ï¼‰*
+%   part3      - *EmbVision(CQç‰ˆ) ãƒãƒ¥ãƒ¼ãƒˆãƒªã‚¢ãƒ«ï¼ˆï¼“ï¼‰*
+%   part4      - *EmbVision(CQç‰ˆ) ãƒãƒ¥ãƒ¼ãƒˆãƒªã‚¢ãƒ«ï¼ˆï¼”ï¼‰*
+%   part5      - *EmbVision(CQç‰ˆ) ãƒãƒ¥ãƒ¼ãƒˆãƒªã‚¢ãƒ«ï¼ˆï¼•ï¼‰*
+%   part6      - *EmbVision(CQç‰ˆ) ãƒãƒ¥ãƒ¼ãƒˆãƒªã‚¢ãƒ«ï¼ˆï¼–ï¼‰*
+%   part7      - *EmbVision(CQç‰ˆ) ãƒãƒ¥ãƒ¼ãƒˆãƒªã‚¢ãƒ«ï¼ˆï¼—ï¼‰*

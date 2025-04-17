@@ -1,88 +1,88 @@
-%% *EmbVision(CQ��) �`���[�g���A���i�V�j*
+%% *EmbVision(CQ版) チュートリアル（７）*
 % 
-% *��A���͂ƋȐ����o - MATLAB�� -*
+% *回帰分析と曲線検出 - MATLAB編 -*
 %
-% �V����w
-% �����@����C�����@�E��
+% 新潟大学
+% 村松　正吾，高橋　勇希
 %
-% Copyright (c), All rights reserved, 2014-2022, Shogo MURAMATSU and Yuki TAKAHASHI
+% Copyright (c), All rights reserved, 2014-2025, Shogo MURAMATSU and Yuki TAKAHASHI
 % 
 
 %%
 % <part6.html Part6> |
-% <index.html ���j���[> |
-% <part8.html Part8>
+% | <index.html メニュー> |
+% | <part8.html Part8>
 
 %%
-% *�T�v*
+% *概要*
 %
-% �{���K�ł́ASystem object �̉��p��Ƃ��āA
-% ��������A�𗘗p�����摜����̋Ȑ����o����������B
+% 本演習では、System object の応用例として、
+% 多項式回帰を利用した画像からの曲線検出を実装する。
 %
-% �����Ƃ��āA�J���Ă���S�Ă� Figure �� <matlab:doc('close') close> �֐���
-% ���Ă����B
+% 準備として、開いている全ての Figure を <matlab:doc('close') close> 関数で
+% 閉じておく。
 
 close all
 
-%% ��A����
+%% 回帰分析
 % 
-% ��A���͂ł́A����ϐ� $y$ �Ƃ���ϐ� $x$ �̊Ԃ�
+% 回帰分析では、ある変数 $y$ とある変数 $x$ の間を
 %
 % $$ y = f(x) $$
 %
-% �̂悤�Ɋ֌W�Â��関�m�̊֐� $f(\cdot)$ �����肷��B
-% ��A���͂́A���̂悤�Ȗ��m�̊֐� $f(\cdot)$ ���ϑ��\�ȃf�[�^���琄�_����
-% ���v�I��@�ł���B
+% のように関係づける未知の関数 $f(\cdot)$ を仮定する。
+% 回帰分析は、このような未知の関数 $f(\cdot)$ を観測可能なデータから推論する
+% 統計的手法である。
 % 
-% �ϐ� $x$ ������ϐ��Ƃ�сA�ϐ� $y$ ��ړI�ϐ��Ƃ�ԁB
-% �܂��A���̖��m�֐��̐��_���t�B�b�e�B���O�Ƃ�ԁB
+% 変数 $x$ を説明変数とよび、変数 $y$ を目的変数とよぶ。
+% また、この未知関数の推論をフィッティングとよぶ。
 % 
-% �ȉ��ł́A��A���͂̈��Ƃ��ăf�[�^�̑������ߎ������݂�B
-% �܂��A��������A���������߂̃f�[�^��p�ӂ��悤�B
+% 以下では、回帰分析の一例としてデータの多項式近似を試みる。
+% まず、多項式回帰を試すためのデータを用意しよう。
 
 load census 
 
 
 %%
-% <matlab:doc('load') load>�R�}���h�œǂݍ��܂ꂽ�ϐ� cdate, pop��
-% �������21�����x�N�g���ł���A���̓��e�͈ȉ��̂Ƃ���B
+% <matlab:doc('load') load>コマンドで読み込まれた変数 cdate, popは
+% いずれも21次元ベクトルであり、その内容は以下のとおり。
 % 
-% * cdate: 1790�N����1990�N�܂ł�10�N���Ƃ̔N�x
-% * pop: cdate�̔N�x�ɑΉ�����A�����J�̐l����( $10^6$ �l�P��)
+% * cdate: 1790年から1990年までの10年ごとの年度
+% * pop: cdateの年度に対応するアメリカの人口数( $10^6$ 人単位)
 % 
-% <matlab:doc('plot') plot>�֐��ŁAcdate��X���Apop��Y���ɂ���X-Y�v���b�g��
-% �\�����悤�B
+% <matlab:doc('plot') plot>関数で、cdateをX軸、popをY軸にしてX-Yプロットを
+% 表示しよう。
 
 plot(cdate,pop,'o')  
 xlabel('year')
 ylabel('population')
 
 %%
-% �v���b�g���ꂽ�O���t������Ɠ񎟊֐��̂悤�ȑ����������Ă���B
+% プロットされたグラフを見ると二次関数のような増え方をしている。
 %
-% MATLAB�͑������ߎ����s�� <matlab:doc('polyfit') polyfit>�֐���񋟂��Ă���B
-% $x$ ������ϐ��̊ϑ��f�[�^�C $y$ ��ړI�ϐ��̊ϑ��f�[�^�Ƃ��ē���������
-% �x�N�g���ŗ^����ꂽ�Ƃ���΁A�R�}���h
+% MATLABは多項式近似を行う <matlab:doc('polyfit') polyfit>関数を提供している。
+% $x$ を説明変数の観測データ， $y$ を目的変数の観測データとして同じ次元の
+% ベクトルで与えられたとすれば、コマンド
 % 
 % >> p = polyfit(x,y,n) 
 % 
-% �́A���m�̊֐� $f(x)$ �� $n$ ��������
+% は、未知の関数 $f(x)$ を $n$ 次多項式
 %
 % $$ p(x) = p_1x^n+p_2x^{n-1}+\cdots+p_nx+p_{n+1} $$
 %
-% �ŋߎ�����B�������A $p_1,p_2,\cdots,p_{n+1}$ �͖��m�p�����[�^�ŁA
-% �f�[�^�Ƃ̐��������ŏ�����덷�̈Ӗ��ōœK�ɂȂ�悤�ɑI�������B
+% で近似する。ただし、 $p_1,p_2,\cdots,p_{n+1}$ は未知パラメータで、
+% データとの整合性が最小自乗誤差の意味で最適になるように選択される。
 
 %%
-% polyfit�@�֐����f�[�^�ɓK�p���ċߎ������������߂Ă݂悤�B
+% polyfit　関数をデータに適用して近似多項式を求めてみよう。
 
 n = 2;
 p = polyfit(cdate,pop,n); 
 
 %%
-% �ÂÂ��āA����ꂽ�ߎ��������� <matlab:doc('polyval') polyval> �֐��ɂ��
-% �]�����悤�B <matlab:doc('linspace') linspace> �֐��ŁA�N�x cdate �̍ŏ��l��
-% �ő�l�̊Ԃ�100�_���Ԋu�ɃT���v������B
+% づづけて、得られた近似多項式を <matlab:doc('polyval') polyval> 関数により
+% 評価しよう。 <matlab:doc('linspace') linspace> 関数で、年度 cdate の最小値と
+% 最大値の間を100点等間隔にサンプルする。
 
 x = linspace(min(cdate),max(cdate),100);
 y = polyval(p, x);  
@@ -90,93 +90,93 @@ hold on
 plot(x,y) 
 
 %%
-% [ <part7.html �g�b�v> ]
+% [ <part7.html トップ> ]
 
-%% �Ȑ����o
+%% 曲線検出
 %
-% System object �̉��p��Ƃ��āA�Ȑ����܂ޓ�l�摜���瑽�����ߎ��ɂ��
-% �Ȑ����ߎ����郂�W���[�����쐬����B
+% System object の応用例として、曲線を含む二値画像から多項式近似により
+% 曲線を近似するモジュールを作成する。
 %
-% �ȉ��̃e�X�g�N���X���`����B
+% 以下のテストクラスを定義する。
 
 %%
 %   classdef CurveDetectionSystemTestCase < matlab.unittest.TestCase
 %       methods(Test)
 %           % Test methods
 %           function testDefaultDegree(testCase)
-%               % ���Ғl�@
+%               % 期待値　
 %               degExpctd = 3;
-%               % �^�[�Q�b�g�N���X�̃C���X�^���X��
+%               % ターゲットクラスのインスタンス化
 %               obj = CurveDetectionSystem();
-%               % �v���p�e�B Degree �̎擾
+%               % プロパティ Degree の取得
 %               degActual = obj.Degree;
-%               % �v���p�e�B Degree �̌���
+%               % プロパティ Degree の検証
 %               testCase.verifyEqual(degActual,degExpctd)
 %           end
 %           function testCoefs(testCase)
-%              % ����
+%              % 準備
 %              xmax = 4;
-%              x = 1:xmax; % �����ϐ�
-%              y = x.^2;   % �ړI�ϐ�
-%              BW = zeros(xmax^2,xmax); % ���W���l�摜�ɕϊ�
+%              x = 1:xmax; % 説明変数
+%              y = x.^2;   % 目的変数
+%              BW = zeros(xmax^2,xmax); % 座標を二値画像に変換
 %              for idx = 1:length(x)
 %                  BW(y(idx),x(idx)) = 1;
 %              end
-%              deg = 3;  % ����
-%              % ���Ғl�̐ݒ�
-%              coefsExpctd = polyfit(x,y,deg); % �������W���̊��Ғl
-%              y = round(polyval(coefsExpctd,x));   % �ړI�ϐ�
-%              lineExpctd = zeros(size(BW),'like',BW); % ���o�����Ȑ��̊��Ғl
+%              deg = 3;  % 次数
+%              % 期待値の設定
+%              coefsExpctd = polyfit(x,y,deg); % 多項式係数の期待値
+%              y = round(polyval(coefsExpctd,x));   % 目的変数
+%              lineExpctd = zeros(size(BW),'like',BW); % 抽出される曲線の期待値
 %              for idx = 1:length(x)
 %                  lineExpctd(y(idx),x(idx)) = 1;
 %              end
-%              % �^�[�Q�b�g�̃C���X�^���X��
+%              % ターゲットのインスタンス化
 %              obj = CurveDetectionSystem();
-%              % ���s���ʁi�����l�̎擾�j
+%              % 実行結果（実現値の取得）
 %              [lineActual,coefsActual] = obj.step(BW);
-%              % �z��̒l�̌���
+%              % 配列の値の検証
 %              testCase.verifyEqual(coefsActual,coefsExpctd,'AbsTol',1e-9);
 %              testCase.verifyEqual(lineActual,lineExpctd,'AbsTol',1e-9);
 %         end
 %           function testSetDegree(testCase)
-%               % ���Ғl
+%               % 期待値
 %               degExpctd = 2;
-%               % �^�[�Q�b�g�N���X�̃C���X�^���X��
+%               % ターゲットクラスのインスタンス化
 %               obj = PolyfitSystem('Degree',degExpctd);
-%               % �v���p�e�B�[ Degree �̎擾
+%               % プロパティー Degree の取得
 %               degActual = obj.Degree;
-%               % �v���p�e�B�[ Degree �̌���
+%               % プロパティー Degree の検証
 %               testCase.verifyEqual(degActual,degExpctd)
 %           end
 %       end
 %   end
 
 %%
-% ��L�̃e�X�g�N���X�𖞑�����^�[�Q�b�g�N���X�Ƃ��Ĉȉ���System object���`���悤�B
+% 上記のテストクラスを満足するターゲットクラスとして以下のSystem objectを定義しよう。
 %
 %   classdef CurveDetectionSystem < matlab.System
-%   % ��l�摜����ߎ��Ȑ��摜�ɕϊ�
+%   % 二値画像から近似曲線画像に変換
 %       properties (Nontunable)
 %           Degree = 3;
 %       end
 %       methods
-%           %�R���X�g���N�^
+%           %コンストラクタ
 %           function obj = CurveDetectionSystem(varargin)
 %               setProperties(obj,nargin,varargin{:})
 %           end
 %       end
 %       methods(Access = protected)
 %           function [Line,p] = stepImpl(obj,BW)
-%               [y,x] = find(BW); % ���o�_�����W�ɕϊ�
-%               p = polyfit(x,y,obj.Degree); % �������ߎ�
+%               [y,x] = find(BW); % 検出点を座標に変換
+%               p = polyfit(x,y,obj.Degree); % 多項式近似
 %   
 %               line = zeros(size(bw),'like',bw);
 %   
-%               xline = 1:size(bw,2); % �����ϐ����摜�̒[����[�Ƃ���
-%               yline = uint8(polyval(p,xline));    % ����������ړI�ϐ������߂��f�Ɏ��܂�悤�ɐ����^�ɂ��Ă���
-%               yline = min(max(yline,1),size(BW,1));   % �ړI�ϐ����摜���Ɏ��܂�悤�ɕύX����B
-%               ind = sub2ind(size(BW),yline,xline);  % ���W����摜�ʒu�ɕϊ�
-%               line(ind) = 1;    % ����`��
+%               xline = 1:size(bw,2); % 説明変数を画像の端から端とする
+%               yline = uint8(polyval(p,xline));    % 多項式から目的変数を求める画素に収まるように整数型にしておく
+%               yline = min(max(yline,1),size(BW,1));   % 目的変数が画像内に収まるように変更する。
+%               ind = sub2ind(size(BW),yline,xline);  % 座標から画像位置に変換
+%               line(ind) = 1;    % 線を描画
 %           end
 %       end
 %   end
@@ -199,27 +199,27 @@ plot(x,y)
 % obj.step(BW)
 
 %%
-% [ <part7.html �g�b�v> ]
+% [ <part7.html トップ> ]
 
-%% �Ȑ��`��
+%% 曲線描画
 %
 
 %%
-% [ <part7.html �g�b�v> ]
+% [ <part7.html トップ> ]
 
-%% ���K�ۑ�
+%% 演習課題
 %
-% *�ۑ�7-1. XXX*
+% *課題7-1. XXX*
 % 
 % ...
 % 
 
 %%
-% *�ۑ�7-2. XXX*
+% *課題7-2. XXX*
 %
 % ...
 %
-% (������j
+% (処理例）
 
 %%
 % <html>
@@ -227,6 +227,6 @@ plot(x,y)
 % </html>
 %%
 % <part6.html Part6> |
-% <index.html ���j���[> |
-% <part7.html �g�b�v> |
-% <part8.html Part8>
+% | <index.html メニュー> |
+% | <part7.html トップ> |
+% | <part8.html Part8>

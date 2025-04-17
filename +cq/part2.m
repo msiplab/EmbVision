@@ -1,63 +1,63 @@
-%% *EmbVision(CQ��) �`���[�g���A���i�Q�j*
+%% *EmbVision(CQ版) チュートリアル（２）*
 %
-% *�t�B���^�����O�Ǝ��g������*
+% *フィルタリングと周波数特性*
 %
-% �V����w
-% �����@����C�����@�E��
+% 新潟大学
+% 村松　正吾，高橋　勇希
 %
-% Copyright (c), All rights reserved, 2014-2022, Shogo MURAMATSU and Yuki TAKAHASHI
+% Copyright (c), All rights reserved, 2014-2025, Shogo MURAMATSU and Yuki TAKAHASHI
 % 
 
 %%
 % <part1.html Part1> |
-% <index.html ���j���[> |
-% <part3.html Part3>
+% | <index.html メニュー> |
+% | <part3.html Part3>
 
 %%
-% *�T�v*
+% *概要*
 %
-% �{���K�ł́AMATLAB�ɂĈꎟ���M���̃t�B���^�����O�Ǝ��g����͖@�A
-% �摜���̃t�B���^�����O�Ǝ��g����͖@�ɂ��ĊȒP�Ɋw�ԁB
+% 本演習では、MATLABにて一次元信号のフィルタリングと周波数解析法、
+% 画像情報のフィルタリングと周波数解析法について簡単に学ぶ。
 %
-% �����Ƃ��āA�J���Ă���S�Ă� Figure �� <matlab:doc('close') close> �֐���
-% ���Ă����B
+% 準備として、開いている全ての Figure を <matlab:doc('close') close> 関数で
+% 閉じておく。
 
 close all
 
-%% �ꎟ���M���̎��g������
-% �܂��A�\�ߗp�ӂ���Ă���I�[�f�B�I�f�[�^ chirp ��
-% <matlab:doc('load') load> �֐��𗘗p���ēǂݏo���ď�������B
+%% 一次元信号の周波数特性
+% まず、予め用意されているオーディオデータ chirp を
+% <matlab:doc('load') load> 関数を利用して読み出して準備する。
 
 load chirp
 
 %%
-% �I�[�f�B�I�f�[�^�͕ϐ� y �ɔ{���x�����^�z��Ƃ��ĕێ������B
-% �Ȃ��A�W�{�����g���͕ϐ� Fs �ɕێ������B
+% オーディオデータは変数 y に倍精度実数型配列として保持される。
+% なお、標本化周波数は変数 Fs に保持される。
 
 whos y Fs
 
 %%
-% ���ɁA�\�ߗp�ӂ���Ă���I�[�f�B�I�f�[�^ gong ��ǂݏo���A
-% <matlab:doc('length') length> �֐��𗘗p���Ē����𑵂��A
-% chirp �̃f�[�^�ƍ�������B
+% 次に、予め用意されているオーディオデータ gong を読み出し、
+% <matlab:doc('length') length> 関数を利用して長さを揃え、
+% chirp のデータと混合する。
 
-c = y; % �ϐ� c �ɑ��
+c = y; % 変数 c に代入
 load gong
-g = y; % �ϐ� g �ɑ��
+g = y; % 変数 g に代入
 
-x = g(1:length(c))+c; % �����𒲐����č���
+x = g(1:length(c))+c; % 長さを調整して混合
 
 %%
-% �ϐ� x �ɂ͍��������I�[�f�B�I�f�[�^���ێ������B
-% <matlab:doc('plot') plot> �֐��Ŋm�F���悤�B
+% 変数 x には混合したオーディオデータが保持される。
+% <matlab:doc('plot') plot> 関数で確認しよう。
 
 plot(x)
 
 %%
-% �I�[�f�B�I�Đ���������� <matlab:doc('audioplayer') audioplayer>
-% �֐��𗘗p���āA�I�[�f�B�I�Đ����\�ł���B
+% オーディオ再生環境があれば <matlab:doc('audioplayer') audioplayer>
+% 関数を利用して、オーディオ再生も可能である。
 %
-% �܂��A�I�[�f�B�I�Đ��I�u�W�F�N�g�𐶐�����B
+% まず、オーディオ再生オブジェクトを生成する。
 
 %% 
 % 
@@ -66,9 +66,9 @@ plot(x)
 %
 
 %%
-% �I�[�f�B�I�Đ��́A
-% <matlab:doc('audioplayer/play') play> ���\�b�h��
-% �I�u�W�F�N�g player ���w�肵�Ď��s�����B
+% オーディオ再生は、
+% <matlab:doc('audioplayer/play') play> メソッドに
+% オブジェクト player を指定して実行される。
 
 %%
 %
@@ -76,12 +76,12 @@ plot(x)
 %
 
 %%
-% <matlab:doc('spectrogram') spectrogram> �֐��𗘗p���邱�ƂŁA
-% �Z���ԃt�[���G�ϊ��𗘗p�����I�[�f�B�I�f�[�^�̎��g����͂����s�ł���B
+% <matlab:doc('spectrogram') spectrogram> 関数を利用することで、
+% 短時間フーリエ変換を利用したオーディオデータの周波数解析を実行できる。
 %
-% * ����: 256
+% * 窓長: 256
 %
-% �Ƃ��Ď��s���悤�B 
+% として実行しよう。 
 
 figure(1)
 spectrogram(x,256)
@@ -89,51 +89,51 @@ caxis([ -70 10 ])
 colorbar
 
 %%
-% ��L�̑���ɂ����g�������i�X�y�N�g���O�����j���\�������B
-% �����͐��K�����g��( $$ F_s/2 $$ �� 1 �Ɛ��K��)�A
-% �c���͕W�{�C���f�b�N�X( $$ 1/F_s $$ �b�P��)�ł���B
+% 上記の操作により周波数特性（スペクトログラム）が表示される。
+% 横軸は正規化周波数( $$ F_s/2 $$ を 1 と正規化)、
+% 縦軸は標本インデックス( $$ 1/F_s $$ 秒単位)である。
 %
-% �Ȃ��A�l�̑傫��[dB] ��������Ղ��悤��
-% <matlab:doc('caxis') caxis> �֐���
-% <matlab:doc('colorbar') colorbar> �֐��𕹗p�����B
+% なお、値の大きさ[dB] が分かり易いように
+% <matlab:doc('caxis') caxis> 関数と
+% <matlab:doc('colorbar') colorbar> 関数を併用した。
 %
-% <matalb:doc('view') view> �֐��Ŏ��_��ς��Ă݂悤�B
+% <matalb:doc('view') view> 関数で視点を変えてみよう。
 
 view([-15 30])
 
 %%
-% <matlab:doc('zlim') zlim> �֐��𗘗p���āA
-% Z���̍��W���@-70 ���� 10 �ɒ�������B
+% <matlab:doc('zlim') zlim> 関数を利用して、
+% Z軸の座標を　-70 から 10 に調整する。
 
 zlim([ -70 10 ])
 
 %%
-% [ <part2.html �g�b�v> ]
+% [ <part2.html トップ> ]
 
-%% �ꎟ���M���̃t�B���^�����O
-% ���ɁA�I�[�f�B�I�f�[�^ x �ɁA���`�t�B���^����
+%% 一次元信号のフィルタリング
+% 次に、オーディオデータ x に、線形フィルタ処理
 %
 % $$ y[n] = h[n] \ast x[n] = \sum_{k=0}^{N-1} h[k]x[n-k] $$
 %
-% ���{���Ă݂悤�B�����ŁA
+% を施してみよう。ここで、
 %
-% * $$ x[n] $$ : �t�B���^����
-% * $$ y[n] $$ : �t�B���^�o�� 
-% * $$ h[n] $$ : �t�B���^�W���i�C���p���X�����j
-% * $$ N $$    : �t�B���^����
+% * $$ x[n] $$ : フィルタ入力
+% * $$ y[n] $$ : フィルタ出力 
+% * $$ h[n] $$ : フィルタ係数（インパルス応答）
+% * $$ N $$    : フィルタ次数
 %
-% �Ƃ���B
+% とする。
 %
-% MATLAB �ł͐��`�t�B���^������ <matlab:doc('conv') conv> �֐��𗘗p�ł���B
+% MATLAB では線形フィルタ処理に <matlab:doc('conv') conv> 関数を利用できる。
 %
-% �t�B���^�W�� 
+% フィルタ係数 
 %
 % $$ h[n] = \left\{\begin{array}{ll}
 %            1/3, & n=0,1,2 \\
 %            0, & \mathrm{otherwise}
 %           \end{array}\right. $$
 % 
-% �Ƃ��Đ��`�t�B���^���������s���Ă݂悤�B
+% として線形フィルタ処理を実行してみよう。
 
 h = [ 1 1 1 ]/3;
 figure(2)
@@ -144,8 +144,8 @@ impz(h)
 y = conv(h,x);
 
 %%
-% �ϐ� y �ɂ̓t�B���^�������ʂ��ێ�����Ă���B 
-% �o�� y �̎��g�������i�X�y�N�g���O�����j���m�F���悤�B
+% 変数 y にはフィルタ処理結果が保持されている。 
+% 出力 y の周波数特性（スペクトログラム）を確認しよう。
 
 figure(3)
 spectrogram(y,256);
@@ -158,57 +158,57 @@ view([ -15 30 ])
 zlim([ -70 10 ])
 
 %%
-% ���� x �Əo�� y �̃X�y�N�g���O�������r���Ă݂ė~�����B
-% �ǂ̂悤�Ȃ��ƂɋC���t�����낤���H
+% 入力 x と出力 y のスペクトログラムを比較してみて欲しい。
+% どのようなことに気が付くだろうか？
 %
-% * ��悻�A���K�����g��0.4�ȏ�̍����g�������������Ă���B
-% * ���ɁA0.667�t�߂̌������傫���B
+% * 大よそ、正規化周波数0.4以上の高周波成分が減衰している。
+% * 特に、0.667付近の減衰が大きい。
 %
-% �Ƃ������Ƃɒ��ӂ��Ċώ@���ė~�����B
+% ということに注意して観察して欲しい。
 %
-% �Ȃ��A�������ʂ��I�[�f�B�I�Đ��ɂ��m�F����ꍇ�́A
+% なお、処理結果をオーディオ再生により確認する場合は、
 %
 %   player = audioplayer(y,Fs);
 %   play(player)
 %
-% �Ǝ��s����΂悢�B
+% と実行すればよい。
 
 %%
-% [ <part2.html �g�b�v> ]
+% [ <part2.html トップ> ]
 
-%% �ꎟ���t�B���^�̎��g������
+%% 一次元フィルタの周波数応答
 %
-% ���`�t�B���^�ɂ����g�������̕ω��́A
-% �t�B���^�̎��g�������ɂ��m�F�ł���B
+% 線形フィルタによる周波数特性の変化は、
+% フィルタの周波数応答により確認できる。
 % 
-% ���̂Ȃ�΁A���ԗ̈�ł̏􍞂݉��Z��
+% 何故ならば、時間領域での畳込み演算は
 %
 % $$ y[n] = h[n] \ast x[n] \ \stackrel{\mathrm{DTFT}}{\longleftrightarrow}\
 %   Y(e^{j\omega}) = H(e^{j\omega})X(e^{j\omega}) $$
 %
-% �̂悤�Ɏ��g���iDTFT: ���U���ԃt�[���G�ϊ��j�̈�ł�
-% �ω��Z�ɑΉ����邽�߂ł���B�����ŁA
+% のように周波数（DTFT: 離散時間フーリエ変換）領域では
+% 積演算に対応するためである。ここで、
 % 
-% * $$ X(e^{j\omega}) $$ : ���� $$ x[n] $$ �̎��g������
-% * $$ Y(e^{j\omega}) $$ : �o�� $$ y[n] $$ �̎��g������  
-% * $$ H(e^{j\omega}) $$ : �t�B���^�W���i�C���p���X�����j $$ h[n] $$ 
-%   �̎��g������
+% * $$ X(e^{j\omega}) $$ : 入力 $$ x[n] $$ の周波数特性
+% * $$ Y(e^{j\omega}) $$ : 出力 $$ y[n] $$ の周波数特性  
+% * $$ H(e^{j\omega}) $$ : フィルタ係数（インパルス応答） $$ h[n] $$ 
+%   の周波数応答
 %
-% �ł���B
+% である。
 %
-% �t�B���^�W�� $$ h[n] $$ �̎��g�������� <matlab:doc('freqz') freqz> �֐�
-% �ɂ��m�F�ł���B
+% フィルタ係数 $$ h[n] $$ の周波数応答は <matlab:doc('freqz') freqz> 関数
+% により確認できる。
 
 figure(4)
 freqz(h)
 
 %%
 % 
-% �U���������m�F����ƁA���K�����g�� 0.3 ����@0.4 �̊Ԃ��獂��ɓn��
-% -6 [dB] �ȏ�̌��������������A���� 0.6 ���� 0.7 �̊Ԃő傫���������������
-% �m�F�ł���B
+% 振幅応答を確認すると、正規化周波数 0.3 から　0.4 の間から高域に渡り
+% -6 [dB] 以上の減衰特性をもち、特に 0.6 から 0.7 の間で大きく減衰する特性が
+% 確認できる。
 %
-% �Ȃ��A
+% なお、
 %
 % $$ H(e^{j\omega}) = \sum_{n=-\infty}^{\infty} h[n]e^{-j\omega n} 
 %    = h[0]e^{-j0} + h[1]e^{-j\omega} + h[2]e^{-j2\omega} $$
@@ -216,23 +216,23 @@ freqz(h)
 % $$ = \frac{1}{3}(e^{j\omega} + 1 + e^{-j\omega})e^{-j\omega} 
 %     = \frac{1}{3}(1 + 2\cos\omega)e^{-j\omega} $$
 %
-% ���A 
+% より、 
 %
-% * $$ \omega = 0 $$ �ŁA  $$ |H(e^{j\omega})| = 1 $$
-% * $$ \omega = \frac{2\pi}{3} $$ �ŁA  $$ |H(e^{j\omega})| = 0 $$
+% * $$ \omega = 0 $$ で、  $$ |H(e^{j\omega})| = 1 $$
+% * $$ \omega = \frac{2\pi}{3} $$ で、  $$ |H(e^{j\omega})| = 0 $$
 %
-% �ƂȂ邱�Ƃ��m�F�ł���B
+% となることが確認できる。
 
 %%
-% [ <part2.html �g�b�v> ]
+% [ <part2.html トップ> ]
 
-%% �񎟌��M���̎��g������
-% �ł́A�摜�f�[�^�ɑ΂���t�B���^�����O�ɘb��i�߂悤�B
-% ��Ɏ������I�[�f�B�I�f�[�^�Ɠ��l�ɐ��`�t�B���^�������{�����Ƃ��ł���B
+%% 二次元信号の周波数特性
+% では、画像データに対するフィルタリングに話を進めよう。
+% 先に示したオーディオデータと同様に線形フィルタ処理を施すことができる。
 % 
-% �܂��A �J���Ă���S�Ă� Figure �� <matlab:doc('close') close> �֐���
-% �ŕ�����A�\�ߗp�ӂ���Ă���摜�f�[�^ cameraman ��
-% �ǂݍ���ŕ\�����悤�B
+% まず、 開いている全ての Figure を <matlab:doc('close') close> 関数で
+% で閉じた後、予め用意されている画像データ cameraman を
+% 読み込んで表示しよう。
 
 close all
 figure(1)
@@ -240,98 +240,98 @@ X = imread('cameraman.tif');
 imshow(X)
 
 %%
-% �摜�f�[�^�͕ϐ� X �ɕ����Ȃ������W�r�b�g�^�z��Ƃ��ĕێ������̂ŁA
-% �����{���x�����^�ɕϊ����悤�B
+% 画像データは変数 X に符号なし整数８ビット型配列として保持されるので、
+% これを倍精度実数型に変換しよう。
 
 X = im2double(X);
 whos X
 
 %%
-% <matlab:doc('fft2') fft2> �֐��𗘗p���邱�ƂŁA
-% �摜�f�[�^�̓񎟌��̎��g����͂����s�ł���B
-% �摜�T�C�Y�ɍ��킹��
+% <matlab:doc('fft2') fft2> 関数を利用することで、
+% 画像データの二次元の周波数解析を実行できる。
+% 画像サイズに合わせて
 %
-% * �񎟌�FFT�_��: $$ 256\times 256 $$
+% * 二次元FFT点数: $$ 256\times 256 $$
 %
-% �Ɛݒ肵�񎟌����g����͂����s���悤�B 
+% と設定し二次元周波数解析を実行しよう。 
 
 F = fft2(X,256,256);
 whos F
 
 %%
-% �ϐ� F �ɓ񎟌����U�t�[���G�ϊ�(DFT)�W�����ێ������B
-% �Ȃ��A���f���Ƃ��Č��ʂ������邽�߁A��Βl���Ƃ���
-% �U�����������߂Ă݂悤�B
+% 変数 F に二次元離散フーリエ変換(DFT)係数が保持される。
+% なお、複素数として結果が得られるため、絶対値をとって
+% 振幅特性を求めてみよう。
 
 Fmag = abs(F);
 whos Fmag
 
 %%
-% �ϐ� Fmag �ɂ́A�U�������Ƃ��Ď����z�񂪕ێ������B
-% <matlab:doc('surface') surface> �֐��𗘗p���āA
-% �������������悤�B
+% 変数 Fmag には、振幅特性として実数配列が保持される。
+% <matlab:doc('surface') surface> 関数を利用して、
+% 特性を可視化しよう。
 %
-% surface �v���b�g�𒲐����邽�߂̃n���h���I�u�W�F�N�g�Ƃ���
-% �ϐ� hsrfc ��p�ӂ��Ă������B
+% surface プロットを調整するためのハンドルオブジェクトとして
+% 変数 hsrfc を用意しておこう。
 
 figure(2)
 hsrfc = surface(20*log10(Fmag));
 hsrfc.EdgeColor = 'none';
 
 %%
-% �����ł́A�f�V�x���Ɋ��Z���Ă���_�ɒ��ӂ���B
+% ここでは、デシベルに換算している点に注意する。
 %
-% �O���t�����₷���悤�J���[�o�[��ݒu����B
+% グラフが見やすいようカラーバーを設置する。
 
 colorbar
 caxis([ -20 80 ])
 
 %%
-% ���S�������ƂȂ�悤�� <matlab:doc('fftshift') fftshift> �֐���p����
-% �z����V�t�g����B
+% 中心が直流となるように <matlab:doc('fftshift') fftshift> 関数を用いて
+% 配列をシフトする。
 
-hsrfc.ZData = fftshift(hsrfc.ZData); % Z���̃V�t�g
-hsrfc.CData = fftshift(hsrfc.CData); % �J���[���̃V�t�g
+hsrfc.ZData = fftshift(hsrfc.ZData); % Z軸のシフト
+hsrfc.CData = fftshift(hsrfc.CData); % カラー軸のシフト
 
 %%
-% ���K�����g���ƂȂ�悤���W�̒������s���B
+% 正規化周波数となるよう座標の調整を行う。
 
-fstep = 1/256; % ���g���W�{�_�̊Ԋu
+fstep = 1/256; % 周波数標本点の間隔
 hsrfc.XData = -0.5:fstep:0.5-fstep;
 hsrfc.YData = -0.5:fstep:0.5-fstep;
 xlabel('F_x (\times\pi rad/sample)')
 ylabel('F_y (\times\pi rad/sample)')
 
 %%
-% ���_��ς���B
+% 視点を変える。
 
 view([ -15 30 ])
 zlim([ -20 80 ])
 
 %%
-% [ <part2.html �g�b�v> ]
+% [ <part2.html トップ> ]
 
-%% �񎟌��M���̃t�B���^�����O
-% ���ɁA�摜�f�[�^ X �ɁA�񎟌����`�t�B���^����
+%% 二次元信号のフィルタリング
+% 次に、画像データ X に、二次元線形フィルタ処理
 %
 % $$ y[n_y,n_x] = h[n_y,n_x] \ast 
 % x[n_y,n_x] = \sum_{k_x=0}^{N_x-1}\sum_{k_y=0}^{N_y-1}
 % h[k_y,k_x]x[n_y-k_y,n_x-k_x] $$
 %
-% ���{���Ă݂悤�B�����ŁA
+% を施してみよう。ここで、
 %
-% * $$ x[n_y,n_x] $$ : �t�B���^����
-% * $$ y[n_y,n_x] $$ : �t�B���^�o�� 
-% * $$ h[n_y,n_x] $$ : �t�B���^�W���i�C���p���X�����j
-% * $$ N_y $$        : �����t�B���^����
-% * $$ N_x $$        : �����t�B���^����
+% * $$ x[n_y,n_x] $$ : フィルタ入力
+% * $$ y[n_y,n_x] $$ : フィルタ出力 
+% * $$ h[n_y,n_x] $$ : フィルタ係数（インパルス応答）
+% * $$ N_y $$        : 垂直フィルタ次数
+% * $$ N_x $$        : 水平フィルタ次数
 %
-% �Ƃ���B
+% とする。
 %
-% MATLAB �ł͓񎟌����`�t�B���^������ <matlab:doc('conv2') conv2> �֐���������
-% <matlab:doc('images/imfilter') imfilter> �֐��𗘗p�ł���B
+% MATLAB では二次元線形フィルタ処理に <matlab:doc('conv2') conv2> 関数もしくは
+% <matlab:doc('images/imfilter') imfilter> 関数を利用できる。
 %
-% �t�B���^�W��  $$ h[n_y,n_x] $$ �Ƃ��Ĕz��
+% フィルタ係数  $$ h[n_y,n_x] $$ として配列
 %
 % $$ \left(\begin{array}{ccc}
 %    1 &  1 & 1 \\
@@ -339,52 +339,52 @@ zlim([ -20 80 ])
 %   -1 & -1 & -1 \\
 %    \end{array}\right) $$
 % 
-% �𗘗p���Đ��`�t�B���^���������s���Ă݂悤�B
+% を利用して線形フィルタ処理を実行してみよう。
 
 H = [ 1 1 1 ; 0 0 0 ; -1 -1 -1 ];
 Y = conv2(H,X);
 
 %%
-% �ϐ� Y �ɂ̓t�B���^�������ʂ��ێ�����Ă���B 
-% �������A
+% 変数 Y にはフィルタ処理結果が保持されている。 
+% ただし、
 
 size(Y)
 
 %%
-% �̂悤�ɁA���Ƃ̔z�� X �����T�C�Y���c�� 2 ��f�Â������Ă���B
-% ����́A�T�C�Y $$ M_y\times M_x $$ �̉摜�ɃT�C�Y 
-% $$ L_y\times L_x $$ �̐��`�t�B���^��������Ƃ��̏o�͂̃T�C�Y��
+% のように、もとの配列 X よりもサイズが縦横 2 画素づつ増加している。
+% これは、サイズ $$ M_y\times M_x $$ の画像にサイズ 
+% $$ L_y\times L_x $$ の線形フィルタをかけるとその出力のサイズが
 %
 % $$ (M_y+L_y-1)\times (M_x+L_x-1) $$ 
 %
-% �ɑ������鐫���ɂ��B
+% に増加する性質による。
 %
-% �㉺���E�A1��f������āA���͉摜 X �̃T�C�Y�ɏo�͉摜 Y �̃T�C�Y��
-% �������悤�B <matlab:doc('end') end> �֐��𗘗p�����z��C���f�b�N�X��
-% �ő�l�w��𗘗p����ƕ֗��ł���B
+% 上下左右、1画素ずつ削って、入力画像 X のサイズに出力画像 Y のサイズを
+% 調整しよう。 <matlab:doc('end') end> 関数を利用した配列インデックスの
+% 最大値指定を利用すると便利である。
 
 Y = Y(2:end-1,2:end-1);
 
 %%
-% �܂��A�o�͉摜 Y �́A���Z�̌��ʁA
+% また、出力画像 Y は、演算の結果、
 
 min(Y(:))
 
 %%
-% �̂悤�ɁA���̒l���܂ށB���̂��߉摜�Ƃ��ĕ\������ۂɂ͍H�v���K�v�ł���B
+% のように、負の値を含む。このため画像として表示する際には工夫が必要である。
 %
-% �����^�摜�̏ꍇ�Aimshow �֐��́A��f�l�� 0 ���� 1 �ɃX�P�[������Ă����
-% ���肵�ĕ\�����s���̂ŁA���̒l��0.5 �ȉ��A���̒l��0.5�ȏ�ƂȂ�悤
-% Y �̒l�𒲐�����B
+% 実数型画像の場合、imshow 関数は、画素値が 0 から 1 にスケールされていると
+% 仮定して表示を行うので、負の値が0.5 以下、正の値が0.5以上となるよう
+% Y の値を調整する。
 
 figure(3)
 imshow(Y+0.5)
 
 %%
-% ��̃t�B���^�́A���������̔��� $$ \frac{\partial X}{\partial y} $$ 
-% �̗��U�ߎ����o�͂���B
+% 先のフィルタは、垂直方向の微分 $$ \frac{\partial X}{\partial y} $$ 
+% の離散近似を出力する。
 %
-% �o�� Y �̎��g���������m�F���悤�B
+% 出力 Y の周波数特性を確認しよう。
 
 figure(4)
 F = fft2(Y,256,256);
@@ -403,51 +403,51 @@ view([ -15 30 ])
 zlim([ -20 80 ])
 
 %%
-% ���� X �Əo�� Y �̎��g���������r���Ă݂ė~�����B
-% �ǂ̂悤�Ȃ��ƂɋC���t�����낤���H
+% 入力 X と出力 Y の周波数特性を比較してみて欲しい。
+% どのようなことに気が付くだろうか？
 %
-% * �����ɂ�����s�[�N���Ȃ��Ȃ�B
-% * ���������̍���Ɍ�����������B
+% * 直流におけるピークがなくなる。
+% * 水平方向の高域に減衰が見られる。
 %
-% �Ƃ������Ƃɒ��ӂ��Ċώ@���ė~�����B
+% ということに注意して観察して欲しい。
 
 %%
-% [ <part2.html �g�b�v> ]
+% [ <part2.html トップ> ]
 
-%% �񎟌��t�B���^�̎��g������
+%% 二次元フィルタの周波数応答
 %
-% �񎟌����`�t�B���^�ɂ����g�������̕ω��́A
-% �ꎟ���̏ꍇ�Ɠ��l�ɁA�t�B���^�̎��g�������ɂ��m�F�ł���B
+% 二次元線形フィルタによる周波数特性の変化は、
+% 一次元の場合と同様に、フィルタの周波数応答により確認できる。
 % 
-% ���̂Ȃ�΁A��ԗ̈�ł̏􍞂݉��Z��
+% 何故ならば、空間領域での畳込み演算は
 %
 % $$ y[n_y,n_x] = h[n_y,n_x] \ast x[n_y,n_x] \ 
 %    \stackrel{\mathrm{DSFT}}{\longleftrightarrow}\
 %   Y(e^{j\omega_y},e^{j\omega_x}) = 
 %   H(e^{j\omega_y},e^{j\omega_x})X(e^{j\omega_y},e^{j\omega_x}) $$
 %
-% �̂悤�Ɏ��g���iDSFT: ���U��ԃt�[���G�ϊ��j�̈�ł�
-% �ω��Z�ɑΉ����邽�߂ł���B�����ŁA
+% のように周波数（DSFT: 離散空間フーリエ変換）領域では
+% 積演算に対応するためである。ここで、
 % 
-% * $$ X(e^{j\omega_y},e^{j\omega_x}) $$ : ���� $$ x[n_y,n_x] $$ �̎��g������
-% * $$ Y(e^{j\omega_y},e^{j\omega_x}) $$ : �o�� $$ y[n_y,n_x] $$ �̎��g������  
-% * $$ H(e^{j\omega_y},e^{j\omega_x}) $$ : �t�B���^�W���i�C���p���X�����j
-% $$ h[n_y,n_x] $$ �̎��g������
+% * $$ X(e^{j\omega_y},e^{j\omega_x}) $$ : 入力 $$ x[n_y,n_x] $$ の周波数特性
+% * $$ Y(e^{j\omega_y},e^{j\omega_x}) $$ : 出力 $$ y[n_y,n_x] $$ の周波数特性  
+% * $$ H(e^{j\omega_y},e^{j\omega_x}) $$ : フィルタ係数（インパルス応答）
+% $$ h[n_y,n_x] $$ の周波数応答
 %
-% �ł���B
+% である。
 %
-% �t�B���^�W�� $$ h[n_y,n_x] $$ �̎��g��������
-% <matlab:doc('freqz2') freqz2> �֐��ɂ��m�F�ł���B
+% フィルタ係数 $$ h[n_y,n_x] $$ の周波数応答は
+% <matlab:doc('freqz2') freqz2> 関数により確認できる。
 
 figure(5)
 freqz2(H)
 
 %%
 % 
-% �U���������m�F����ƁA�����Ɛ��������̍����g�������ɑ΂��錸�������������A
-% ���������ɂ��Ă͑ш�ʉߓ����������Ƃ��m�F�ł���B
+% 振幅応答を確認すると、直流と水平方向の高周波数成分に対する減衰特性をもち、
+% 垂直方向については帯域通過特性をもつことが確認できる。
 %
-% �Ȃ��A
+% なお、
 %
 % $$ H(e^{j\omega_y},e^{j\omega_x}) = \sum_{n_x=-\infty}^{\infty}
 % \sum_{n_y=-\infty}^{\infty} 
@@ -457,27 +457,27 @@ freqz2(H)
 %
 % $$ = 2\sin\omega_y(1 + 2\cos\omega_x)e^{-j\frac{\pi}{2}} $$
 %
-% ���A 
+% より、 
 %
-% * $$ \omega_y = 0 $$ �ŁA
+% * $$ \omega_y = 0 $$ で、
 % $$ |H(e^{j\omega_y},e^{j\omega_x})| = 0 $$
-% * $$ \omega_y = \pi $$ �ŁA
+% * $$ \omega_y = \pi $$ で、
 % $$ |H(e^{j\omega_y},e^{j\omega_x})| = 0 $$
-% * $$ \omega_x = \frac{2\pi}{3} $$ �ŁA
+% * $$ \omega_x = \frac{2\pi}{3} $$ で、
 % $$ |H(e^{j\omega_y},e^{j\omega_x})| = 0 $$
-% * $$ \omega_y = \pm\frac{\pi}{2}, \omega_x = 0 $$ �ŁA
+% * $$ \omega_y = \pm\frac{\pi}{2}, \omega_x = 0 $$ で、
 % $$ |H(e^{j\omega_y},e^{j\omega_x})| = 6 $$
 %
-% �ƂȂ邱�Ƃ��m�F�ł���B
+% となることが確認できる。
 
 %%
-% [ <part2.html �g�b�v> ]
+% [ <part2.html トップ> ]
 
-%% ���K�ۑ�
+%% 演習課題
 %
-% *�ۑ�2-1. ���������t�B���^*
+% *課題2-1. 水平微分フィルタ*
 % 
-% �t�B���^�W��  $$ h[n_y,n_x] $$ �Ƃ��Ĕz��
+% フィルタ係数  $$ h[n_y,n_x] $$ として配列
 %
 % $$ \left(\begin{array}{ccc}
 %    1 &  0 & -1 \\
@@ -485,37 +485,37 @@ freqz2(H)
 %    1 &  0 & -1 \\
 %    \end{array}\right) $$
 % 
-% �i���������̗��U�ߎ��t�B���^�j��p�ӂ��A
-% �摜�t�@�C�� cameraman.tif �̃O���[�X�P�[���摜�ɑ΂���
-% ���`�t�B���^�������{���A�������ʂ��摜�t�@�C�� cameramangradx.tif �ɕۑ�����B
-% �i���̒l���l�����āA�l0.5 �ɂ�肩���グ���邱�Ɓj�B
+% （水平微分の離散近似フィルタ）を用意し、
+% 画像ファイル cameraman.tif のグレースケール画像に対して
+% 線形フィルタ処理を施し、処理結果を画像ファイル cameramangradx.tif に保存せよ。
+% （負の値を考慮して、値0.5 によりかさ上げすること）。
 %
-% �܂��A�t�B���^�̎��g���������O���t�Ŋm�F����B
+% また、フィルタの周波数特性をグラフで確認せよ。
 %
-% (������j
+% (処理例）
 %
 %%
 % <<cameramangradx.png>>
 %%
 % <<freqz2gradx.png>>
 %%
-% *�ۑ�2-2. ���z�̑傫���ƕΊp*
+% *課題2-2. 勾配の大きさと偏角*
 %
-% ���������t�B���^�o�� $$ \frac{\partial X}{\partial y} $$ �� 
-% ���������t�B���^�o�� $$ \frac{\partial X}{\partial x} $$ ����A
+% 垂直微分フィルタ出力 $$ \frac{\partial X}{\partial y} $$ と 
+% 水平微分フィルタ出力 $$ \frac{\partial X}{\partial x} $$ から、
 %
-% * ���z�̑傫�� : $$ \|\Delta X \| = \sqrt{
+% * 勾配の大きさ : $$ \|\Delta X \| = \sqrt{
 % \left(\frac{\partial X}{\partial y}\right)^2
 % +\left(\frac{\partial X}{\partial x}\right)^2} $$
-% * ���z�̕����@ : $$ \angle \Delta X = \tan^{-1}
+% * 勾配の方向　 : $$ \angle \Delta X = \tan^{-1}
 % \left((\frac{\partial X}{\partial y})/(
 % \frac{\partial X}{\partial x})\right) $$
 %
-% ���v�Z���A�������ʂ����ꂼ��摜�t�@�C�� cameramangradmag.tif ��
-% cameramangradang.tif �ɕۑ�����B�������A���z�̕����ɂ��ẮA
-% �l�͈̔͂� 0 ���� 1 �Ɋ��Z���邱�ƁB
+% を計算し、処理結果をそれぞれ画像ファイル cameramangradmag.tif と
+% cameramangradang.tif に保存せよ。ただし、勾配の方向については、
+% 値の範囲を 0 から 1 に換算すること。
 %
-% (������j
+% (処理例）
 %
 %%
 % <<cameramangradmag.png>>
@@ -528,6 +528,6 @@ freqz2(H)
 % </html>
 %%
 % <part1.html Part1> |
-% <index.html ���j���[> |
-% <part2.html �g�b�v> |
-% <part3.html Part3>
+% | <index.html メニュー> |
+% | <part2.html トップ> |
+% | <part3.html Part3>

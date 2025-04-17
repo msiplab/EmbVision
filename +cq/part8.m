@@ -1,25 +1,25 @@
-%% *EmbVision(CQ”Å) ƒ`ƒ…[ƒgƒŠƒAƒ‹i‚Wj*
+%% *EmbVision(CQç‰ˆ) ãƒãƒ¥ãƒ¼ãƒˆãƒªã‚¢ãƒ«ï¼ˆï¼˜ï¼‰*
 % 
-% *‰ñ‹A•ªÍ‚Æ‹ÈüŒŸo - Simulink/Raspberry Pi(TM)•Ò -*
+% *å›žå¸°åˆ†æžã¨æ›²ç·šæ¤œå‡º - Simulink/Raspberry Pi(TM)ç·¨ -*
 %
-% VŠƒ‘åŠw
-% ‘º¼@³ŒáC‚‹´@—EŠó
+% æ–°æ½Ÿå¤§å­¦
+% æ‘æ¾ã€€æ­£å¾ï¼Œé«˜æ©‹ã€€å‹‡å¸Œ
 %
-% Copyright (c), All rights reserved, 2014-2022, Shogo MURAMATSU and Yuki TAKAHASHI
+% Copyright (c), All rights reserved, 2014-2025, Shogo MURAMATSU and Yuki TAKAHASHI
 % 
 
 %%
 % <part7.html Part7> |
-% <index.html ƒƒjƒ…[> 
+% | <index.html ãƒ¡ãƒ‹ãƒ¥ãƒ¼> 
 
 %%
-% *ŠT—v*
+% *æ¦‚è¦*
 %
-% –{‰‰K‚Å‚ÍASystem object ‚Ì‰ž—p—á‚Æ‚µ‚ÄA
-% ‘½€Ž®‰ñ‹A‚ð—˜—p‚µ‚½‰æ‘œ‚©‚ç‚Ì‹ÈüŒŸo‚ðŽÀ‘•‚·‚éB
+% æœ¬æ¼”ç¿’ã§ã¯ã€System object ã®å¿œç”¨ä¾‹ã¨ã—ã¦ã€
+% å¤šé …å¼å›žå¸°ã‚’åˆ©ç”¨ã—ãŸç”»åƒã‹ã‚‰ã®æ›²ç·šæ¤œå‡ºã‚’å®Ÿè£…ã™ã‚‹ã€‚
 %
-% €”õ‚Æ‚µ‚ÄAŠJ‚¢‚Ä‚¢‚é‘S‚Ä‚Ì Figure ‚ð <matlab:doc('close') close> ŠÖ”‚Å
-% •Â‚¶‚Ä‚¨‚­B
+% æº–å‚™ã¨ã—ã¦ã€é–‹ã„ã¦ã„ã‚‹å…¨ã¦ã® Figure ã‚’ <matlab:doc('close') close> é–¢æ•°ã§
+% é–‰ã˜ã¦ãŠãã€‚
 
 close all
 
@@ -27,27 +27,27 @@ close all
 %
 
 %%
-% [ <part8.html ƒgƒbƒv> ]
+% [ <part8.html ãƒˆãƒƒãƒ—> ]
 
 %% XXX
 %
 
 %%
-% [ <part8.html ƒgƒbƒv> ]
+% [ <part8.html ãƒˆãƒƒãƒ—> ]
 
-%% ‰‰K‰Û‘è
+%% æ¼”ç¿’èª²é¡Œ
 %
-% *‰Û‘è8-1. XXX*
+% *èª²é¡Œ8-1. XXX*
 % 
 % ...
 % 
 
 %%
-% *‰Û‘è8-2. XXX*
+% *èª²é¡Œ8-2. XXX*
 %
 % ...
 %
-% (ˆ——áj
+% (å‡¦ç†ä¾‹ï¼‰
 
 %%
 % <html>
@@ -55,5 +55,5 @@ close all
 % </html>
 %%
 % <part7.html Part7> |
-% <index.html ƒƒjƒ…[> |
-% <part8.html ƒgƒbƒv> 
+% | <index.html ãƒ¡ãƒ‹ãƒ¥ãƒ¼> |
+% | <part8.html ãƒˆãƒƒãƒ—> 
