@@ -10,7 +10,7 @@
 %% 
 % * 新潟大学　村松　正吾，高橋　勇希
 %% 
-% Copyright (c), All rights reserved, 2014-2022, Shogo MURAMATSU and Yuki TAKAHASHI
+% Copyright (c), All rights reserved, 2014-2025, Shogo MURAMATSU and Yuki TAKAHASHI
 %% 準備
 
 proj = 'cq';
