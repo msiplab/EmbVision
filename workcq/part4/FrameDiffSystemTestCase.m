@@ -1,62 +1,62 @@
 classdef FrameDiffSystemTestCase < matlab.unittest.TestCase
-    %FRAMEDIFFSYSTEMTESTCASE FrameDiffSystem ‚ÌƒeƒXƒgƒP[ƒX
+    %FRAMEDIFFSYSTEMTESTCASE FrameDiffSystem ã®ãƒ†ã‚¹ãƒˆã‚±ãƒ¼ã‚¹
     properties
     end
     methods (Test)
         function testFirstFrame(testCase)
-            % €”õ
+            % æº–å‚™
             width  = 12;
             height = 16;
-            % “ü—ÍƒtƒŒ[ƒ€
+            % å…¥åŠ›ãƒ•ãƒ¬ãƒ¼ãƒ 
             frame1 = rand(height,width);
-            % Šú‘Ò’l
+            % æœŸå¾…å€¤
             cnt0Expctd = [];
             cnt1Expctd = 1;
             res1Expctd = zeros(height,width);
-            % ƒ^[ƒQƒbƒgƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            % ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             obj = FrameDiffSystem();
-            % ‰Šúó‘Ô‚ÌŒŸØ
+            % åˆæœŸçŠ¶æ…‹ã®æ¤œè¨¼
             state      = obj.getDiscreteState();
             cnt0Actual = state.Count;
             testCase.verifyEqual(cnt0Actual,cnt0Expctd)            
-            % ˆ—Œ‹‰Ê
+            % å‡¦ç†çµæžœ
             res1Actual = obj.step(frame1);
             state      = obj.getDiscreteState();
             cnt1Actual = state.Count;
-            % ˆ—Œ‹‰Ê‚ÌŒŸØ
+            % å‡¦ç†çµæžœã®æ¤œè¨¼
             testCase.verifyEqual(res1Actual,res1Expctd,'RelTol',1e-6)
             testCase.verifyEqual(cnt1Actual,cnt1Expctd)            
         end
         function testThreeFrames(testCase)
-            % €”õ
+            % æº–å‚™
             width  = 12;
             height = 16;
-            % “ü—ÍƒtƒŒ[ƒ€
+            % å…¥åŠ›ãƒ•ãƒ¬ãƒ¼ãƒ 
             frame1 = rand(height,width);
             frame2 = rand(height,width);
             frame3 = rand(height,width);            
-            % Šú‘Ò’l
+            % æœŸå¾…å€¤
             cnt1Expctd = 1;
             cnt2Expctd = 2;            
             cnt3Expctd = 3;                        
             res1Expctd = zeros(height,width);
             res2Expctd = (frame2-frame1);
             res3Expctd = (frame3-frame2);
-            % ƒ^[ƒQƒbƒgƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            % ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             obj = FrameDiffSystem();
-            % ‘æ‚PƒtƒŒ[ƒ€ˆ—Œ‹‰Ê
+            % ç¬¬ï¼‘ãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†çµæžœ
             res1Actual = obj.step(frame1);
             state      = obj.getDiscreteState();
             cnt1Actual = state.Count;
-            % ‘æ‚QƒtƒŒ[ƒ€ˆ—Œ‹‰Ê
+            % ç¬¬ï¼’ãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†çµæžœ
             res2Actual = obj.step(frame2);
             state      = obj.getDiscreteState();
             cnt2Actual = state.Count;            
-            % ‘æ‚RƒtƒŒ[ƒ€ˆ—Œ‹‰Ê
+            % ç¬¬ï¼“ãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†çµæžœ
             res3Actual = obj.step(frame3);
             state      = obj.getDiscreteState();
             cnt3Actual = state.Count;            
-            % ˆ—Œ‹‰Ê‚ÌŒŸØ
+            % å‡¦ç†çµæžœã®æ¤œè¨¼
             testCase.verifyEqual(cnt1Actual,cnt1Expctd)                        
             testCase.verifyEqual(cnt2Actual,cnt2Expctd)                                    
             testCase.verifyEqual(cnt3Actual,cnt3Expctd)                                                
@@ -65,27 +65,27 @@ classdef FrameDiffSystemTestCase < matlab.unittest.TestCase
             testCase.verifyEqual(res3Actual,res3Expctd,'RelTol',1e-6)                        
         end        
         function testReset(testCase)
-            % €”õ
+            % æº–å‚™
             width  = 12;
             height = 16;
-            % “ü—ÍƒtƒŒ[ƒ€
+            % å…¥åŠ›ãƒ•ãƒ¬ãƒ¼ãƒ 
             frame1 = rand(height,width);
-            % Šú‘Ò’l
+            % æœŸå¾…å€¤
             cnt0Expctd = [];
             cnt1Expctd = 1;
             cntrExpctd = 0;
-            % ƒ^[ƒQƒbƒgƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            % ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             obj = FrameDiffSystem();
-            % ‰Šúó‘Ô‚ÌŒŸØ
+            % åˆæœŸçŠ¶æ…‹ã®æ¤œè¨¼
             state      = obj.getDiscreteState();
             cnt0Actual = state.Count;
             testCase.verifyEqual(cnt0Actual,cnt0Expctd)            
-            % ‘æˆêƒtƒŒ[ƒ€ˆ—Œã‚Ìó‘Ô‚ÌŒŸØ
+            % ç¬¬ä¸€ãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†å¾Œã®çŠ¶æ…‹ã®æ¤œè¨¼
             obj.step(frame1);
             state      = obj.getDiscreteState();
             cnt1Actual = state.Count;
             testCase.verifyEqual(cnt1Actual,cnt1Expctd)                        
-            % ƒŠƒZƒbƒgŒã‚Ìó‘Ô‚ÌŒŸØ
+            % ãƒªã‚»ãƒƒãƒˆå¾Œã®çŠ¶æ…‹ã®æ¤œè¨¼
             reset(obj);
             state      = obj.getDiscreteState();
             cntrActual = state.Count;

@@ -1,32 +1,32 @@
 classdef FrameDiffSystem < matlab.System
     properties
-        preFrame % ‘OƒtƒŒ[ƒ€
+        preFrame % å‰ãƒ•ãƒ¬ãƒ¼ãƒ 
     end
     properties (DiscreteState)
-        Count    % ƒtƒŒ[ƒ€ƒJƒEƒ“ƒg
+        Count    % ãƒ•ãƒ¬ãƒ¼ãƒ ã‚«ã‚¦ãƒ³ãƒˆ
     end
     properties (Access = private)
     end
     methods (Access = protected)
-        % ƒZƒbƒgƒAƒbƒviÅ‰‚ÌƒXƒeƒbƒv’¼‘O‚ÉŽÀsj
+        % ã‚»ãƒƒãƒˆã‚¢ãƒƒãƒ—ï¼ˆæœ€åˆã®ã‚¹ãƒ†ãƒƒãƒ—ç›´å‰ã«å®Ÿè¡Œï¼‰
         function setupImpl(obj,srcFrame)
-            % ‘OƒtƒŒ[ƒ€‚Ì‰Šú‰»
+            % å‰ãƒ•ãƒ¬ãƒ¼ãƒ ã®åˆæœŸåŒ–
             obj.preFrame = srcFrame;
-            % ƒtƒŒ[ƒ€ƒJƒEƒ“ƒg‚Ì‰Šú‰»
+            % ãƒ•ãƒ¬ãƒ¼ãƒ ã‚«ã‚¦ãƒ³ãƒˆã®åˆæœŸåŒ–
             obj.Count = 0;
         end
-        % ƒXƒeƒbƒv
+        % ã‚¹ãƒ†ãƒƒãƒ—
         function resFrame = stepImpl(obj,srcFrame)
-            % ƒtƒŒ[ƒ€•½‹Ïˆ— 
+            % ãƒ•ãƒ¬ãƒ¼ãƒ å¹³å‡å‡¦ç† 
             resFrame = srcFrame - obj.preFrame;
-            % ‘OƒtƒŒ[ƒ€‚ÌXV©Œ»ƒtƒŒ[ƒ€
+            % å‰ãƒ•ãƒ¬ãƒ¼ãƒ ã®æ›´æ–°â†ç¾ãƒ•ãƒ¬ãƒ¼ãƒ 
             obj.preFrame = srcFrame;
-            % ƒtƒŒ[ƒ€ƒJƒEƒ“ƒg‚ÌƒCƒ“ƒNƒŠƒƒ“ƒg
+            % ãƒ•ãƒ¬ãƒ¼ãƒ ã‚«ã‚¦ãƒ³ãƒˆã®ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ãƒˆ
             obj.Count = obj.Count+1;
         end
-        % ƒŠƒZƒbƒg
+        % ãƒªã‚»ãƒƒãƒˆ
         function resetImpl(obj)
-            % ƒtƒŒ[ƒ€ƒJƒEƒ“ƒg‚ÌƒŠƒZƒbƒg
+            % ãƒ•ãƒ¬ãƒ¼ãƒ ã‚«ã‚¦ãƒ³ãƒˆã®ãƒªã‚»ãƒƒãƒˆ
             obj.Count = 0;
         end
     end

@@ -1,7 +1,7 @@
 classdef GradFiltSystem < matlab.System
     properties
         Kernel = [ 
-             1  1  1 ; % ‰Šú‰»‚µ‚½ƒvƒƒpƒeƒB
+             1  1  1 ; % åˆæœŸåŒ–ã—ãŸãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
              0  0  0 ;
             -1 -1 -1 ];
     end
@@ -10,26 +10,26 @@ classdef GradFiltSystem < matlab.System
     properties (Access = private)
     end
     methods
-        % ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+        % ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
         function obj = GradFiltSystem(varargin)
             setProperties(obj,nargin,varargin{:})
         end
     end
     methods (Access = protected)
-        % ƒZƒbƒgƒAƒbƒviÅ‰‚ÌƒXƒeƒbƒv’¼‘O‚ÉŽÀsj
+        % ã‚»ãƒƒãƒˆã‚¢ãƒƒãƒ—ï¼ˆæœ€åˆã®ã‚¹ãƒ†ãƒƒãƒ—ç›´å‰ã«å®Ÿè¡Œï¼‰
         function setupImpl(obj,srcImg)
         end
-        % ƒXƒeƒbƒv
+        % ã‚¹ãƒ†ãƒƒãƒ—
         function [mag,ang] = stepImpl(obj,srcImg)
             X  = im2double(srcImg);
-            Yv = conv2(obj.Kernel  ,X); % ‚’¼Œù”z‚ÌŒvŽZ
-            Yv = Yv(2:end-1,2:end-1);   % ˆ—‰æ‘œ‚ÌƒNƒŠƒbƒsƒ“ƒO
-            Yh = conv2(obj.Kernel.',X); % …•½Œù”z‚ÌŒvŽZ@
-            Yh = Yh(2:end-1,2:end-1);   % ˆ—‰æ‘œ‚ÌƒNƒŠƒbƒsƒ“ƒO
-            mag = sqrt(Yv.^2+Yh.^2);    % Œù”z‚Ì‘å‚«‚³‚ÌŠú‘Ò’l
-            ang = atan2(Yv,Yh);         % Œù”z‚Ì•ÎŠp‚Ì‚ÌŠú‘Ò’l
+            Yv = conv2(obj.Kernel  ,X); % åž‚ç›´å‹¾é…ã®è¨ˆç®—
+            Yv = Yv(2:end-1,2:end-1);   % å‡¦ç†ç”»åƒã®ã‚¯ãƒªãƒƒãƒ”ãƒ³ã‚°
+            Yh = conv2(obj.Kernel.',X); % æ°´å¹³å‹¾é…ã®è¨ˆç®—ã€€
+            Yh = Yh(2:end-1,2:end-1);   % å‡¦ç†ç”»åƒã®ã‚¯ãƒªãƒƒãƒ”ãƒ³ã‚°
+            mag = sqrt(Yv.^2+Yh.^2);    % å‹¾é…ã®å¤§ãã•ã®æœŸå¾…å€¤
+            ang = atan2(Yv,Yh);         % å‹¾é…ã®åè§’ã®ã®æœŸå¾…å€¤
         end
-        % ƒŠƒZƒbƒg
+        % ãƒªã‚»ãƒƒãƒˆ
         function resetImpl(obj)
         end
     end

@@ -8,3 +8,4 @@
 %   part5      - *EmbVision(CQ版) チュートリアル（５）*
 %   part6      - *EmbVision(CQ版) チュートリアル（６）*
 %   part7      - *EmbVision(CQ版) チュートリアル（７）*
+%   part8      - *EmbVision(CQ版) チュートリアル（８）*

@@ -1,4 +1,4 @@
-classdef Rgb2GraySystem < matlab.System
+﻿classdef Rgb2GraySystem < matlab.System
     % RGB2GRAYSYSTEM RGB から グレースケールへの変換
     %
     methods (Access = protected)

@@ -1,51 +1,51 @@
 classdef GradFiltSystemTestCase < matlab.unittest.TestCase
-    %GRADFILTSYSTEMTESTCASE GradFiltSystem ‚ÌƒeƒXƒgƒP[ƒX
+    %GRADFILTSYSTEMTESTCASE GradFiltSystem ã®ãƒ†ã‚¹ãƒˆã‚±ãƒ¼ã‚¹
     properties
     end
     methods (Test)
         function testDefaultKernel(testCase)
-            % Šú‘Ò’l
+            % æœŸå¾…å€¤
             kernelExpctd = [  1  1  1 ;
                               0  0  0 ;
                              -1 -1 -1 ];
-            % ƒ^[ƒQƒbƒgƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            % ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             obj = GradFiltSystem();
-            % ƒvƒƒpƒeƒB[ Kernel ‚ÌŽæ“¾
+            % ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ãƒ¼ Kernel ã®å–å¾—
             kernelActual = obj.Kernel;
-            % ƒvƒƒpƒeƒB[ Kernel ‚ÌŒŸØ
+            % ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ãƒ¼ Kernel ã®æ¤œè¨¼
             testCase.verifyEqual(kernelActual,kernelExpctd)
         end
         function testSobelKernel(testCase)
-            % Šú‘Ò’l
+            % æœŸå¾…å€¤
             kernelExpctd = [  1  2  1 ;
                               0  0  0 ;
                              -1 -2 -1 ];
-            % ƒ^[ƒQƒbƒgƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            % ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             obj = GradFiltSystem('Kernel',kernelExpctd);
-            % ƒvƒƒpƒeƒB[ Kernel ‚ÌŽæ“¾
+            % ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ãƒ¼ Kernel ã®å–å¾—
             kernelActual = obj.Kernel;
-            % ƒvƒƒpƒeƒB[ Kernel ‚ÌŒŸØ
+            % ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ãƒ¼ Kernel ã®æ¤œè¨¼
             testCase.verifyEqual(kernelActual,kernelExpctd)
         end        
         function testStepWithPrewittKernel(testCase)
-            % €”õ
+            % æº–å‚™
             H = [  1  1  1 ;
                    0  0  0 ;
                   -1 -1 -1 ];
-            % Šú‘Ò’l‚Ì€”õ
+            % æœŸå¾…å€¤ã®æº–å‚™
             I  = imread('cameraman.tif');
             X  = im2double(I);
-            Yv = conv2(H  ,X);        % ‚’¼Œù”z‚ÌŒvŽZ
-            Yv = Yv(2:end-1,2:end-1); % ˆ—‰æ‘œ‚ÌƒNƒŠƒbƒsƒ“ƒO
-            Yh = conv2(H.',X);        % …•½Œù”z‚ÌŒvŽZ@
-            Yh = Yh(2:end-1,2:end-1); % ˆ—‰æ‘œ‚ÌƒNƒŠƒbƒsƒ“ƒO
-            magExpctd = sqrt(Yv.^2+Yh.^2); % Œù”z‚Ì‘å‚«‚³‚ÌŠú‘Ò’l
-            angExpctd = atan2(Yv,Yh);     % Œù”z‚Ì•ÎŠp‚Ì‚ÌŠú‘Ò’l
-            % ƒ^[ƒQƒbƒgƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            Yv = conv2(H  ,X);        % åž‚ç›´å‹¾é…ã®è¨ˆç®—
+            Yv = Yv(2:end-1,2:end-1); % å‡¦ç†ç”»åƒã®ã‚¯ãƒªãƒƒãƒ”ãƒ³ã‚°
+            Yh = conv2(H.',X);        % æ°´å¹³å‹¾é…ã®è¨ˆç®—ã€€
+            Yh = Yh(2:end-1,2:end-1); % å‡¦ç†ç”»åƒã®ã‚¯ãƒªãƒƒãƒ”ãƒ³ã‚°
+            magExpctd = sqrt(Yv.^2+Yh.^2); % å‹¾é…ã®å¤§ãã•ã®æœŸå¾…å€¤
+            angExpctd = atan2(Yv,Yh);     % å‹¾é…ã®åè§’ã®ã®æœŸå¾…å€¤
+            % ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             obj = GradFiltSystem();
-            % ˆ—Œ‹‰Ê
+            % å‡¦ç†çµæžœ
             [magActual,angActual] = obj.step(X);
-            % ˆ—Œ‹‰Ê‚ÌŒŸØ
+            % å‡¦ç†çµæžœã®æ¤œè¨¼
             testCase.verifyEqual(magActual,magExpctd,'AbsTol',1e-6)
             testCase.verifyEqual(angActual,angExpctd,'AbsTol',1e-6)
         end        

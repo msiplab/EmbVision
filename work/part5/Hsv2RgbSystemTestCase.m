@@ -1,39 +1,39 @@
 classdef Hsv2RgbSystemTestCase < matlab.unittest.TestCase
-    %HSV2RGBSYSTEMTESTCASE Hsv2RgbSystem ‚ÌƒeƒXƒgƒP[ƒX
+    %HSV2RGBSYSTEMTESTCASE Hsv2RgbSystem ã®ãƒ†ã‚¹ãƒˆã‚±ãƒ¼ã‚¹
     properties
     end
     methods (Test)
         function testSize(testCase)
-            % €”õ
+            % æº–å‚™
             h = zeros(1,2);
             s = zeros(1,2);
             v = zeros(1,2);
-            % Šú‘Ò’l
+            % æœŸå¾…å€¤
             szRExpctd = [ 1 2 ];
             szGExpctd = [ 1 2 ];
             szBExpctd = [ 1 2 ];
-            % ƒ^[ƒQƒbƒg‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            % ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             obj = Hsv2RgbSystem();
-            % ŽÀsŒ‹‰Ê
+            % å®Ÿè¡Œçµæžœ
             [r,g,b] = step(obj,h,s,v);
-            % ƒTƒCƒY‚ÌŒŸØ
+            % ã‚µã‚¤ã‚ºã®æ¤œè¨¼
             testCase.verifySize(r,szRExpctd);
             testCase.verifySize(g,szGExpctd);
             testCase.verifySize(b,szBExpctd);
         end
         function testValues(testCase)
-            % €”õ
+            % æº–å‚™
             h = rand(4,6);
             s = rand(4,6);
             v = rand(4,6);
-            hsv = cat(3,h,s,v); % ŽOŽŸŒ³”z—ñ‰»
-            % Šú‘Ò’l
+            hsv = cat(3,h,s,v); % ä¸‰æ¬¡å…ƒé…åˆ—åŒ–
+            % æœŸå¾…å€¤
             rgbExpctd = hsv2rgb(hsv); 
-            % ƒ^[ƒQƒbƒg‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            % ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             obj = Hsv2RgbSystem();
-            % ŽÀsŒ‹‰Ê
+            % å®Ÿè¡Œçµæžœ
             [rActual,gActual,bActual] = step(obj,h,s,v);
-            % ”z—ñ‚Ì’l‚ÌŒŸØ
+            % é…åˆ—ã®å€¤ã®æ¤œè¨¼
             testCase.verifyEqual(rActual,rgbExpctd(:,:,1));
             testCase.verifyEqual(gActual,rgbExpctd(:,:,2));
             testCase.verifyEqual(bActual,rgbExpctd(:,:,3));

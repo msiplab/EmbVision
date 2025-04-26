@@ -1,30 +1,30 @@
 classdef Rgb2GraySystemTestCase < matlab.unittest.TestCase
-    %RGB2GRAYSYSTEMTESTCASE Rgb2GraySystem ‚ÌƒeƒXƒgƒP[ƒX
+    %RGB2GRAYSYSTEMTESTCASE Rgb2GraySystem ã®ãƒ†ã‚¹ãƒˆã‚±ãƒ¼ã‚¹
     properties
     end
     methods (Test)
         function testSize(testCase)
-            % €”õ
-            u = zeros(1,2,3);   % 1s2—ñ3¬•ª‚ÌŽOŽŸŒ³”z—ñ
-            % Šú‘Ò’l
-            szExpctd = [ 1 2 ]; % 1s2—ñ‚Ì“ñŽŸŒ³”z—ñ
-            % ƒ^[ƒQƒbƒg‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            % æº–å‚™
+            u = zeros(1,2,3);   % 1è¡Œ2åˆ—3æˆåˆ†ã®ä¸‰æ¬¡å…ƒé…åˆ—
+            % æœŸå¾…å€¤
+            szExpctd = [ 1 2 ]; % 1è¡Œ2åˆ—ã®äºŒæ¬¡å…ƒé…åˆ—
+            % ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             obj = Rgb2GraySystem();
-            % ŽÀsŒ‹‰Ê
+            % å®Ÿè¡Œçµæžœ
             y = step(obj,u);
-            % ƒTƒCƒY‚ÌŒŸØ
+            % ã‚µã‚¤ã‚ºã®æ¤œè¨¼
             testCase.verifySize(y,szExpctd);
         end
         function testValues(testCase)
-            % €”õ
-            u = rand(4,6,3);           % ŽOŽŸŒ³ƒ‰ƒ“ƒ_ƒ€”z—ñ
-            % Šú‘Ò’l
-            arrayExpctd = rgb2gray(u); % ƒOƒŒ[ƒXƒP[ƒ‹‚ÌŠú‘Ò’l
-            % ƒ^[ƒQƒbƒg‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            % æº–å‚™
+            u = rand(4,6,3);           % ä¸‰æ¬¡å…ƒãƒ©ãƒ³ãƒ€ãƒ é…åˆ—
+            % æœŸå¾…å€¤
+            arrayExpctd = rgb2gray(u); % ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«ã®æœŸå¾…å€¤
+            % ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             obj = Rgb2GraySystem();
-            % ŽÀsŒ‹‰Ê
+            % å®Ÿè¡Œçµæžœ
             arrayActual = step(obj,u);
-            % ”z—ñ‚Ì’l‚ÌŒŸØ
+            % é…åˆ—ã®å€¤ã®æ¤œè¨¼
             testCase.verifyEqual(arrayActual,arrayExpctd);
         end
     end
